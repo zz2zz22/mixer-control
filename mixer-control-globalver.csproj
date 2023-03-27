@@ -68,6 +68,13 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.6.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Sharp7, Version=1.1.82.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Sharp7.1.1.82\lib\net40\Sharp7.dll</HintPath>
     </Reference>
@@ -136,6 +143,36 @@
     <Compile Include="View\CustomComponent\AppIntro.Designer.cs">
       <DependentUpon>AppIntro.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\CustomComponent\LoadingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CustomComponent\LoadingDialog.Designer.cs">
+      <DependentUpon>LoadingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomControls\CustomMaterialDataRow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\CustomControls\CustomMaterialDataRow.Designer.cs">
+      <DependentUpon>CustomMaterialDataRow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainUI\AutomationInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MainUI\AutomationInfo.Designer.cs">
+      <DependentUpon>AutomationInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainUI\ChooseSpec.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MainUI\ChooseSpec.Designer.cs">
+      <DependentUpon>ChooseSpec.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainUI\MaterialScale.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MainUI\MaterialScale.Designer.cs">
+      <DependentUpon>MaterialScale.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,8 +190,20 @@
     <EmbeddedResource Include="View\CustomComponent\AppIntro.resx">
       <DependentUpon>AppIntro.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MainWindow.en-US.resx">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <EmbeddedResource Include="View\CustomComponent\LoadingDialog.resx">
+      <DependentUpon>LoadingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\CustomControls\CustomMaterialDataRow.resx">
+      <DependentUpon>CustomMaterialDataRow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MainUI\AutomationInfo.resx">
+      <DependentUpon>AutomationInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MainUI\ChooseSpec.resx">
+      <DependentUpon>ChooseSpec.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MainUI\MaterialScale.resx">
+      <DependentUpon>MaterialScale.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -189,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mixer-control.ico" />
+    <None Include="Resources\update.png" />
     <None Include="Resources\weighing-scale.png" />
     <None Include="Resources\logoTechlinkFix.png" />
     <None Include="Resources\cancel.png" />
@@ -200,6 +250,12 @@
     <None Include="Resources\choose.png" />
     <None Include="Resources\automation.png" />
     <None Include="Resources\control.png" />
+    <None Include="Resources\download.png" />
+    <None Include="Resources\loading.gif" />
+    <None Include="Resources\right-arrow.png" />
+    <None Include="Resources\scale.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\plus.png" />
     <Content Include="Resources\techlinkIntro.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -214,8 +270,26 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="View\CustomControls\" />
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\System.Text.Json.6.0.6\build\System.Text.Json.targets" Condition="Exists('packages\System.Text.Json.6.0.6\build\System.Text.Json.targets')" />

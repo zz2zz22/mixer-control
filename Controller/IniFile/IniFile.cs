@@ -36,7 +36,6 @@ namespace mixer_control_globalver.Controller.IniFile
             StringBuilder temp = new StringBuilder(255);
             int i = GetPrivateProfileString(Section, Key, "", temp, 255, this.path);
             return temp.ToString();
-
         }
     }
 }

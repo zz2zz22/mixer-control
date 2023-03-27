@@ -31,7 +31,7 @@ namespace mixer_control_globalver.Controller.LogFile
             System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
             if (dir.Exists == false)
                 dir.Create();
-
+            
             string[] files = Directory.GetFiles(dirPath);
 
             foreach (string file in files)
@@ -57,7 +57,7 @@ namespace mixer_control_globalver.Controller.LogFile
         private void logout(MSG_TYPE msgType, string name, string str)
         {
             string filePath = m_startUpPath + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-            string output = name + " : " + str;
+            string output = name + " : " + str + "\r\n";
             try
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(@filePath, true))

@@ -14,6 +14,7 @@ namespace mixer_control_globalver.View.CustomComponent
 {
     public partial class AppIntro : Form
     {
+        public static MainWindow main = new MainWindow();
         static Image[] images;
         int frameCount = 0;
         Timer t1 = new Timer();
@@ -62,7 +63,7 @@ namespace mixer_control_globalver.View.CustomComponent
         {
             t2.Stop();
             this.Hide();
-            MainWindow main = new MainWindow();
+            
             main.ShowDialog();
             this.Close();
             this.Dispose();
