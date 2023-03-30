@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using Spire.Pdf.OPC;
+using System.IO;
 
 namespace mixer_control_globalver.Controller.IniFile
 {
@@ -23,6 +25,7 @@ namespace mixer_control_globalver.Controller.IniFile
         public IniFile(string INIPath)
         {
             path = INIPath;
+            
         }
         
         public void Write(string Section, string Key, string Value)

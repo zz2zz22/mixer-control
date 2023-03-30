@@ -19,9 +19,8 @@ namespace mixer_control_globalver.View.MainUI
     {
         int flag;
         bool isFinished;
-        string dataIn, scaleMatName, scaleMatNo;
-        double matWeight, matTolerance, weightRT, tempWeightRT;
-        public MaterialScale(string fileName)
+        string scaleMatName, scaleMatNo;
+        public MaterialScale()
         {
             InitializeComponent();
         }
@@ -31,24 +30,9 @@ namespace mixer_control_globalver.View.MainUI
             flag = 0;
             flpMaterialList.Controls.Clear();
             CustomMaterialDataRow customMaterial;
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_packed"])
-                {
-                    if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_scaled"])
-                        customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), false, false);
-                    else
-                        customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), true, false);
-                }
-                else
-                {
-                    customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), true, true);
-                }
-                flpMaterialList.Controls.Add(customMaterial);
-            }
             for (int j = 0; j < dt.Rows.Count; j++)
             {
-                if (!(bool)TemporaryVariables.materialDT.Rows[j]["is_scaled"] && !(bool)TemporaryVariables.materialDT.Rows[j]["is_packed"])
+                if (!(bool)TemporaryVariables.materialDT.Rows[j]["is_confirmed"])
                 {
                     flag = j;
                     break;
@@ -58,6 +42,14 @@ namespace mixer_control_globalver.View.MainUI
                     flag++;
                 }
             }
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"])
+                    customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), false);
+                else
+                    customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), true);
+                flpMaterialList.Controls.Add(customMaterial);
+            }
         }
 
         private void MaterialScale_Load(object sender, EventArgs e)
@@ -66,65 +58,11 @@ namespace mixer_control_globalver.View.MainUI
             LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
             NextMatScale(TemporaryVariables.materialDT, flag);
 
-            string[] ports = SerialPort.GetPortNames();
-            cbComPort.Items.AddRange(ports);
-
-            if (!serialPort1.IsOpen)
-            {
-                cbComPort.Enabled = true;
-                btnConnectScale.ButtonText = "Kết nối cân" + Environment.NewLine + "Connect Scale";
-            }
-            else
-            {
-                cbComPort.Enabled = false;
-                btnConnectScale.ButtonText = "Ngắt kết nối cân" + Environment.NewLine + "Disconnect Scale";
-            }
-            if (cbComPort.Items.Count <= 0)
-            {
-                MessageBox.Show("Không tìm được cổng kết nối serial port! Vui lòng kiểm tra kết nối và thử lại!" + Environment.NewLine + "Serial ports not found! Please check ports connection and try again!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                btnConnectScale.ButtonText = "Tải danh sách COM" + Environment.NewLine + "Load list COM";
-            }
-
-            btnSaveWeight.ButtonText = "Lưu KL" + Environment.NewLine + "Save weight";
-            btnStackWeight.ButtonText = "Cộng dồn KL" + Environment.NewLine + "Stack weight";
+            btnConfirm.ButtonText = "Xác nhận nguyên liệu" + Environment.NewLine + "Confirm material";
             btnProceedAutomation.ButtonText = "Tiến hành chạy tự động" + Environment.NewLine + "Begin automation process";
         }
 
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            dataIn = serialPort1.ReadExisting().Replace("\r\n", "").Replace("kg", "").Trim();
-            this.Invoke(new EventHandler(showData));
-        }
 
-        private void showData(object sender, EventArgs e)
-        {
-            if (!String.IsNullOrEmpty(dataIn))
-            {
-                if (Double.TryParse(dataIn, out weightRT))
-                {
-                    weightRT += tempWeightRT;
-                    lbScaleWeight.Text = weightRT.ToString();
-                    if (CheckWeight(weightRT))
-                    {
-                        panelScaleData.BackColor = Color.Green;
-                        lbScaleWeight.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        panelScaleData.BackColor = Color.Black;
-                        lbScaleWeight.ForeColor = Color.White;
-                    }
-                }
-            }
-        }
-
-        private void btnStackWeight_Click(object sender, EventArgs e)
-        {
-            if (!Double.TryParse(lbScaleWeight.Text.Trim(), out tempWeightRT))
-            {
-                MessageBox.Show("Lỗi khi cộng dồn khối lượng. Vui lòng thử lại." + Environment.NewLine + "Error when stack up weight. Please try again.", "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
@@ -138,103 +76,38 @@ namespace mixer_control_globalver.View.MainUI
                 scaleMatName = dt.Rows[i]["mat_name"].ToString();
                 lbMaterialName.Text = scaleMatName;
                 scaleMatNo = dt.Rows[i]["mat_no"].ToString();
-                matWeight = Convert.ToDouble(dt.Rows[i]["weight"].ToString());
-                matTolerance = Convert.ToDouble(dt.Rows[i]["tolerance"].ToString());
-                lbToleranceRange.Text = Convert.ToString(matWeight - matTolerance) + " - " + Convert.ToString(matWeight + matTolerance);
             }
             else
             {
-                lbToleranceRange.Text = "0.000 - 0.000";
                 scaleMatName = null;
                 scaleMatNo = null;
-                matWeight = 0;
-                matTolerance = 0;
                 isFinished = true;
-                lbMaterialName.Text = String.Empty;
-                lbScaleWeight.Text = "FINISHED";
-                panelScaleData.BackColor = Color.Black;
-                lbScaleWeight.ForeColor = Color.White;
+                lbMaterialName.Text = "Hoàn thành xác nhận" + Environment.NewLine + "Confirmation Completed";
             }
         }
 
         private void btnSaveWeight_Click(object sender, EventArgs e)
         {
-            if (CheckWeight(weightRT))
+            if (!String.IsNullOrEmpty(scaleMatName))
             {
-                foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+                DialogResult dialog = MessageBox.Show("Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?" + Environment.NewLine + "Confirm \"" + scaleMatName + "\" material is ready ?", "Xác nhận / Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dialog == DialogResult.Yes)
                 {
-                    if (dr["mat_name"].ToString() == scaleMatName && dr["mat_no"].ToString() == scaleMatNo)
+                    foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
                     {
-                        dr["is_scaled"] = true;
-                        break;
+                        if (dr["mat_name"].ToString() == scaleMatName && dr["mat_no"].ToString() == scaleMatNo)
+                        {
+                            dr["is_confirmed"] = true;
+                            break;
+                        }
                     }
+                    LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
+                    NextMatScale(TemporaryVariables.materialDT, flag);
                 }
             }
             else
             {
-                MessageBox.Show("Chưa đạt trọng lượng yêu cầu!" + Environment.NewLine + "The required weight has not been reached!！", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
-            NextMatScale(TemporaryVariables.materialDT, flag);
-            tempWeightRT = 0;
-        }
-
-        private bool CheckWeight(double w)
-        {
-            if (w <= (matWeight + matTolerance) && w >= (matWeight - matTolerance))
-            {
-                return true;
-            }
-            else { return false; }
-        }
-
-        private void btnConnectScale_Click(object sender, EventArgs e)
-        {
-            if (cbComPort.Items.Count <= 0)
-            {
-                MessageBox.Show("Không tìm được cổng kết nối serial port! Vui lòng kiểm tra kết nối và thử lại!" + Environment.NewLine + "Serial ports not found! Please check ports connection and try again!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                btnConnectScale.ButtonText = "Tải danh sách COM" + Environment.NewLine + "Load list COM";
-            }
-            else
-            {
-                if (!String.IsNullOrEmpty(cbComPort.Text))
-                {
-                    if (serialPort1.IsOpen)
-                    {
-                        serialPort1.Close();
-                        btnConnectScale.ButtonText = "Kết nối cân" + Environment.NewLine + "Connect Scale";
-                    }
-                    else
-                    {
-                        try
-                        {
-                            serialPort1.PortName = cbComPort.Text;
-                            serialPort1.BaudRate = Convert.ToInt32("9600");
-                            serialPort1.DataBits = Convert.ToInt32("8");
-                            serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), "One");
-                            serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), "None");
-                            serialPort1.Open();
-                            btnConnectScale.ButtonText = "Ngắt kết nối" + Environment.NewLine + "Disconnect scale";
-                        }
-                        catch (Exception err)
-                        {
-                            MessageBox.Show("Lỗi kết nối cân" + Environment.NewLine + "Error when connect to scale" + "\r\n\r\n" + err.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Vui lòng chọn cổng kết nối và thử lại!" + Environment.NewLine + "Please choose connect port and try again!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-        }
-
-        private void MaterialScale_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.Close();
+                MessageBox.Show("Đã hoàn thành xác nhận!" + Environment.NewLine + "Confirmation has completed!", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

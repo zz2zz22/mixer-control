@@ -15,17 +15,24 @@ using mixer_control_globalver.Controller.IniFile;
 using XanderUI;
 using mixer_control_globalver.View.MainUI;
 using mixer_control_globalver.Controller;
+using mixer_control_globalver.View.SideUI;
+using System.IO;
+using Spire.Pdf.Exporting.XPS.Schema;
 
 namespace mixer_control_globalver
 {
     public partial class MainWindow : Form
     {
         ChooseSpec specWindow = new ChooseSpec();
-        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\setting.ini");
+        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainWindow()
         {
             InitializeComponent();
-
+            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\data")
+))
+            {
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\data");
+            }
             TemporaryVariables.resetAllTempVariables();
 
             this.Text = string.Empty;
@@ -40,7 +47,8 @@ namespace mixer_control_globalver
         private Form activeForm = null;
         public void openChildForm(Form childForm)
         {
-            if (activeForm != null) activeForm.Close();
+            if (activeForm != null)
+                activeForm.Close();
             activeForm = childForm;
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
@@ -91,9 +99,12 @@ namespace mixer_control_globalver
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            TemporaryVariables.InitSettingDT();
+            TemporaryVariables.language = Settings.Default.language;
+            cbxLanguageChoose.SelectedIndex = Settings.Default.language;
 
             btnChooseSpecTab.ButtonText = "Chọn công thức" + Environment.NewLine + "Choose formula";
-            btnWeightTab.ButtonText = "Cân nguyên vật liệu" + Environment.NewLine + "Material Scale";
+            btnWeightTab.ButtonText = "Xác nhận nguyên vật liệu" + Environment.NewLine + "Material Confirmation";
             btnAutomationTab.ButtonText = "Tự động hóa" + Environment.NewLine + "Automation";
 
             openSpecTab();
@@ -115,16 +126,13 @@ namespace mixer_control_globalver
 
         public void btnChooseSpecTab_Click(object sender, EventArgs e)
         {
-            if(!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
+            if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
                 bool isScaled = false;
                 for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i++)
                 {
-                    if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_packed"])
-                    {
-                        if ((bool)TemporaryVariables.materialDT.Rows[i]["is_scaled"])
-                            isScaled = true;
-                    }
+                    if ((bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"])
+                        isScaled = true;
                 }
                 if (isScaled)
                 {
@@ -151,14 +159,14 @@ namespace mixer_control_globalver
                 btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                 btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                 btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-            }  
+            }
         }
 
         public void btnWeightTab_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
-                openChildForm(new MaterialScale(TemporaryVariables.tempFileName));
+                openChildForm(new MaterialScale());
                 btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                 btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                 btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
@@ -171,32 +179,98 @@ namespace mixer_control_globalver
 
         public void btnAutomationTab_Click(object sender, EventArgs e)
         {
+
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
                 bool isAllScaled = true;
-                for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i ++)
+                for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i++)
                 {
-                    if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_scaled"])
+                    if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"])
                     {
-                        if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_packed"])
-                            isAllScaled = false;
+                        isAllScaled = false;
                     }
                 }
                 if (isAllScaled)
                 {
-                    openChildForm(new AutomationInfo());
-                    btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-                    btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-                    btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                    if (String.IsNullOrEmpty(Settings.Default.plc_ip)
+                || Settings.Default.database_no == 0
+                || Settings.Default.max_speed == 0
+                || Settings.Default.spindle_diameter == 0
+                || Settings.Default.sensor_diameter == 0
+                || Settings.Default.transmission_ratio == 0)
+                    {
+                        MessageBox.Show("Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!" + Environment.NewLine + "Please input all required setting first!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MainSetting mainSetting = new MainSetting();
+                        mainSetting.ShowDialog();
+                    }
+                    else
+                    {
+                        bool notSettingEnough = false;
+                        for (int i = 0; i < TemporaryVariables.settingDT.Rows.Count; i++)
+                        {
+                            if (String.IsNullOrEmpty(ini.Read(TemporaryVariables.settingDT.Rows[i]["value_member"].ToString(), "start")))
+                            {
+                                notSettingEnough = true;
+                            }
+                        }
+                        if (notSettingEnough)
+                        {
+                            MessageBox.Show("Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!" + Environment.NewLine + "Please input all required setting first!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MainSetting mainSetting = new MainSetting();
+                            mainSetting.ShowDialog();
+                        }
+                        else
+                        {
+                            openChildForm(new AutomationInfo());
+                            btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                        }
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Vui lòng cân khối lượng các nguyên liệu trước!" + Environment.NewLine + "Please scale all materials weight first!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Vui lòng xác các nguyên liệu trước!" + Environment.NewLine + "Please confirm all materials first!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
                 MessageBox.Show("Vui lòng chọn một công thức trước!" + Environment.NewLine + "Please choose a formula first!", "Cảnh báo / Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnSetting_Click(object sender, EventArgs e)
+        {
+            MainSetting mainSetting = new MainSetting();
+            mainSetting.ShowDialog();
+        }
+
+        private void cbxLanguageChoose_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (Settings.Default.language != cbxLanguageChoose.SelectedIndex)
+            {
+                Settings.Default.language = cbxLanguageChoose.SelectedIndex;
+                Settings.Default.Save();
+                string message = String.Empty, caption = String.Empty;
+
+                //Change language message
+                if (Settings.Default.language == 0)
+                {
+                    message = "Cần khởi động lại ứng dụng để áp dụng ngôn ngữ mới. Bạn có muốn thoát ?" + Environment.NewLine + "A restart process is required to apply new language. Do you want to close the program ?";
+                    caption = "Cảnh báo / Warning";
+                }
+                else if (Settings.Default.language == 1)
+                {
+                    //add chinese
+                    message = "Cần khởi động lại ứng dụng để áp dụng ngôn ngữ mới. Bạn có muốn thoát ?" + Environment.NewLine + "切换语言需要重新启动才能生效，点击确认重新启动 ?";
+                    caption = "Cảnh báo / 提示";
+                }
+
+                DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.OK)
+                {
+                    Environment.Exit(0);
+                }
             }
         }
     }

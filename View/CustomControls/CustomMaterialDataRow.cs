@@ -14,32 +14,25 @@ namespace mixer_control_globalver.View.CustomControls
 {
     public partial class CustomMaterialDataRow : UserControl
     {
-        public CustomMaterialDataRow(string matCode, string weight, bool status, bool isPacked)
+        public CustomMaterialDataRow(string matCode, string weight, bool status)
         {
             InitializeComponent();
             lbMatCode.Text = matCode;
-            lbWeight.Text = weight + "kg";
-            if (!isPacked)
-            {
-                if (status)
-                {
-                    panelStatus.BackColor = Color.Yellow;
-                    lbStatus.ForeColor = Color.Black;
-                    lbStatus.Text = "ĐẠT" + Environment.NewLine + "OK";
-                }
-                else
-                {
-                    panelStatus.BackColor = Color.Red;
-                    lbStatus.ForeColor = Color.White;
-                    lbStatus.Text = "CHƯA CÂN" + Environment.NewLine + "NOT SCALED";
-                }
-            }
-            else
+            lbWeight.Text = weight;
+
+            if (status)
             {
                 panelStatus.BackColor = Color.Yellow;
                 lbStatus.ForeColor = Color.Black;
-                lbStatus.Text = "TÍNH SỐ GÓI" + Environment.NewLine + "PACKED COUNT";
+                lbStatus.Text = "ĐÃ XÁC NHẬN" + Environment.NewLine + "CONFIRMED";
             }
+            else
+            {
+                panelStatus.BackColor = Color.Red;
+                lbStatus.ForeColor = Color.White;
+                lbStatus.Text = "CHƯA XÁC NHẬN" + Environment.NewLine + "NOT CONFIRMED";
+            }
+
         }
     }
 }

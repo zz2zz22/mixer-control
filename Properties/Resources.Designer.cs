@@ -103,10 +103,50 @@ namespace mixer_control_globalver.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap confirmation {
+            get {
+                object obj = ResourceManager.GetObject("confirmation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap control {
             get {
                 object obj = ResourceManager.GetObject("control", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap cycle {
+            get {
+                object obj = ResourceManager.GetObject("cycle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] data_template_Chinese_ {
+            get {
+                object obj = ResourceManager.GetObject("data_template_Chinese_", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] data_template_English_ {
+            get {
+                object obj = ResourceManager.GetObject("data_template_English_", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -226,6 +266,16 @@ namespace mixer_control_globalver.Properties {
         public static System.Drawing.Bitmap techlinkGifIntro {
             get {
                 object obj = ResourceManager.GetObject("techlinkGifIntro", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap time {
+            get {
+                object obj = ResourceManager.GetObject("time", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

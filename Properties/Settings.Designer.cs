@@ -43,5 +43,98 @@ namespace mixer_control_globalver.Properties {
                 this["folder_directory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string plc_ip {
+            get {
+                return ((string)(this["plc_ip"]));
+            }
+            set {
+                this["plc_ip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int database_no {
+            get {
+                return ((int)(this["database_no"]));
+            }
+            set {
+                this["database_no"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int language {
+            get {
+                return ((int)(this["language"]));
+            }
+            set {
+                this["language"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int max_speed {
+            get {
+                return ((int)(this["max_speed"]));
+            }
+            set {
+                this["max_speed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double spindle_diameter {
+            get {
+                return ((double)(this["spindle_diameter"]));
+            }
+            set {
+                this["spindle_diameter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double sensor_diameter {
+            get {
+                return ((double)(this["sensor_diameter"]));
+            }
+            set {
+                this["sensor_diameter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double transmission_ratio {
+            get {
+                return ((double)(this["transmission_ratio"]));
+            }
+            set {
+                this["transmission_ratio"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string master_pw {
+            get {
+                return ((string)(this["master_pw"]));
+            }
+        }
     }
 }

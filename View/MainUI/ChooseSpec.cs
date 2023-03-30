@@ -25,9 +25,16 @@ namespace mixer_control_globalver.View.MainUI
         public ChooseSpec()
         {
             InitializeComponent();
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
-                txbSearchDirectory.Text = Properties.Settings.Default.folder_directory;
-            else
+            
+        }
+
+        private void ChooseSpec_Load(object sender, EventArgs e)
+        {
+            btnRefreshFileList.ButtonText = "Làm mới" + Environment.NewLine + "Refresh";
+            btnConfirmChoose.ButtonText = "Tiến hành cân liệu" + Environment.NewLine + "Material Scale";
+            btnGetTemplate.ButtonText = "Tải mẫu" + Environment.NewLine + "Download template";
+
+            if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
             {
                 string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
                 System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
@@ -35,16 +42,9 @@ namespace mixer_control_globalver.View.MainUI
                     dir.Create();
 
                 Properties.Settings.Default.folder_directory = dir.FullName;
-                txbSearchDirectory.Text = dir.FullName;
                 Properties.Settings.Default.Save();
             }
             LoadItemFilePath(Properties.Settings.Default.folder_directory);
-        }
-
-        private void ChooseSpec_Load(object sender, EventArgs e)
-        {
-            btnRefreshFileList.ButtonText = "Làm mới" + Environment.NewLine + "Refresh";
-            btnConfirmChoose.ButtonText = "Tiến hành cân liệu" + Environment.NewLine + "Material Scale";
 
             TemporaryVariables.resetAllTempVariables();
         }
@@ -52,6 +52,7 @@ namespace mixer_control_globalver.View.MainUI
         {
             try
             {
+                dtgvListSpecification.DataSource = null;
                 DataTable dt = new DataTable();
                 dt.Columns.Add("file_name", typeof(string));
                 dt.Columns.Add("file_path", typeof(string));
@@ -84,12 +85,11 @@ namespace mixer_control_globalver.View.MainUI
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 Properties.Settings.Default.folder_directory = dialog.FileName;
-                txbSearchDirectory.Text = dialog.FileName;
                 Properties.Settings.Default.Save();
             }
             LoadItemFilePath(Properties.Settings.Default.folder_directory);
         }
-        
+
         private void dtgvListSpecification_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dtgvListSpecification.SelectedCells.Count > 0)
@@ -117,101 +117,107 @@ namespace mixer_control_globalver.View.MainUI
                     matDT = materialSheet.ExportDataTable();
                     processDT = processSheet.ExportDataTable();
 
-                    LoadingDialog loadingDialog = new LoadingDialog();
-                    Thread backgroundThreadGetData = new Thread(
-                        new ThreadStart(() =>
-                        {       
-                            for (int i = 0; i < matDT.Rows.Count; i++)
+                    if (matDT.Rows.Count > 0 && processDT.Rows.Count > 0)
+                    {
+                        LoadingDialog loadingDialog = new LoadingDialog();
+                        Thread backgroundThreadGetData = new Thread(
+                            new ThreadStart(() =>
                             {
-                                Thread.Sleep(20);
-                                if (!String.IsNullOrEmpty(matDT.Rows[i][0].ToString())
-                                    && !String.IsNullOrEmpty(matDT.Rows[i][1].ToString()))
+                                for (int i = 0; i < matDT.Rows.Count; i++)
                                 {
-                                    if (String.IsNullOrEmpty(matDT.Rows[i][3].ToString())
-                                    || String.IsNullOrEmpty(matDT.Rows[i][4].ToString())
-                                    || String.IsNullOrEmpty(matDT.Rows[i][5].ToString()))
+                                    Thread.Sleep(20);
+                                    if (!String.IsNullOrEmpty(matDT.Rows[i][0].ToString())
+                                        && !String.IsNullOrEmpty(matDT.Rows[i][1].ToString()))
                                     {
-                                        throw new Exception("Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Material data in excel file is not enough or wrong! Please check again!");
-                                    }
-                                    bool isPacked;
-                                    if (matDT.Rows[i][5].ToString().ToLower() == "packed")
-                                        isPacked = true;
-                                    else isPacked = false;
-
-                                    TemporaryVariables.materialDT.Rows.Add(matDT.Rows[i][0].ToString(),
-                                        matDT.Rows[i][1].ToString(),
-                                        matDT.Rows[i][2].ToString(),
-                                        matDT.Rows[i][3].ToString(),
-                                        matDT.Rows[i][4].ToString(),
-                                        isPacked,
-                                        false);
-                                }
-                                loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, "Lấy dữ liệu nguyên vật liệu ..." + Environment.NewLine + "Getting material data ...");
-                            }
-                            loadingDialog.UpdateProgress(0, "");
-
-                            for (int j = 0; j < processDT.Rows.Count; j++)
-                            {
-                                Thread.Sleep(20);
-                                if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
-                                    && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString()))
-                                {
-                                    if (String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
-                                        || String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
-                                        || String.IsNullOrEmpty(processDT.Rows[j][6].ToString()))
-                                    {
-                                        throw new Exception("Dữ liệu quy trình ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Process data in excel file is not enough or wrong! Please check again!");
+                                        if (String.IsNullOrEmpty(matDT.Rows[i][3].ToString())
+                                        || String.IsNullOrEmpty(matDT.Rows[i][4].ToString()))
+                                        {
+                                            throw new Exception("Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Material data in excel file is not enough or wrong! Please check again!");
+                                        }
+                                        TemporaryVariables.materialDT.Rows.Add(matDT.Rows[i][0].ToString(),
+                                            matDT.Rows[i][1].ToString(),
+                                            matDT.Rows[i][2].ToString(),
+                                            matDT.Rows[i][3].ToString(),
+                                            matDT.Rows[i][4].ToString(),
+                                            false);
                                     }
 
-                                    int changeSpeed = 0, changeTime = 0, vaccumTime = 0;
-
-                                    if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
-                                        changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
-
-                                    if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
-                                        changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
-
-                                    if (!String.IsNullOrEmpty(processDT.Rows[j][5].ToString()))
-                                        vaccumTime = Convert.ToInt32(processDT.Rows[j][5].ToString());
-
-                                    TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
-                                        processDT.Rows[j][1].ToString(),
-                                        processDT.Rows[j][2].ToString(),
-                                        changeSpeed,
-                                        changeTime,
-                                        vaccumTime,
-                                        processDT.Rows[j][6].ToString(),
-                                        processDT.Rows[j][7].ToString(),
-                                        false);
+                                    loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, "Lấy dữ liệu nguyên vật liệu ..." + Environment.NewLine + "Getting material data ...");
                                 }
-                                loadingDialog.UpdateProgress(100 * j / processDT.Rows.Count, "Lấy dữ liệu quy trình ..." + Environment.NewLine + "Getting process data ...");
-                            }
-                            loadingDialog.BeginInvoke(new Action(() => loadingDialog.Close()));
-                        }));
-                    backgroundThreadGetData.Start();
-                    loadingDialog.ShowDialog();
+                                loadingDialog.UpdateProgress(0, "");
 
-                    lbFormulaName.Text = TemporaryVariables.tempFileName;
+                                for (int j = 0; j < processDT.Rows.Count; j++)
+                                {
+                                    Thread.Sleep(20);
+                                    if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
+                                        && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString()))
+                                    {
+                                        if (String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
+                                            || String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
+                                            || String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
+                                            || String.IsNullOrEmpty(processDT.Rows[j][6].ToString()))
+                                        {
+                                            throw new Exception("Dữ liệu quy trình ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Process data in excel file is not enough or wrong! Please check again!");
+                                        }
 
-                    dtgvSpecMaterialList.DataSource = TemporaryVariables.materialDT;
-                    dtgvSpecMaterialList.Columns["mat_no"].Visible = false;
-                    dtgvSpecMaterialList.Columns["lot_no"].Visible = false;
-                    dtgvSpecMaterialList.Columns["tolerance"].Visible = false;
-                    dtgvSpecMaterialList.Columns["is_packed"].Visible = false;
-                    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu" + Environment.NewLine + "Material name";
-                    dtgvSpecMaterialList.Columns["weight"].Visible = false;
-                    dtgvSpecMaterialList.Columns["is_scaled"].Visible = false;
+                                        int changeSpeed = 0, changeTime = 0;
+                                        bool isVaccum = false;
 
-                    dtgvSpecProcessList.DataSource = TemporaryVariables.processDT;
-                    dtgvSpecProcessList.Columns["init_speed"].Visible = false;
-                    dtgvSpecProcessList.Columns["init_time"].Visible = false;
-                    dtgvSpecProcessList.Columns["change_speed"].Visible = false;
-                    dtgvSpecProcessList.Columns["change_time"].Visible = false;
-                    dtgvSpecProcessList.Columns["vaccum_time"].Visible = false;
-                    dtgvSpecProcessList.Columns["max_temperature"].Visible = false;
-                    dtgvSpecProcessList.Columns["is_finished"].Visible = false;
-                    dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước" + Environment.NewLine + "Step No.";
-                    dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả" + Environment.NewLine + "Description";
+                                        if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
+                                            changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
+
+                                        if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
+                                            changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
+
+
+                                        if (processDT.Rows[j][5].ToString().ToLower() == "yes")
+                                            isVaccum = true;
+                                        else if (processDT.Rows[j][5].ToString().ToLower() == "no")
+                                            isVaccum = false;
+
+
+                                        TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
+                                            processDT.Rows[j][1].ToString(),
+                                            processDT.Rows[j][2].ToString(),
+                                            changeSpeed,
+                                            changeTime,
+                                            isVaccum,
+                                            processDT.Rows[j][6].ToString(),
+                                            processDT.Rows[j][7].ToString(),
+                                            false);
+                                    }
+                                    loadingDialog.UpdateProgress(100 * j / processDT.Rows.Count, "Lấy dữ liệu quy trình ..." + Environment.NewLine + "Getting process data ...");
+                                }
+                                loadingDialog.BeginInvoke(new Action(() => loadingDialog.Close()));
+                            }));
+                        backgroundThreadGetData.Start();
+                        loadingDialog.ShowDialog();
+
+                        lbFormulaName.Text = TemporaryVariables.tempFileName;
+
+                        dtgvSpecMaterialList.DataSource = TemporaryVariables.materialDT;
+                        dtgvSpecMaterialList.Columns["mat_no"].Visible = false;
+                        dtgvSpecMaterialList.Columns["lot_no"].Visible = false;
+                        dtgvSpecMaterialList.Columns["tolerance"].Visible = false;
+                        dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu" + Environment.NewLine + "Material name";
+                        dtgvSpecMaterialList.Columns["weight"].Visible = false;
+                        dtgvSpecMaterialList.Columns["is_confirmed"].Visible = false;
+
+                        dtgvSpecProcessList.DataSource = TemporaryVariables.processDT;
+                        dtgvSpecProcessList.Columns["init_speed"].Visible = false;
+                        dtgvSpecProcessList.Columns["init_time"].Visible = false;
+                        dtgvSpecProcessList.Columns["change_speed"].Visible = false;
+                        dtgvSpecProcessList.Columns["change_time"].Visible = false;
+                        dtgvSpecProcessList.Columns["is_vaccum"].Visible = false;
+                        dtgvSpecProcessList.Columns["max_temperature"].Visible = false;
+                        dtgvSpecProcessList.Columns["is_finished"].Visible = false;
+                        dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước" + Environment.NewLine + "Step No.";
+                        dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả" + Environment.NewLine + "Description";
+                    }
+                    else
+                    {
+                        throw new Exception("Dữ liệu excel trống. Vui lòng kiểm tra!" + Environment.NewLine + "Excel file is empty. Please check again!");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -232,6 +238,45 @@ namespace mixer_control_globalver.View.MainUI
         private void btnConfirmChoose_Click(object sender, EventArgs e)
         {
             AppIntro.main.openScaleTab();
+        }
+
+        private void btnGetTemplate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Windows.Forms.SaveFileDialog saveFileDialog = new SaveFileDialog();
+                string pathsave = "";
+                saveFileDialog.Title = "Browse Excel Files";
+                saveFileDialog.DefaultExt = "Excel";
+                saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
+                saveFileDialog.CheckPathExists = true;
+
+                if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    pathsave = saveFileDialog.FileName;
+                    saveFileDialog.RestoreDirectory = true;
+                    using (System.IO.FileStream fs = new System.IO.FileStream(pathsave, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+                    {
+                        byte[] data = null; //Add resource
+                        if (TemporaryVariables.language == 0)
+                        {
+                            data = Properties.Resources.data_template_English_;
+                        }
+                        else
+                        {
+                            data = Properties.Resources.data_template_Chinese_;
+                        }
+                        fs.Write(data, 0, data.Length);
+                    }
+
+                    MessageBox.Show("Lưu tệp Excel mẫu thành công !" + Environment.NewLine + "Successfully save Excel template !", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lưu tệp Excel mẫu thất bại !" + Environment.NewLine + "Failed to save Excel template !" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Lỗi lưu file mẫu", ex.Message);
+            }
         }
     }
 }
