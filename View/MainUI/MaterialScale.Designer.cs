@@ -30,18 +30,18 @@
         {
             this.panelMaterialScaleMain = new System.Windows.Forms.Panel();
             this.lbMaterialName = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.flpMaterialList = new System.Windows.Forms.FlowLayoutPanel();
-            this.lb1 = new System.Windows.Forms.Label();
+            this.lb2 = new System.Windows.Forms.Label();
             this.btnProceedAutomation = new XanderUI.XUIButton();
             this.btnConfirm = new XanderUI.XUIButton();
+            this.flpMaterialList = new System.Windows.Forms.FlowLayoutPanel();
+            this.lb1 = new System.Windows.Forms.Label();
             this.panelMaterialScaleMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelMaterialScaleMain
             // 
             this.panelMaterialScaleMain.Controls.Add(this.lbMaterialName);
-            this.panelMaterialScaleMain.Controls.Add(this.label2);
+            this.panelMaterialScaleMain.Controls.Add(this.lb2);
             this.panelMaterialScaleMain.Controls.Add(this.btnProceedAutomation);
             this.panelMaterialScaleMain.Controls.Add(this.btnConfirm);
             this.panelMaterialScaleMain.Controls.Add(this.flpMaterialList);
@@ -56,46 +56,25 @@
             // 
             this.lbMaterialName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbMaterialName.AutoSize = true;
-            this.lbMaterialName.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMaterialName.Location = new System.Drawing.Point(523, 152);
+            this.lbMaterialName.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMaterialName.Location = new System.Drawing.Point(518, 168);
             this.lbMaterialName.Name = "lbMaterialName";
-            this.lbMaterialName.Size = new System.Drawing.Size(25, 21);
+            this.lbMaterialName.Size = new System.Drawing.Size(24, 19);
             this.lbMaterialName.TabIndex = 19;
             this.lbMaterialName.Text = "...";
+            this.lbMaterialName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // lb2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(444, 97);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(130, 38);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Tên nguyên liệu:\r\nMaterial name:";
-            // 
-            // flpMaterialList
-            // 
-            this.flpMaterialList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flpMaterialList.AutoScroll = true;
-            this.flpMaterialList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.flpMaterialList.Location = new System.Drawing.Point(12, 50);
-            this.flpMaterialList.Name = "flpMaterialList";
-            this.flpMaterialList.Size = new System.Drawing.Size(408, 546);
-            this.flpMaterialList.TabIndex = 1;
-            // 
-            // lb1
-            // 
-            this.lb1.AutoSize = true;
-            this.lb1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb1.Location = new System.Drawing.Point(12, 9);
-            this.lb1.Name = "lb1";
-            this.lb1.Size = new System.Drawing.Size(271, 38);
-            this.lb1.TabIndex = 0;
-            this.lb1.Text = "Danh sách nguyên vật liệu cần cân:\r\nScale required materials list:";
+            this.lb2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb2.AutoSize = true;
+            this.lb2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lb2.Location = new System.Drawing.Point(444, 97);
+            this.lb2.Name = "lb2";
+            this.lb2.Size = new System.Drawing.Size(130, 38);
+            this.lb2.TabIndex = 18;
+            this.lb2.Text = "Tên nguyên liệu:\r\nMaterial name:";
             // 
             // btnProceedAutomation
             // 
@@ -135,13 +114,35 @@
             this.btnConfirm.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnConfirm.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnConfirm.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnConfirm.Location = new System.Drawing.Point(448, 211);
+            this.btnConfirm.Location = new System.Drawing.Point(448, 255);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(299, 95);
             this.btnConfirm.TabIndex = 15;
             this.btnConfirm.TextColor = System.Drawing.Color.Black;
             this.btnConfirm.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnConfirm.Click += new System.EventHandler(this.btnSaveWeight_Click);
+            // 
+            // flpMaterialList
+            // 
+            this.flpMaterialList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flpMaterialList.AutoScroll = true;
+            this.flpMaterialList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.flpMaterialList.Location = new System.Drawing.Point(12, 50);
+            this.flpMaterialList.Name = "flpMaterialList";
+            this.flpMaterialList.Size = new System.Drawing.Size(408, 546);
+            this.flpMaterialList.TabIndex = 1;
+            // 
+            // lb1
+            // 
+            this.lb1.AutoSize = true;
+            this.lb1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb1.Location = new System.Drawing.Point(12, 9);
+            this.lb1.Name = "lb1";
+            this.lb1.Size = new System.Drawing.Size(310, 38);
+            this.lb1.TabIndex = 0;
+            this.lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:\r\nConfirmation required materials list:";
             // 
             // MaterialScale
             // 
@@ -170,7 +171,7 @@
         private System.Windows.Forms.FlowLayoutPanel flpMaterialList;
         private XanderUI.XUIButton btnConfirm;
         private XanderUI.XUIButton btnProceedAutomation;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lb2;
         private System.Windows.Forms.Label lbMaterialName;
     }
 }

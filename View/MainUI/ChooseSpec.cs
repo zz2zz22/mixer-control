@@ -22,17 +22,34 @@ namespace mixer_control_globalver.View.MainUI
 {
     public partial class ChooseSpec : Form
     {
+        string message = String.Empty, caption = String.Empty;
         public ChooseSpec()
         {
             InitializeComponent();
-            
         }
 
         private void ChooseSpec_Load(object sender, EventArgs e)
         {
-            btnRefreshFileList.ButtonText = "Làm mới" + Environment.NewLine + "Refresh";
-            btnConfirmChoose.ButtonText = "Tiến hành cân liệu" + Environment.NewLine + "Material Scale";
-            btnGetTemplate.ButtonText = "Tải mẫu" + Environment.NewLine + "Download template";
+            if (TemporaryVariables.language == 0 )
+            {
+                lb5.Text = "Công thức đã chọn:\r\nSelected formula:";
+                lb2.Text = "Danh sách công thức:\r\nFormula setting files:";
+                lb3.Text = "Danh sách liệu:\r\nMaterials list:";
+                lb4.Text = "Danh sách quy trình:\r\nProcess list:";
+
+                btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu\r\nBegin Material Confirmation";
+                btnGetTemplate.ButtonText = "Tải mẫu\r\nDownload template";
+            }
+            else if (TemporaryVariables.language == 1)
+            {
+                lb5.Text = "Công thức đã chọn:\r\n已选产品型号:";
+                lb2.Text = "Danh sách công thức:\r\n产品型号列表:";
+                lb3.Text = "Danh sách liệu:\r\n原料列表:";
+                lb4.Text = "Danh sách quy trình:\r\n操作步骤:";
+
+                btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu\r\n开始材料确认。";
+                btnGetTemplate.ButtonText = "Tải mẫu\r\n下载模板";
+            }
 
             if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
             {
@@ -67,13 +84,31 @@ namespace mixer_control_globalver.View.MainUI
                         dt.Rows.Add(Path.GetFileNameWithoutExtension(fileName), fileName);
                     }
                 }
+               
                 dtgvListSpecification.DataSource = dt;
-                dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp" + Environment.NewLine + "File name";
+                if (TemporaryVariables.language == 0)
+                {
+                    dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp\r\nFile name";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp\r\n产品型号名称";
+                }
                 dtgvListSpecification.Columns["file_path"].Visible = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không thể tải dữ liệu tệp!" + Environment.NewLine + "Load dirctory files failed!" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Không thể tải dữ liệu tệp!\r\nLoad dirctory files failed!" + "\r\n\r\n" + ex.Message;
+                    caption = "Lỗi / Error";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Không thể tải dữ liệu tệp!\r\n上传产品型号失败！" + "\r\n\r\n" + ex.Message;
+                    caption = "Lỗi / 错误";
+                }
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,7 +148,17 @@ namespace mixer_control_globalver.View.MainUI
                     Worksheet processSheet = workbook.Worksheets["process_info"];
 
                     if (materialSheet == null || processSheet == null)
-                        throw new Exception("Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!" + Environment.NewLine + "Excel file is not in correct format! Please check again!");
+                    {
+                        if (TemporaryVariables.language == 0)
+                        {
+                            message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nExcel file is not in correct format! Please check again!";
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nEXCEL板式不合格！请检查！";
+                        }
+                        throw new Exception(message);
+                    }
                     matDT = materialSheet.ExportDataTable();
                     processDT = processSheet.ExportDataTable();
 
@@ -132,7 +177,15 @@ namespace mixer_control_globalver.View.MainUI
                                         if (String.IsNullOrEmpty(matDT.Rows[i][3].ToString())
                                         || String.IsNullOrEmpty(matDT.Rows[i][4].ToString()))
                                         {
-                                            throw new Exception("Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Material data in excel file is not enough or wrong! Please check again!");
+                                            if (TemporaryVariables.language == 0)
+                                            {
+                                                message = "Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\nMaterial data in excel file is not enough or wrong! Please check again!";
+                                            }
+                                            else if (TemporaryVariables.language == 1)
+                                            {
+                                                message = "Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\n........................"; //add chinese
+                                            }
+                                            throw new Exception(message);
                                         }
                                         TemporaryVariables.materialDT.Rows.Add(matDT.Rows[i][0].ToString(),
                                             matDT.Rows[i][1].ToString(),
@@ -141,8 +194,15 @@ namespace mixer_control_globalver.View.MainUI
                                             matDT.Rows[i][4].ToString(),
                                             false);
                                     }
-
-                                    loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, "Lấy dữ liệu nguyên vật liệu ..." + Environment.NewLine + "Getting material data ...");
+                                    if (TemporaryVariables.language == 0)
+                                    {
+                                        message = "Lấy dữ liệu nguyên vật liệu ...\r\nGetting material data ...";
+                                    }
+                                    else if (TemporaryVariables.language == 1)
+                                    {
+                                        message = "Lấy dữ liệu nguyên vật liệu ...\r\n获取原料信息 ...";
+                                    }
+                                    loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, message);
                                 }
                                 loadingDialog.UpdateProgress(0, "");
 
@@ -157,7 +217,8 @@ namespace mixer_control_globalver.View.MainUI
                                             || String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
                                             || String.IsNullOrEmpty(processDT.Rows[j][6].ToString()))
                                         {
-                                            throw new Exception("Dữ liệu quy trình ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!" + Environment.NewLine + "Process data in excel file is not enough or wrong! Please check again!");
+
+                                            throw new Exception("Dữ liệu quy trình ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\nProcess data in excel file is not enough or wrong! Please check again!");
                                         }
 
                                         int changeSpeed = 0, changeTime = 0;
@@ -186,7 +247,15 @@ namespace mixer_control_globalver.View.MainUI
                                             processDT.Rows[j][7].ToString(),
                                             false);
                                     }
-                                    loadingDialog.UpdateProgress(100 * j / processDT.Rows.Count, "Lấy dữ liệu quy trình ..." + Environment.NewLine + "Getting process data ...");
+                                    if (TemporaryVariables.language == 0)
+                                    {
+                                        message = "Lấy dữ liệu quy trình ...\r\nGetting process data ...";
+                                    }
+                                    else if (TemporaryVariables.language == 1)
+                                    {
+                                        message = "Lấy dữ liệu quy trình ...\r\n获取操作步骤信息...";
+                                    }
+                                    loadingDialog.UpdateProgress(100 * j / processDT.Rows.Count, message);
                                 }
                                 loadingDialog.BeginInvoke(new Action(() => loadingDialog.Close()));
                             }));
@@ -199,7 +268,15 @@ namespace mixer_control_globalver.View.MainUI
                         dtgvSpecMaterialList.Columns["mat_no"].Visible = false;
                         dtgvSpecMaterialList.Columns["lot_no"].Visible = false;
                         dtgvSpecMaterialList.Columns["tolerance"].Visible = false;
-                        dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu" + Environment.NewLine + "Material name";
+                        if (TemporaryVariables.language == 0)
+                        {
+                            dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\nMaterial name";
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\n原料名称";
+                        }
+                        
                         dtgvSpecMaterialList.Columns["weight"].Visible = false;
                         dtgvSpecMaterialList.Columns["is_confirmed"].Visible = false;
 
@@ -211,12 +288,21 @@ namespace mixer_control_globalver.View.MainUI
                         dtgvSpecProcessList.Columns["is_vaccum"].Visible = false;
                         dtgvSpecProcessList.Columns["max_temperature"].Visible = false;
                         dtgvSpecProcessList.Columns["is_finished"].Visible = false;
-                        dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước" + Environment.NewLine + "Step No.";
-                        dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả" + Environment.NewLine + "Description";
+                        if (TemporaryVariables.language == 0)
+                        {
+                            dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\nStep No.";
+                            dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\nDescription";
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\n序号";
+                            dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\n描述";
+                        }
+                        
                     }
                     else
                     {
-                        throw new Exception("Dữ liệu excel trống. Vui lòng kiểm tra!" + Environment.NewLine + "Excel file is empty. Please check again!");
+                        throw new Exception("Dữ liệu excel trống. Vui lòng kiểm tra!\r\nExcel file is empty. Please check again!");
                     }
                 }
                 catch (Exception ex)
@@ -225,7 +311,17 @@ namespace mixer_control_globalver.View.MainUI
                     dtgvSpecMaterialList.DataSource = null;
                     dtgvSpecProcessList.DataSource = null;
                     SystemLog.Output(SystemLog.MSG_TYPE.Err, "Excel Load error", ex.Message);
-                    MessageBox.Show("Lỗi khi tải dữ liệu excel!" + Environment.NewLine + "Load Excel data failed!" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (TemporaryVariables.language == 0)
+                    {
+                        message = "Lỗi khi tải dữ liệu excel!\r\nLoad Excel data failed!" + "\r\n\r\n" + ex.Message;
+                        caption = "Lỗi / Error";
+                    }
+                    else if (TemporaryVariables.language == 1)
+                    {
+                        message = "Lỗi khi tải dữ liệu excel!\r\n下载EXCEL失败!" + "\r\n\r\n" + ex.Message;
+                        caption = "Lỗi / 错误";
+                    }
+                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -246,7 +342,7 @@ namespace mixer_control_globalver.View.MainUI
             {
                 System.Windows.Forms.SaveFileDialog saveFileDialog = new SaveFileDialog();
                 string pathsave = "";
-                saveFileDialog.Title = "Browse Excel Files";
+                saveFileDialog.Title = "Lưu file Excel mẫu / Save Excel template";
                 saveFileDialog.DefaultExt = "Excel";
                 saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
                 saveFileDialog.CheckPathExists = true;
@@ -269,12 +365,12 @@ namespace mixer_control_globalver.View.MainUI
                         fs.Write(data, 0, data.Length);
                     }
 
-                    MessageBox.Show("Lưu tệp Excel mẫu thành công !" + Environment.NewLine + "Successfully save Excel template !", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Lưu tệp Excel mẫu thành công !\r\nSuccessfully save Excel template !", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lưu tệp Excel mẫu thất bại !" + Environment.NewLine + "Failed to save Excel template !" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Lưu tệp Excel mẫu thất bại !\r\nFailed to save Excel template !" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Lỗi lưu file mẫu", ex.Message);
             }
         }

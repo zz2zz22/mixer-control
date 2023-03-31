@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panelAutomationInfoMain = new System.Windows.Forms.Panel();
+            this.btnContinueStep = new XanderUI.XUIButton();
+            this.btnStartProcess = new XanderUI.XUIButton();
             this.btnActivateSpeedControl = new System.Windows.Forms.Button();
             this.rtbRemark = new System.Windows.Forms.RichTextBox();
             this.btnResetRoll = new System.Windows.Forms.Button();
@@ -45,8 +47,6 @@
             this.lb3 = new System.Windows.Forms.Label();
             this.lbCountDown = new System.Windows.Forms.Label();
             this.lb5 = new System.Windows.Forms.Label();
-            this.btnContinueStep = new XanderUI.XUIButton();
-            this.btnStartProcess = new XanderUI.XUIButton();
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelShowSpeed.SuspendLayout();
             this.panelShowTemperature.SuspendLayout();
@@ -71,6 +71,51 @@
             this.panelAutomationInfoMain.Name = "panelAutomationInfoMain";
             this.panelAutomationInfoMain.Size = new System.Drawing.Size(759, 608);
             this.panelAutomationInfoMain.TabIndex = 1;
+            // 
+            // btnContinueStep
+            // 
+            this.btnContinueStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnContinueStep.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnContinueStep.ButtonImage = global::mixer_control_globalver.Properties.Resources.cycle;
+            this.btnContinueStep.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnContinueStep.ButtonText = "Refresh";
+            this.btnContinueStep.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnContinueStep.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnContinueStep.CornerRadius = 10;
+            this.btnContinueStep.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnContinueStep.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnContinueStep.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnContinueStep.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnContinueStep.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
+            this.btnContinueStep.Location = new System.Drawing.Point(415, 538);
+            this.btnContinueStep.Name = "btnContinueStep";
+            this.btnContinueStep.Size = new System.Drawing.Size(69, 58);
+            this.btnContinueStep.TabIndex = 25;
+            this.btnContinueStep.TextColor = System.Drawing.Color.Black;
+            this.btnContinueStep.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            // 
+            // btnStartProcess
+            // 
+            this.btnStartProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnStartProcess.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnStartProcess.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
+            this.btnStartProcess.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnStartProcess.ButtonText = "Start process";
+            this.btnStartProcess.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnStartProcess.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnStartProcess.CornerRadius = 10;
+            this.btnStartProcess.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStartProcess.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnStartProcess.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnStartProcess.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnStartProcess.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
+            this.btnStartProcess.Location = new System.Drawing.Point(12, 529);
+            this.btnStartProcess.Name = "btnStartProcess";
+            this.btnStartProcess.Size = new System.Drawing.Size(297, 67);
+            this.btnStartProcess.TabIndex = 19;
+            this.btnStartProcess.TextColor = System.Drawing.Color.Black;
+            this.btnStartProcess.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnStartProcess.Click += new System.EventHandler(this.btnStartProcess_Click);
             // 
             // btnActivateSpeedControl
             // 
@@ -267,51 +312,6 @@
             this.lb5.TabIndex = 5;
             this.lb5.Text = "Thời gian còn lại đến khi kết thúc bước:\r\nTime left untill process ended:\r\n";
             // 
-            // btnContinueStep
-            // 
-            this.btnContinueStep.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnContinueStep.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnContinueStep.ButtonImage = global::mixer_control_globalver.Properties.Resources.cycle;
-            this.btnContinueStep.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnContinueStep.ButtonText = "Refresh";
-            this.btnContinueStep.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnContinueStep.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnContinueStep.CornerRadius = 10;
-            this.btnContinueStep.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnContinueStep.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnContinueStep.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnContinueStep.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnContinueStep.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnContinueStep.Location = new System.Drawing.Point(415, 538);
-            this.btnContinueStep.Name = "btnContinueStep";
-            this.btnContinueStep.Size = new System.Drawing.Size(69, 58);
-            this.btnContinueStep.TabIndex = 25;
-            this.btnContinueStep.TextColor = System.Drawing.Color.Black;
-            this.btnContinueStep.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            // 
-            // btnStartProcess
-            // 
-            this.btnStartProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnStartProcess.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnStartProcess.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
-            this.btnStartProcess.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnStartProcess.ButtonText = "Start process";
-            this.btnStartProcess.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnStartProcess.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnStartProcess.CornerRadius = 10;
-            this.btnStartProcess.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStartProcess.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnStartProcess.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnStartProcess.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnStartProcess.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnStartProcess.Location = new System.Drawing.Point(12, 529);
-            this.btnStartProcess.Name = "btnStartProcess";
-            this.btnStartProcess.Size = new System.Drawing.Size(297, 67);
-            this.btnStartProcess.TabIndex = 19;
-            this.btnStartProcess.TextColor = System.Drawing.Color.Black;
-            this.btnStartProcess.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnStartProcess.Click += new System.EventHandler(this.btnStartProcess_Click);
-            // 
             // AutomationInfo
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -325,6 +325,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "AutomationInfo";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutomationInfo_FormClosing);
             this.Load += new System.EventHandler(this.AutomationInfo_Load);
             this.panelAutomationInfoMain.ResumeLayout(false);
             this.panelAutomationInfoMain.PerformLayout();

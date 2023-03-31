@@ -16,6 +16,7 @@ using System.Reflection.Emit;
 using static System.Net.Mime.MediaTypeNames;
 using mixer_control_globalver.View.SideUI;
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace mixer_control_globalver.View.MainUI
 {
@@ -26,6 +27,7 @@ namespace mixer_control_globalver.View.MainUI
         Timer runTimer;
         CountDownTimer timer;
         string tempSpeed;
+        string message = String.Empty, caption = String.Empty;
         int db, currentRow, speed1, time1, speed2, time2, max_temp;
         bool isVaccum;
         IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
@@ -80,8 +82,17 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnStartProcess_Click(object sender, EventArgs e)
         {
-
-            DialogResult dialog = MessageBox.Show("Xác nhận đã cho ... vào máy ? Bấm \"OK\" để tiến hành bước đang thể hiện!", "Cảnh báo / Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (TemporaryVariables.language == 0)
+            {
+                message = "Hãy xác nhận đã cho nguyên liệu vào máy! Bấm \"OK\" để tiến hành bước đang thể hiện!\r\nPlease confirm the material have been put in the machine! Press \"OK\" to begin process!";
+                caption = "Cảnh báo / Warning";
+            }
+            else if (TemporaryVariables.language == 1)
+            {
+                message = "Hãy xác nhận đã cho nguyên liệu vào máy! Bấm \"OK\" để tiến hành bước đang thể hiện!\r\n请确认料已经放好！继续执行此步骤，点击 \"OK\"。";
+                caption = "Cảnh báo / 提示";
+            }
+            DialogResult dialog = MessageBox.Show(message, "Cảnh báo / Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dialog == DialogResult.OK)
             {
                 pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
@@ -151,7 +162,7 @@ namespace mixer_control_globalver.View.MainUI
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TV", "start")), Convert.ToInt32(ini.Read("TV", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("TV", "start")), Convert.ToInt32(ini.Read("TV", "bit")), 1);
             }
-
+            btnStartProcess.Enabled = true;
             bool isFinished = true;
             for (int i = 0; i < TemporaryVariables.processDT.Rows.Count; i++)
             {
@@ -164,7 +175,7 @@ namespace mixer_control_globalver.View.MainUI
             if (!isFinished)
             {
                 TemporaryVariables.processDT.Rows[currentRow]["is_finished"] = true;
-                DialogResult dialog = MessageBox.Show("Đã kết thúc bước, bấm \"OK\" để mở nắp, \"CANCEL\" để giữ nắp đóng!", "Thông tin / Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                DialogResult dialog = MessageBox.Show("Đã kết thúc bước, bấm \"OK\" để mở nắp, \"CANCEL\" để giữ nắp đóng!\r\nProcess finished, press \"OK\" to open the lid, press \"Cancel\" to left the lid stay shut!", "Thông tin / Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (dialog == DialogResult.OK)
                 {
                     if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
@@ -185,7 +196,7 @@ namespace mixer_control_globalver.View.MainUI
             else
             {
                 TemporaryVariables.processDT.Rows[currentRow]["is_finished"] = true;
-                DialogResult dialog = MessageBox.Show("Đã hoàn thành thực hiện công thức! Vui lòng đổ liệu thủ công!" + Environment.NewLine + "Formula automation process is finished! Please take out the product manually!", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult dialog = MessageBox.Show("Đã hoàn thành thực hiện công thức! Vui lòng đổ liệu thủ công!\r\nFormula automation process is finished! Please take out the product manually!", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (dialog == DialogResult.OK)
                 {
                     if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
@@ -223,6 +234,19 @@ namespace mixer_control_globalver.View.MainUI
 
                 AppIntro.main.openSpecTab();
             }
+            
+        }
+
+        private void AutomationInfo_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (timer != null)
+            {
+                timer.Disable();
+            }
+            if (runTimer != null)
+            {
+                runTimer.Enabled = false;
+            }
         }
 
         private void btnNormalRoll_Click(object sender, EventArgs e)
@@ -259,7 +283,14 @@ namespace mixer_control_globalver.View.MainUI
                 btnResetRoll.BackColor = Color.Yellow;
                 btnActivateSpeedControl.BackColor = Color.White;
 
-                btnActivateSpeedControl.Text = "Chế độ tự động đang tắt" + Environment.NewLine + "Automation mode OFF";
+                if (TemporaryVariables.language == 0)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang tắt\r\nAutomation mode OFF";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang tắt\r\n自动化模式：关";
+                }
                 btnNormalRoll.Visible = false;
                 btnReverseRoll.Visible = false;
             }
@@ -281,7 +312,14 @@ namespace mixer_control_globalver.View.MainUI
                 btnResetRoll.BackColor = Color.White;
 
                 btnActivateSpeedControl.BackColor = Color.Yellow;
-                btnActivateSpeedControl.Text = "Chế độ tự động đang bật" + Environment.NewLine + "Automation mode ON";
+                if (TemporaryVariables.language == 0)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\n自动化模式：开";
+                }
                 btnNormalRoll.Visible = true;
                 btnNormalRoll.BackColor = Color.Yellow;
                 btnReverseRoll.BackColor = Color.White;
@@ -297,7 +335,33 @@ namespace mixer_control_globalver.View.MainUI
 
         private void AutomationInfo_Load(object sender, EventArgs e)
         {
-            btnStartProcess.ButtonText = "Bắt đầu thực hiện bước" + Environment.NewLine + "Start Process";
+            if (TemporaryVariables.language == 0)
+            {
+                lb1.Text = "Tốc độ hiện tại:\r\nCurrent speed:";
+                lb3.Text = "Nhiệt độ hiện tại:\r\nCurrent temperature:";
+                lb2.Text = "(vòng/phút)\r\n(rpm)";
+                lb4.Text = "(Độ C)\r\n(Celsius)";
+                lb5.Text = "Thời gian còn lại đến khi kết thúc bước:\r\nTime left untill process ended:";
+
+                btnStartProcess.ButtonText = "Bắt đầu thực hiện bước\r\nStart Process";
+                btnNormalRoll.Text = "Quay Thuận\r\nClockwise";
+                btnReverseRoll.Text = "Quay Ngược\r\nReverse Clockwise";
+                btnResetRoll.Text = "Ngừng Quay\r\nStop Motor";
+            }
+            else if (TemporaryVariables.language == 1)
+            {
+                lb1.Text = "Tốc độ hiện tại:\r\n实时转速:";
+                lb3.Text = "Nhiệt độ hiện tại:\r\n实时温度:";
+                lb2.Text = "(vòng/phút)\r\n(转/分)";
+                lb4.Text = "(Độ C)\r\n(摄氏度)";
+                lb5.Text = "Thời gian còn lại đến khi kết thúc bước:\r\n时间倒计时致此步骤结束:";
+
+                btnStartProcess.ButtonText = "Bắt đầu thực hiện bước\r\n开始执行此步骤";
+                btnNormalRoll.Text = "Quay Thuận\r\n顺转";
+                btnReverseRoll.Text = "Quay Ngược\r\n逆转";
+                btnResetRoll.Text = "Ngừng Quay\r\n停止旋转";
+            }
+            
 
             pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
             db = Settings.Default.database_no;
@@ -344,7 +408,14 @@ namespace mixer_control_globalver.View.MainUI
             if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1))
             {
                 btnActivateSpeedControl.BackColor = Color.Yellow;
-                btnActivateSpeedControl.Text = "Chế độ tự động đang bật" + Environment.NewLine + "Automation mode ON";
+                if (TemporaryVariables.language == 0)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\n自动化模式：开";
+                }
                 btnNormalRoll.Visible = true;
                 btnReverseRoll.Visible = true;
                 btnResetRoll.Visible = true;
@@ -352,7 +423,14 @@ namespace mixer_control_globalver.View.MainUI
             else
             {
                 btnActivateSpeedControl.BackColor = Color.White;
-                btnActivateSpeedControl.Text = "Chế độ tự động đang tắt" + Environment.NewLine + "Automation mode OFF";
+                if (TemporaryVariables.language == 0)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang tắt\r\nAutomation mode OFF";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang tắt\r\n自动化模式：关";
+                }
                 btnNormalRoll.Visible = false;
                 btnReverseRoll.Visible = false;
                 btnResetRoll.Visible = false;
@@ -400,7 +478,14 @@ namespace mixer_control_globalver.View.MainUI
                         currentRow = i;
                         rtbRemark.Text = dt.Rows[i]["description"].ToString();
 
-                        lbProcessNo.Text = "Thực hiện bước số : " + dt.Rows[i]["process_no"].ToString() + Environment.NewLine + "Process no: " + dt.Rows[i]["process_no"].ToString();
+                        if (TemporaryVariables.language == 0)
+                        {
+                            lbProcessNo.Text = "Thực hiện bước số : " + dt.Rows[i]["process_no"].ToString() + Environment.NewLine + "Process no: " + dt.Rows[i]["process_no"].ToString();
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            lbProcessNo.Text = "Thực hiện bước số : " + dt.Rows[i]["process_no"].ToString() + Environment.NewLine + "执行第" + dt.Rows[i]["process_no"].ToString() + "步骤";
+                        }
                         speed1 = (int)dt.Rows[i]["init_speed"];
                         time1 = (int)dt.Rows[i]["init_time"];
                         time2 = (int)dt.Rows[i]["change_speed"];
@@ -410,11 +495,6 @@ namespace mixer_control_globalver.View.MainUI
                         break;
                     }
                 }
-            }
-            else
-            {
-                MessageBox.Show("Công thức không có bước thực hiện nào!");
-                this.Close();
             }
         }
     }

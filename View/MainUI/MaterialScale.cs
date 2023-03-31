@@ -20,11 +20,11 @@ namespace mixer_control_globalver.View.MainUI
         int flag;
         bool isFinished;
         string scaleMatName, scaleMatNo;
+        string message = String.Empty, caption = String.Empty;
         public MaterialScale()
         {
             InitializeComponent();
         }
-
         public void LoadFlowLayoutMaterial(DataTable dt)
         {
             flag = 0;
@@ -58,8 +58,23 @@ namespace mixer_control_globalver.View.MainUI
             LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
             NextMatScale(TemporaryVariables.materialDT, flag);
 
-            btnConfirm.ButtonText = "Xác nhận nguyên liệu" + Environment.NewLine + "Confirm material";
-            btnProceedAutomation.ButtonText = "Tiến hành chạy tự động" + Environment.NewLine + "Begin automation process";
+            if (TemporaryVariables.language == 0)
+            {
+                lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:\r\nConfirmation required materials list:";
+                lb2.Text = "Tên nguyên liệu:\r\nMaterial name:";
+
+                btnConfirm.ButtonText = "Xác nhận nguyên liệu\r\nConfirm material";
+                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động\r\nBegin automation process";
+            }
+            else if (TemporaryVariables.language == 1)
+            {
+                lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:\r\n需要确认的原料列表:";
+                lb2.Text = "Tên nguyên liệu:\r\n原料名称:";
+
+                btnConfirm.ButtonText = "Xác nhận nguyên liệu\r\n点击确认原料";
+                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động\r\n开始运行";
+            }
+            
         }
 
 
@@ -82,7 +97,14 @@ namespace mixer_control_globalver.View.MainUI
                 scaleMatName = null;
                 scaleMatNo = null;
                 isFinished = true;
-                lbMaterialName.Text = "Hoàn thành xác nhận" + Environment.NewLine + "Confirmation Completed";
+                if (TemporaryVariables.language == 0)
+                {
+                    lbMaterialName.Text = "Đã hoàn thành xác nhận!\r\nConfirmation has completed!";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    lbMaterialName.Text = "Đã hoàn thành xác nhận!\r\n已确认！";
+                }
             }
         }
 
@@ -90,7 +112,17 @@ namespace mixer_control_globalver.View.MainUI
         {
             if (!String.IsNullOrEmpty(scaleMatName))
             {
-                DialogResult dialog = MessageBox.Show("Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?" + Environment.NewLine + "Confirm \"" + scaleMatName + "\" material is ready ?", "Xác nhận / Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?\r\nConfirm \"" + scaleMatName + "\" material is ready ?";
+                    caption = "Xác nhận / Confirmation";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?\r\n确认原料 \"" + scaleMatName + "\" 已经准备好？";
+                    caption = "Xác nhận / 确认";
+                }
+                DialogResult dialog = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dialog == DialogResult.Yes)
                 {
                     foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
@@ -107,7 +139,17 @@ namespace mixer_control_globalver.View.MainUI
             }
             else
             {
-                MessageBox.Show("Đã hoàn thành xác nhận!" + Environment.NewLine + "Confirmation has completed!", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Đã hoàn thành xác nhận!\r\nConfirmation has completed!";
+                    caption = "Thông tin / Information";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Đã hoàn thành xác nhận!\r\n已确认！";
+                    caption = "Thông tin / Information";
+                }
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
