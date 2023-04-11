@@ -93,6 +93,7 @@
             this.btnContinueStep.TabIndex = 25;
             this.btnContinueStep.TextColor = System.Drawing.Color.Black;
             this.btnContinueStep.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnContinueStep.Click += new System.EventHandler(this.btnContinueStep_Click);
             // 
             // btnStartProcess
             // 

@@ -19,7 +19,7 @@ namespace mixer_control_globalver.View.CustomControls
         {
             InitializeComponent();
             lbMatCode.Text = matCode;
-            lbWeight.Text = weight;
+            lbWeight.Text = weight + " kg";
 
             if (status)
             {

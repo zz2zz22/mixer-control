@@ -146,8 +146,8 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
                 settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
                 settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
-                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
                 settingDT.Rows.Add("CD", "Lật thùng - Container Down");
+                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
                 settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
                 settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
                 settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
@@ -156,11 +156,18 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
                 settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
                 settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
-                settingDT.Rows.Add("TV", "Kích hút chân không - Toggle Vaccum");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
                 settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay cảm biến - Sensor Spindle Diameter");
                 settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
             }
             else if (Settings.Default.language == 1)
             {
@@ -168,8 +175,8 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
                 settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
                 settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
-                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
                 settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
+                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
                 settingDT.Rows.Add("OL", "Mở nắp - 开盖");
                 settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
                 settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
@@ -178,11 +185,18 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
                 settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
                 settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
-                settingDT.Rows.Add("TV", "Kích hút chân không - 启动抽真空");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
                 settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay cảm biến - 速度采集轮直径");
                 settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
             }
             
         }

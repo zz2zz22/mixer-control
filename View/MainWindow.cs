@@ -93,11 +93,6 @@ namespace mixer_control_globalver
                 this.WindowState = FormWindowState.Normal;
         }
 
-        private void btnMinimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-
         private void pbxCompanyLogo_Click(object sender, EventArgs e)
         {
             Process.Start(Settings.Default.website);
@@ -148,26 +143,44 @@ namespace mixer_control_globalver
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
+                bool isFinished = true;
+                for (int i = 0; i < TemporaryVariables.processDT.Rows.Count; i++)
+                {
+                    if (!(bool)TemporaryVariables.processDT.Rows[i]["is_finished"])
+                    {
+                        isFinished = false;
+                    }
+                }
                 bool isScaled = false;
                 for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i++)
                 {
                     if ((bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"])
                         isScaled = true;
                 }
-                if (isScaled)
+                if (!isFinished)
                 {
-                    if (TemporaryVariables.language == 0)
+                    if (isScaled)
                     {
-                        message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác?\r\nCurrent data will be lost! Do you want to continue to choose other formula?";
-                        caption = "Cảnh báo / Warning";
+                        if (TemporaryVariables.language == 0)
+                        {
+                            message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác?\r\nCurrent data will be lost! Do you want to continue to choose other formula?";
+                            caption = "Cảnh báo / Warning";
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác ?" + Environment.NewLine + "您所做的更改可能无法保存。请选择其他产品型号？";
+                            caption = "Cảnh báo / 提示";
+                        }
+                        DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        if (dialogResult == DialogResult.OK)
+                        {
+                            openChildForm(new ChooseSpec());
+                            btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                            btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                        }
                     }
-                    else if (TemporaryVariables.language == 1)
-                    {
-                        message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác ?" + Environment.NewLine + "您所做的更改可能无法保存。请选择其他产品型号？";
-                        caption = "Cảnh báo / 提示";
-                    }
-                    DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                    if (dialogResult == DialogResult.OK)
+                    else
                     {
                         openChildForm(new ChooseSpec());
                         btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
@@ -182,6 +195,7 @@ namespace mixer_control_globalver
                     btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                     btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                 }
+                
             }
             else
             {

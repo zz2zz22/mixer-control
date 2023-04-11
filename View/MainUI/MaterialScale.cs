@@ -18,7 +18,6 @@ namespace mixer_control_globalver.View.MainUI
     public partial class MaterialScale : Form
     {
         int flag;
-        bool isFinished;
         string scaleMatName, scaleMatNo;
         string message = String.Empty, caption = String.Empty;
         public MaterialScale()
@@ -54,7 +53,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void MaterialScale_Load(object sender, EventArgs e)
         {
-            isFinished = false;
+            
             LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
             NextMatScale(TemporaryVariables.materialDT, flag);
 
@@ -81,7 +80,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            AppIntro.main.openAutomationTab();
+            Program.main.openAutomationTab();
         }
 
         private void NextMatScale(DataTable dt, int i)
@@ -96,7 +95,6 @@ namespace mixer_control_globalver.View.MainUI
             {
                 scaleMatName = null;
                 scaleMatNo = null;
-                isFinished = true;
                 if (TemporaryVariables.language == 0)
                 {
                     lbMaterialName.Text = "Đã hoàn thành xác nhận!\r\nConfirmation has completed!";

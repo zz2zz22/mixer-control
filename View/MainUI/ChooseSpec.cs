@@ -179,11 +179,11 @@ namespace mixer_control_globalver.View.MainUI
                                         {
                                             if (TemporaryVariables.language == 0)
                                             {
-                                                message = "Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\nMaterial data in excel file is not enough or wrong! Please check again!";
+                                                message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nExcel file is not in correct format! Please check again!";
                                             }
                                             else if (TemporaryVariables.language == 1)
                                             {
-                                                message = "Dữ liệu nguyên liệu ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\n........................"; //add chinese
+                                                message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nEXCEL板式不合格！请检查！";
                                             }
                                             throw new Exception(message);
                                         }
@@ -218,7 +218,15 @@ namespace mixer_control_globalver.View.MainUI
                                             || String.IsNullOrEmpty(processDT.Rows[j][6].ToString()))
                                         {
 
-                                            throw new Exception("Dữ liệu quy trình ở file excel không đúng hoặc thiếu! Vui lòng kiểm tra!\r\nProcess data in excel file is not enough or wrong! Please check again!");
+                                            if (TemporaryVariables.language == 0)
+                                            {
+                                                message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nExcel file is not in correct format! Please check again!";
+                                            }
+                                            else if (TemporaryVariables.language == 1)
+                                            {
+                                                message = "Dữ liệu excel không đúng kiểu! Vui lòng kiểm tra!\r\nEXCEL板式不合格！请检查！";
+                                            }
+                                            throw new Exception(message);
                                         }
 
                                         int changeSpeed = 0, changeTime = 0;
@@ -302,7 +310,15 @@ namespace mixer_control_globalver.View.MainUI
                     }
                     else
                     {
-                        throw new Exception("Dữ liệu excel trống. Vui lòng kiểm tra!\r\nExcel file is empty. Please check again!");
+                        if (TemporaryVariables.language == 0)
+                        {
+                            message = "Dữ liệu excel trống. Vui lòng kiểm tra!\r\nExcel file is empty. Please check again!";
+                        }
+                        else if (TemporaryVariables.language == 1)
+                        {
+                            message = "Dữ liệu excel trống. Vui lòng kiểm tra!\r\nExcel 文件为空。请再检查一次！";
+                        }
+                        throw new Exception(message); //add chinese
                     }
                 }
                 catch (Exception ex)
@@ -333,7 +349,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnConfirmChoose_Click(object sender, EventArgs e)
         {
-            AppIntro.main.openScaleTab();
+            Program.main.openScaleTab();
         }
 
         private void btnGetTemplate_Click(object sender, EventArgs e)
@@ -342,7 +358,14 @@ namespace mixer_control_globalver.View.MainUI
             {
                 System.Windows.Forms.SaveFileDialog saveFileDialog = new SaveFileDialog();
                 string pathsave = "";
-                saveFileDialog.Title = "Lưu file Excel mẫu / Save Excel template";
+                if (TemporaryVariables.language == 0)
+                {
+                    saveFileDialog.Title = "Lưu file Excel mẫu / Save Excel template";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    saveFileDialog.Title = "Lưu file Excel mẫu / 保存 Excel 模板";
+                }
                 saveFileDialog.DefaultExt = "Excel";
                 saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
                 saveFileDialog.CheckPathExists = true;
@@ -364,13 +387,32 @@ namespace mixer_control_globalver.View.MainUI
                         }
                         fs.Write(data, 0, data.Length);
                     }
-
-                    MessageBox.Show("Lưu tệp Excel mẫu thành công !\r\nSuccessfully save Excel template !", "Thông tin / Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (TemporaryVariables.language == 0)
+                    {
+                        message = "Lưu tệp Excel mẫu thành công !\r\nSuccessfully save Excel template !";
+                        caption = "Thông tin / Information";
+                    }
+                    else if (TemporaryVariables.language == 1)
+                    {
+                        message = "Lưu tệp Excel mẫu thành công !\r\nEXCEL模板保存成功！";
+                        caption = "Thông tin / 信息";
+                    }
+                    MessageBox.Show(message, caption , MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lưu tệp Excel mẫu thất bại !\r\nFailed to save Excel template !" + "\r\n\r\n" + ex.Message, "Lỗi / Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Lưu tệp Excel mẫu thất bại !\r\nFailed to save Excel template !" + "\r\n\r\n" + ex.Message;
+                    caption = "Lỗi / Error";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Lưu tệp Excel mẫu thất bại !\r\nEXCEL模板保存失败！" + "\r\n\r\n" + ex.Message;
+                    caption = "Lỗi / 错误";
+                }
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Lỗi lưu file mẫu", ex.Message);
             }
         }

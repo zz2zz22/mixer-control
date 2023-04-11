@@ -274,7 +274,7 @@
     <None Include="Resources\scale.png" />
     <None Include="Resources\save.png" />
     <None Include="Resources\plus.png" />
-    <Content Include="Resources\techlinkIntro.gif" />
+    <EmbeddedResource Include="Resources\techlinkIntro.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

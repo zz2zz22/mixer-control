@@ -32,7 +32,6 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btnSetting = new XanderUI.XUIButton();
             this.btnHelp = new XanderUI.XUIButton();
-            this.btnMinimize = new XanderUI.XUIButton();
             this.btnMaximize = new XanderUI.XUIButton();
             this.btnClose = new XanderUI.XUIButton();
             this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
@@ -60,7 +59,6 @@
             this.panelHeader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelHeader.Controls.Add(this.btnSetting);
             this.panelHeader.Controls.Add(this.btnHelp);
-            this.panelHeader.Controls.Add(this.btnMinimize);
             this.panelHeader.Controls.Add(this.btnMaximize);
             this.panelHeader.Controls.Add(this.btnClose);
             this.panelHeader.Controls.Add(this.pbxCompanyLogo);
@@ -114,28 +112,6 @@
             this.btnHelp.TextColor = System.Drawing.Color.DodgerBlue;
             this.btnHelp.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
-            // 
-            // btnMinimize
-            // 
-            this.btnMinimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnMinimize.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnMinimize.ButtonImage = global::mixer_control_globalver.Properties.Resources.subtraction;
-            this.btnMinimize.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnMinimize.ButtonText = "Button";
-            this.btnMinimize.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnMinimize.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnMinimize.CornerRadius = 5;
-            this.btnMinimize.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnMinimize.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnMinimize.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnMinimize.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnMinimize.Location = new System.Drawing.Point(824, 4);
-            this.btnMinimize.Name = "btnMinimize";
-            this.btnMinimize.Size = new System.Drawing.Size(56, 56);
-            this.btnMinimize.TabIndex = 4;
-            this.btnMinimize.TextColor = System.Drawing.Color.DodgerBlue;
-            this.btnMinimize.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnMinimize.Click += new System.EventHandler(this.btnMinimize_Click);
             // 
             // btnMaximize
             // 
@@ -352,6 +328,7 @@
             this.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1024, 720);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -374,7 +351,6 @@
         private System.Windows.Forms.PictureBox pbxCompanyLogo;
         private System.Windows.Forms.Panel panelSideMenu;
         private XanderUI.XUIButton btnClose;
-        private XanderUI.XUIButton btnMinimize;
         private XanderUI.XUIButton btnMaximize;
         private XanderUI.XUIButton btnHelp;
         private XanderUI.XUIButton btnChooseSpecTab;
