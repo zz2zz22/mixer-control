@@ -236,11 +236,7 @@ namespace mixer_control_globalver.View.MainUI
                     timer.Disable();
                     timer.Dispose();
                 }
-                if (runTimer != null)
-                {
-                    runTimer.Enabled = false;
-                    runTimer.Dispose();
-                }
+                
                 btnStartProcess.Enabled = true;
             }
         }
@@ -520,7 +516,7 @@ namespace mixer_control_globalver.View.MainUI
                 btnResetRoll.Visible = false;
             }
         }
-        //Timer dùng để load nhiệt độ và tốc độ từ PLc theo giây
+        //Timer dùng để load nhiệt độ và tốc độ từ PLC theo giây
         private void runTimer_Tick(object sender, EventArgs e)
         {
             double tempRT = Convert.ToDouble(pLC.ReadRealToString(db, Convert.ToInt32(ini.Read("RT", "start"))));
