@@ -37,12 +37,12 @@ namespace mixer_control_globalver
             }
             else
             {
-                if (TemporaryVariables.language == 0)
+                if (Properties.Settings.Default.language == 0)
                 {
                     message = "Phần mềm đang chạy.\r\nProgram is running.";
                     caption = "Thông tin / Information";
                 }
-                else if (TemporaryVariables.language == 1)
+                else if (Properties.Settings.Default.language == 1)
                 {
                     message = "Phần mềm đang chạy.\r\n软件正在运行";
                     caption = "Thông tin / 信息";

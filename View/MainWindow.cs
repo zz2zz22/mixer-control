@@ -18,11 +18,16 @@ using mixer_control_globalver.Controller;
 using mixer_control_globalver.View.SideUI;
 using System.IO;
 using Spire.Pdf.Exporting.XPS.Schema;
+using mixer_control_globalver.Model.PLC;
 
 namespace mixer_control_globalver
 {
     public partial class MainWindow : Form
     {
+        public static int ConnectionPLC;
+        public static PLCConnector pLC;
+        int db = Settings.Default.database_no;
+        bool isAutomation;
         string message = String.Empty, caption = String.Empty;
         ChooseSpec specWindow = new ChooseSpec();
         IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
@@ -74,13 +79,28 @@ namespace mixer_control_globalver
                 caption = "Cảnh báo / Warning";
             }
             else if (TemporaryVariables.language == 1)
-            {     
+            {
                 message = "Thoát chương trình ?" + Environment.NewLine + "退出应用 ?";
                 caption = "Cảnh báo / 提示";
             }
             DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.OK)
             {
+                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
+                pLC.WritebittoPLC(true, db, 24, 0, 1); // Truyền reset variable
                 Environment.Exit(0);
             }
         }
@@ -195,7 +215,7 @@ namespace mixer_control_globalver
                     btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                     btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                 }
-                
+
             }
             else
             {
@@ -210,10 +230,36 @@ namespace mixer_control_globalver
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
-                openChildForm(new MaterialScale());
-                btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-                btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 192);
-                btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                if (isAutomation)
+                {
+                    if (TemporaryVariables.language == 0)
+                    {
+                        message = "Các dữ liệu đã làm sẽ bị mất! \r\nCurrent data will be lost! ";
+                        caption = "Cảnh báo / Warning";
+                    }
+                    else if (TemporaryVariables.language == 1)
+                    {
+                        message = "Các dữ liệu đã làm sẽ bị mất! " + Environment.NewLine + "您所做的更改可能无法保存。？";
+                        caption = "Cảnh báo / 提示";
+                    }
+                    DialogResult dialog = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if (dialog == DialogResult.OK)
+                    {
+                        isAutomation = false;
+                        openChildForm(new MaterialScale());
+                        btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                        btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                        btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    }
+                }
+                else
+                {
+                    isAutomation = false;
+                    openChildForm(new MaterialScale());
+                    btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                    btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                }
             }
             else
             {
@@ -294,6 +340,7 @@ namespace mixer_control_globalver
                         }
                         else
                         {
+                            isAutomation = true;
                             openChildForm(new AutomationInfo());
                             btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                             btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);

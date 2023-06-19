@@ -16,6 +16,7 @@ namespace mixer_control_globalver.Controller
 
         public static String tempMatName { get; set; }
         public static String tempMatNo { get; set; }
+        public static String tempFormulaName { get; set; }
         public static int language { get; set; }
 
         #endregion
@@ -208,7 +209,7 @@ namespace mixer_control_globalver.Controller
             //reset basic variables
             tempFileName = null;
             tempFilePath = null;
-
+            tempFormulaName = null;
             //reset datatables
             materialDT = null;
             processDT = null;

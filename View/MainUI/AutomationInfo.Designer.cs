@@ -47,6 +47,8 @@
             this.lb3 = new System.Windows.Forms.Label();
             this.lbCountDown = new System.Windows.Forms.Label();
             this.lb5 = new System.Windows.Forms.Label();
+            this.lbShowF = new System.Windows.Forms.Label();
+            this.lbFormulaName = new System.Windows.Forms.Label();
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelShowSpeed.SuspendLayout();
             this.panelShowTemperature.SuspendLayout();
@@ -54,6 +56,8 @@
             // 
             // panelAutomationInfoMain
             // 
+            this.panelAutomationInfoMain.Controls.Add(this.lbFormulaName);
+            this.panelAutomationInfoMain.Controls.Add(this.lbShowF);
             this.panelAutomationInfoMain.Controls.Add(this.btnContinueStep);
             this.panelAutomationInfoMain.Controls.Add(this.btnStartProcess);
             this.panelAutomationInfoMain.Controls.Add(this.btnActivateSpeedControl);
@@ -130,7 +134,6 @@
             this.btnActivateSpeedControl.TabIndex = 24;
             this.btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
             this.btnActivateSpeedControl.UseVisualStyleBackColor = false;
-            this.btnActivateSpeedControl.Click += new System.EventHandler(this.btnActivateSpeedControl_Click);
             // 
             // rtbRemark
             // 
@@ -139,10 +142,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbRemark.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.rtbRemark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtbRemark.Location = new System.Drawing.Point(12, 53);
+            this.rtbRemark.Location = new System.Drawing.Point(12, 101);
             this.rtbRemark.Name = "rtbRemark";
             this.rtbRemark.ReadOnly = true;
-            this.rtbRemark.Size = new System.Drawing.Size(321, 460);
+            this.rtbRemark.Size = new System.Drawing.Size(321, 412);
             this.rtbRemark.TabIndex = 1;
             this.rtbRemark.Text = "";
             // 
@@ -162,7 +165,7 @@
             // lbProcessNo
             // 
             this.lbProcessNo.AutoSize = true;
-            this.lbProcessNo.Location = new System.Drawing.Point(21, 12);
+            this.lbProcessNo.Location = new System.Drawing.Point(12, 56);
             this.lbProcessNo.Name = "lbProcessNo";
             this.lbProcessNo.Size = new System.Drawing.Size(148, 38);
             this.lbProcessNo.TabIndex = 0;
@@ -223,11 +226,11 @@
             this.lbRollSpeed.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbRollSpeed.AutoSize = true;
             this.lbRollSpeed.BackColor = System.Drawing.Color.Transparent;
-            this.lbRollSpeed.Font = new System.Drawing.Font("Arial", 25.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRollSpeed.Font = new System.Drawing.Font("Arial", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbRollSpeed.ForeColor = System.Drawing.Color.White;
-            this.lbRollSpeed.Location = new System.Drawing.Point(243, 19);
+            this.lbRollSpeed.Location = new System.Drawing.Point(201, 27);
             this.lbRollSpeed.Name = "lbRollSpeed";
-            this.lbRollSpeed.Size = new System.Drawing.Size(82, 51);
+            this.lbRollSpeed.Size = new System.Drawing.Size(89, 55);
             this.lbRollSpeed.TabIndex = 2;
             this.lbRollSpeed.Text = "0.0";
             // 
@@ -271,11 +274,11 @@
             this.lbTemperature.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbTemperature.AutoSize = true;
             this.lbTemperature.BackColor = System.Drawing.Color.Transparent;
-            this.lbTemperature.Font = new System.Drawing.Font("Arial", 25.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTemperature.Font = new System.Drawing.Font("Arial", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTemperature.ForeColor = System.Drawing.Color.White;
-            this.lbTemperature.Location = new System.Drawing.Point(243, 19);
+            this.lbTemperature.Location = new System.Drawing.Point(201, 27);
             this.lbTemperature.Name = "lbTemperature";
-            this.lbTemperature.Size = new System.Drawing.Size(82, 51);
+            this.lbTemperature.Size = new System.Drawing.Size(89, 55);
             this.lbTemperature.TabIndex = 2;
             this.lbTemperature.Text = "0.0";
             // 
@@ -312,6 +315,24 @@
             this.lb5.Size = new System.Drawing.Size(324, 38);
             this.lb5.TabIndex = 5;
             this.lb5.Text = "Thời gian còn lại đến khi kết thúc bước:\r\nTime left untill process ended:\r\n";
+            // 
+            // lbShowF
+            // 
+            this.lbShowF.AutoSize = true;
+            this.lbShowF.Location = new System.Drawing.Point(12, 12);
+            this.lbShowF.Name = "lbShowF";
+            this.lbShowF.Size = new System.Drawing.Size(99, 38);
+            this.lbShowF.TabIndex = 26;
+            this.lbShowF.Text = "Công thức:\r\nFormula:";
+            // 
+            // lbFormulaName
+            // 
+            this.lbFormulaName.AutoSize = true;
+            this.lbFormulaName.Location = new System.Drawing.Point(147, 21);
+            this.lbFormulaName.Name = "lbFormulaName";
+            this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
+            this.lbFormulaName.TabIndex = 27;
+            this.lbFormulaName.Text = "...";
             // 
             // AutomationInfo
             // 
@@ -359,5 +380,7 @@
         private System.Windows.Forms.Button btnReverseRoll;
         private System.Windows.Forms.Button btnNormalRoll;
         private XanderUI.XUIButton btnContinueStep;
+        private System.Windows.Forms.Label lbShowF;
+        private System.Windows.Forms.Label lbFormulaName;
     }
 }

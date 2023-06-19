@@ -5,8 +5,6 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mixer-control-globalver", "mixer-control-globalver.csproj", "{B927D86A-90EC-4E78-8EF9-9D7C88DF716F}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup_Mixer_Controller_Global", "..\Setup_Mixer_Controller_Global\Setup_Mixer_Controller_Global.vdproj", "{2A31BDB0-EEE8-4C6B-A1DA-9D60E9367178}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,8 +15,6 @@ Global
 		{B927D86A-90EC-4E78-8EF9-9D7C88DF716F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B927D86A-90EC-4E78-8EF9-9D7C88DF716F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B927D86A-90EC-4E78-8EF9-9D7C88DF716F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A31BDB0-EEE8-4C6B-A1DA-9D60E9367178}.Debug|Any CPU.ActiveCfg = Debug
-		{2A31BDB0-EEE8-4C6B-A1DA-9D60E9367178}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
