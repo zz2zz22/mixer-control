@@ -12,6 +12,7 @@ using System.Windows.Media.Media3D;
 using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Properties;
+using mixer_control_globalver.View.CustomControls;
 
 namespace mixer_control_globalver.View.SideUI
 {
@@ -19,6 +20,7 @@ namespace mixer_control_globalver.View.SideUI
     {
         string message = String.Empty, caption = String.Empty;
         IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
+        int language;
         public MainSetting()
         {
             InitializeComponent();
@@ -47,12 +49,12 @@ namespace mixer_control_globalver.View.SideUI
             {
                 if (notSettingList.Items.Count > 1)
                 {
-                    if (TemporaryVariables.language == 0)
+                    if (language == 0)
                     {
                         lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" và " + (notSettingList.Items.Count - 1) + " giá trị khác chưa được cài đặt!"
     + Environment.NewLine + "There are variable \"" + notSettingList.Items[0].ToString() + "\" and " + (notSettingList.Items.Count - 1) + " other not yet setting!";
                     }
-                    else if (TemporaryVariables.language == 1)
+                    else if (language == 1)
                     {
                         lbSettingAnnounce.Text = lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" và " + (notSettingList.Items.Count - 1) + " giá trị khác chưa được cài đặt!"
     + Environment.NewLine + "存在 \"" + notSettingList.Items[0].ToString() + "\" 变量值和其他 " + (notSettingList.Items.Count - 1) + " 个未设置。";
@@ -60,12 +62,12 @@ namespace mixer_control_globalver.View.SideUI
                 }
                 else
                 {
-                    if (TemporaryVariables.language == 0)
+                    if (language == 0)
                     {
                         lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" chưa được cài đặt!"
                                                 + Environment.NewLine + "There is variable \"" + notSettingList.Items[0].ToString() + "\" not yet setting!";
                     }
-                    else if (TemporaryVariables.language == 1)
+                    else if (language == 1)
                     {
                         lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" chưa được cài đặt!"
                                                 + Environment.NewLine + "存在 \"" + notSettingList.Items[0].ToString() + "\" 变量值未设置!";
@@ -78,7 +80,23 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
-            if (TemporaryVariables.language == 0)
+            switch (TemporaryVariables.language)
+            {
+                case 0:
+                    language = 0; break;
+                case 1: 
+                    language = 1; break;
+                case 2: 
+                    language = 0; break;
+                case 3:
+                    language = 0; break;
+                case 4:
+                    language = 1; break;
+                default:
+                    language = 0; break;
+            }
+            
+            if (language == 0)
             {
                 lb1.Text = "Địa chỉ IP của PLC:\r\nPLC IP address:";
                 lb2.Text = "Số thứ tự database:\r\nDatabase no:";
@@ -92,7 +110,7 @@ namespace mixer_control_globalver.View.SideUI
                 btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\nSave base setting";
                 btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
             }
-            else if (TemporaryVariables.language == 1)
+            else if (language == 1)
             {
                 lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
                 lb2.Text = "Số thứ tự database:\r\n数据库序号:";
@@ -172,19 +190,19 @@ namespace mixer_control_globalver.View.SideUI
             {
                 if (!String.IsNullOrEmpty(cbxPLCValueSetting.Text))
                 {
-                    if (TemporaryVariables.language == 0)
+                    if (language == 0)
                     {
                         message = "Lưu địa chỉ offset thành công!\r\nSuccessfully saved offset address !";
                         caption = "Thông tin / Information";
                     }
-                    else if (TemporaryVariables.language == 1)
+                    else if (language == 1)
                     {
                         message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
                         caption = "Thông tin / 信息";
                     }
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "start", txbStartNo.Text);
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "bit", txbBitNo.Text);
-                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     btnSaveBaseSetting.ButtonText = "Lưu cài đặt\r\nSave Settings";
                     btnSaveOffset.ButtonText = "Lưu offset\r\nSave Offsets";
@@ -241,12 +259,12 @@ namespace mixer_control_globalver.View.SideUI
 
         private void btnSaveBaseSetting_Click(object sender, EventArgs e)
         {
-            if (TemporaryVariables.language == 0)
+            if (language == 0)
             {
                 message = "Lưu cài đặt thành công!\r\nSuccessfully saved base settings !";
                 caption = "Thông tin / Information";
             }
-            else if (TemporaryVariables.language == 1)
+            else if (language == 1)
             {
                 message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
                 caption = "Thông tin / 信息";
@@ -260,7 +278,7 @@ namespace mixer_control_globalver.View.SideUI
             Settings.Default.transmission_ratio = Convert.ToDouble(txbTransmissionRatio.Text.Trim());
             Settings.Default.Save();
 
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void txbMotorMaxSpeed_KeyPress(object sender, KeyPressEventArgs e)

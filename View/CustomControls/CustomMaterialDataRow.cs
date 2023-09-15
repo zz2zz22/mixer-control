@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Media.Media3D;
 using mixer_control_globalver.Controller;
+using mixer_control_globalver.Properties;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace mixer_control_globalver.View.CustomControls
 {
@@ -33,6 +35,18 @@ namespace mixer_control_globalver.View.CustomControls
                 {
                     lbStatus.Text = "ĐÃ XÁC NHẬN\r\n已确认";
                 }
+                else if (Settings.Default.language == 2)
+                {
+                    lbStatus.Text = "CONFIRMED";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    lbStatus.Text = "ĐÃ XÁC NHẬN";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    lbStatus.Text = "已确认";
+                }
             }
             else
             {
@@ -45,7 +59,19 @@ namespace mixer_control_globalver.View.CustomControls
                 else if (TemporaryVariables.language == 1)
                 {
                     lbStatus.Text = "CHƯA XÁC NHẬN\r\n未确认";
-                } 
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    lbStatus.Text = "NOT CONFIRMED";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    lbStatus.Text = "CHƯA XÁC NHẬN";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    lbStatus.Text = "未确认";
+                }
             }
         }
     }

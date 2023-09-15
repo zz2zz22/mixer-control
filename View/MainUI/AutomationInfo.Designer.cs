@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panelAutomationInfoMain = new System.Windows.Forms.Panel();
+            this.lbFormulaName = new System.Windows.Forms.Label();
+            this.lbShowF = new System.Windows.Forms.Label();
             this.btnContinueStep = new XanderUI.XUIButton();
             this.btnStartProcess = new XanderUI.XUIButton();
             this.btnActivateSpeedControl = new System.Windows.Forms.Button();
@@ -47,8 +49,6 @@
             this.lb3 = new System.Windows.Forms.Label();
             this.lbCountDown = new System.Windows.Forms.Label();
             this.lb5 = new System.Windows.Forms.Label();
-            this.lbShowF = new System.Windows.Forms.Label();
-            this.lbFormulaName = new System.Windows.Forms.Label();
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelShowSpeed.SuspendLayout();
             this.panelShowTemperature.SuspendLayout();
@@ -75,6 +75,24 @@
             this.panelAutomationInfoMain.Name = "panelAutomationInfoMain";
             this.panelAutomationInfoMain.Size = new System.Drawing.Size(759, 608);
             this.panelAutomationInfoMain.TabIndex = 1;
+            // 
+            // lbFormulaName
+            // 
+            this.lbFormulaName.AutoSize = true;
+            this.lbFormulaName.Location = new System.Drawing.Point(147, 21);
+            this.lbFormulaName.Name = "lbFormulaName";
+            this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
+            this.lbFormulaName.TabIndex = 27;
+            this.lbFormulaName.Text = "...";
+            // 
+            // lbShowF
+            // 
+            this.lbShowF.AutoSize = true;
+            this.lbShowF.Location = new System.Drawing.Point(12, 12);
+            this.lbShowF.Name = "lbShowF";
+            this.lbShowF.Size = new System.Drawing.Size(99, 38);
+            this.lbShowF.TabIndex = 26;
+            this.lbShowF.Text = "Công thức:\r\nFormula:";
             // 
             // btnContinueStep
             // 
@@ -300,7 +318,7 @@
             this.lbCountDown.BackColor = System.Drawing.Color.Transparent;
             this.lbCountDown.Font = new System.Drawing.Font("Arial", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbCountDown.ForeColor = System.Drawing.Color.Black;
-            this.lbCountDown.Location = new System.Drawing.Point(417, 277);
+            this.lbCountDown.Location = new System.Drawing.Point(417, 290);
             this.lbCountDown.Name = "lbCountDown";
             this.lbCountDown.Size = new System.Drawing.Size(268, 70);
             this.lbCountDown.TabIndex = 4;
@@ -316,24 +334,6 @@
             this.lb5.TabIndex = 5;
             this.lb5.Text = "Thời gian còn lại đến khi kết thúc bước:\r\nTime left untill process ended:\r\n";
             // 
-            // lbShowF
-            // 
-            this.lbShowF.AutoSize = true;
-            this.lbShowF.Location = new System.Drawing.Point(12, 12);
-            this.lbShowF.Name = "lbShowF";
-            this.lbShowF.Size = new System.Drawing.Size(99, 38);
-            this.lbShowF.TabIndex = 26;
-            this.lbShowF.Text = "Công thức:\r\nFormula:";
-            // 
-            // lbFormulaName
-            // 
-            this.lbFormulaName.AutoSize = true;
-            this.lbFormulaName.Location = new System.Drawing.Point(147, 21);
-            this.lbFormulaName.Name = "lbFormulaName";
-            this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
-            this.lbFormulaName.TabIndex = 27;
-            this.lbFormulaName.Text = "...";
-            // 
             // AutomationInfo
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -348,6 +348,7 @@
             this.ShowInTaskbar = false;
             this.Text = "AutomationInfo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutomationInfo_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AutomationInfo_FormClosed);
             this.Load += new System.EventHandler(this.AutomationInfo_Load);
             this.panelAutomationInfoMain.ResumeLayout(false);
             this.panelAutomationInfoMain.PerformLayout();

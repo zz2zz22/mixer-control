@@ -32,9 +32,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelChooseSpecMain = new System.Windows.Forms.Panel();
+            this.btnImportTemplate = new XanderUI.XUIButton();
             this.btnGetTemplate = new XanderUI.XUIButton();
-            this.lbFormulaName = new System.Windows.Forms.Label();
-            this.lb5 = new System.Windows.Forms.Label();
             this.btnConfirmChoose = new XanderUI.XUIButton();
             this.lb4 = new System.Windows.Forms.Label();
             this.lb3 = new System.Windows.Forms.Label();
@@ -53,9 +52,8 @@
             // 
             // panelChooseSpecMain
             // 
+            this.panelChooseSpecMain.Controls.Add(this.btnImportTemplate);
             this.panelChooseSpecMain.Controls.Add(this.btnGetTemplate);
-            this.panelChooseSpecMain.Controls.Add(this.lbFormulaName);
-            this.panelChooseSpecMain.Controls.Add(this.lb5);
             this.panelChooseSpecMain.Controls.Add(this.btnConfirmChoose);
             this.panelChooseSpecMain.Controls.Add(this.lb4);
             this.panelChooseSpecMain.Controls.Add(this.lb3);
@@ -70,6 +68,29 @@
             this.panelChooseSpecMain.Name = "panelChooseSpecMain";
             this.panelChooseSpecMain.Size = new System.Drawing.Size(759, 608);
             this.panelChooseSpecMain.TabIndex = 0;
+            // 
+            // btnImportTemplate
+            // 
+            this.btnImportTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnImportTemplate.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btnImportTemplate.ButtonImage = global::mixer_control_globalver.Properties.Resources.submit;
+            this.btnImportTemplate.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnImportTemplate.ButtonText = "Upload formula";
+            this.btnImportTemplate.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnImportTemplate.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnImportTemplate.CornerRadius = 10;
+            this.btnImportTemplate.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnImportTemplate.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnImportTemplate.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnImportTemplate.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnImportTemplate.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
+            this.btnImportTemplate.Location = new System.Drawing.Point(12, 9);
+            this.btnImportTemplate.Name = "btnImportTemplate";
+            this.btnImportTemplate.Size = new System.Drawing.Size(173, 59);
+            this.btnImportTemplate.TabIndex = 15;
+            this.btnImportTemplate.TextColor = System.Drawing.Color.Black;
+            this.btnImportTemplate.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnImportTemplate.Click += new System.EventHandler(this.btnImportTemplate_Click);
             // 
             // btnGetTemplate
             // 
@@ -86,31 +107,13 @@
             this.btnGetTemplate.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnGetTemplate.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnGetTemplate.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnGetTemplate.Location = new System.Drawing.Point(504, 9);
+            this.btnGetTemplate.Location = new System.Drawing.Point(576, 9);
             this.btnGetTemplate.Name = "btnGetTemplate";
-            this.btnGetTemplate.Size = new System.Drawing.Size(243, 59);
+            this.btnGetTemplate.Size = new System.Drawing.Size(171, 59);
             this.btnGetTemplate.TabIndex = 14;
             this.btnGetTemplate.TextColor = System.Drawing.Color.Black;
             this.btnGetTemplate.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnGetTemplate.Click += new System.EventHandler(this.btnGetTemplate_Click);
-            // 
-            // lbFormulaName
-            // 
-            this.lbFormulaName.AutoSize = true;
-            this.lbFormulaName.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbFormulaName.Location = new System.Drawing.Point(201, 20);
-            this.lbFormulaName.Name = "lbFormulaName";
-            this.lbFormulaName.Size = new System.Drawing.Size(0, 27);
-            this.lbFormulaName.TabIndex = 13;
-            // 
-            // lb5
-            // 
-            this.lb5.AutoSize = true;
-            this.lb5.Location = new System.Drawing.Point(12, 9);
-            this.lb5.Name = "lb5";
-            this.lb5.Size = new System.Drawing.Size(167, 38);
-            this.lb5.TabIndex = 12;
-            this.lb5.Text = "Công thức đã chọn:\r\nSelected formula:";
             // 
             // btnConfirmChoose
             // 
@@ -282,7 +285,7 @@
             // picbtnChooseDirectory
             // 
             this.picbtnChooseDirectory.Image = global::mixer_control_globalver.Properties.Resources.control;
-            this.picbtnChooseDirectory.Location = new System.Drawing.Point(187, 186);
+            this.picbtnChooseDirectory.Location = new System.Drawing.Point(191, 12);
             this.picbtnChooseDirectory.Name = "picbtnChooseDirectory";
             this.picbtnChooseDirectory.Size = new System.Drawing.Size(56, 51);
             this.picbtnChooseDirectory.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -326,8 +329,7 @@
         private System.Windows.Forms.Label lb3;
         private System.Windows.Forms.Label lb4;
         private XanderUI.XUIButton btnConfirmChoose;
-        private System.Windows.Forms.Label lb5;
-        private System.Windows.Forms.Label lbFormulaName;
         private XanderUI.XUIButton btnGetTemplate;
+        private XanderUI.XUIButton btnImportTemplate;
     }
 }

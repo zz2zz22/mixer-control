@@ -191,9 +191,9 @@
             this.lbVersion.AutoSize = true;
             this.lbVersion.Location = new System.Drawing.Point(12, 580);
             this.lbVersion.Name = "lbVersion";
-            this.lbVersion.Size = new System.Drawing.Size(135, 19);
+            this.lbVersion.Size = new System.Drawing.Size(119, 19);
             this.lbVersion.TabIndex = 4;
-            this.lbVersion.Text = "Version 0.1 beta";
+            this.lbVersion.Text = "Version 1.0.42";
             // 
             // cbxLanguageChoose
             // 
@@ -202,7 +202,10 @@
             this.cbxLanguageChoose.FormattingEnabled = true;
             this.cbxLanguageChoose.Items.AddRange(new object[] {
             "Vietnamese - English",
-            "越南语 - 中文"});
+            "越南语 - 中文",
+            "English",
+            "Tiếng Việt",
+            "中文"});
             this.cbxLanguageChoose.Location = new System.Drawing.Point(12, 534);
             this.cbxLanguageChoose.Name = "cbxLanguageChoose";
             this.cbxLanguageChoose.Size = new System.Drawing.Size(229, 27);

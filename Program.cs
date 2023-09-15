@@ -1,5 +1,6 @@
 ﻿using mixer_control_globalver.Controller;
 using mixer_control_globalver.View.CustomComponent;
+using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace mixer_control_globalver
                     message = "Phần mềm đang chạy.\r\n软件正在运行";
                     caption = "Thông tin / 信息";
                 }
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

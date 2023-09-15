@@ -15,7 +15,7 @@ namespace mixer_control_globalver.Controller
         public Action TimeChanged;
         public Action CountDownFinished;
 
-        public bool IsRunnign => timer.Enabled;
+        public bool IsRunning => timer.Enabled;
 
         public int StepMs
         {
@@ -25,16 +25,13 @@ namespace mixer_control_globalver.Controller
 
         private Timer timer = new Timer();
 
-        private TimeSpan _max = TimeSpan.FromMilliseconds(30000);
+        private TimeSpan _max = TimeSpan.FromSeconds(30);
 
-        public TimeSpan TimeLeft => (_max.TotalMilliseconds - _stpWatch.ElapsedMilliseconds) > 0 ? TimeSpan.FromMilliseconds(_max.TotalMilliseconds - _stpWatch.ElapsedMilliseconds) : TimeSpan.FromMilliseconds(0);
+        public TimeSpan TimeLeft => (_max.TotalSeconds - Math.Round(Convert.ToDouble(_stpWatch.ElapsedMilliseconds / 1000))) > 0 ? TimeSpan.FromSeconds(_max.TotalSeconds - Math.Round(Convert.ToDouble(_stpWatch.ElapsedMilliseconds / 1000))) : TimeSpan.FromSeconds(0);
 
-        private bool _mustStop => (_max.TotalMilliseconds - _stpWatch.ElapsedMilliseconds) < 0;
+        private bool _mustStop => (_max.TotalSeconds - Math.Round(Convert.ToDouble(_stpWatch.ElapsedMilliseconds / 1000))) < 0;
 
         public string TimeLeftStr => TimeLeft.ToString(@"hh\:mm\:ss");
-
-        public string TimeLeftMsStr => TimeLeft.ToString(@"hh\:mm\:ss\.fff");
-
 
         private void TimerTick(object sender, EventArgs e)
         {
@@ -77,7 +74,6 @@ namespace mixer_control_globalver.Controller
             TimeChanged?.Invoke();
         }
 
-
         public void SetTime(int min, int sec = 0) => SetTime(TimeSpan.FromSeconds(min * 60 + sec));
 
         public void Start()
@@ -85,31 +81,23 @@ namespace mixer_control_globalver.Controller
             timer.Start();
             _stpWatch.Start();
         }
-        public void Disable()
-        {
-            timer.Enabled = false;
-        }
+
         public void Pause()
         {
             timer.Stop();
             _stpWatch.Stop();
         }
-
-        public void Stop()
+        public void Continue()
         {
-            Reset();
-            Pause();
-        }
-
-        public void Reset()
-        {
-            _stpWatch.Reset();
-        }
-
-        public void Restart()
-        {
-            _stpWatch.Reset();
             timer.Start();
+            _stpWatch.Start();
+        }
+
+        public void Delete()
+        {
+            _stpWatch.Stop();
+            _stpWatch.Reset();
+            timer.Enabled = false;
         }
 
         public void Dispose() => timer.Dispose();

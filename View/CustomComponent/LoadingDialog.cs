@@ -28,17 +28,23 @@ namespace mixer_control_globalver.View.CustomComponent
         }
         public void UpdateProgress(int progress, string announce)
         {
+            while (!this.IsHandleCreated)
+                System.Threading.Thread.Sleep(100);
             lbAnnounce.BeginInvoke(
                 new Action(() =>
                 {
                     lbAnnounce.Text = announce;
                 }));
+            while (!this.IsHandleCreated)
+                System.Threading.Thread.Sleep(100);
             pgbProcess.BeginInvoke(
                 new Action(() =>
                 {
                     pgbProcess.Value = progress;
                 }
                 ));
+            while (!this.IsHandleCreated)
+                System.Threading.Thread.Sleep(100);
             lbPercentage.BeginInvoke(
                 new Action(() =>
                 {

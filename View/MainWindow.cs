@@ -19,6 +19,7 @@ using mixer_control_globalver.View.SideUI;
 using System.IO;
 using Spire.Pdf.Exporting.XPS.Schema;
 using mixer_control_globalver.Model.PLC;
+using mixer_control_globalver.View.CustomControls;
 
 namespace mixer_control_globalver
 {
@@ -43,6 +44,8 @@ namespace mixer_control_globalver
             this.Text = string.Empty;
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+
+            
         }
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
@@ -80,11 +83,26 @@ namespace mixer_control_globalver
             }
             else if (TemporaryVariables.language == 1)
             {
-                message = "Thoát chương trình ?" + Environment.NewLine + "退出应用 ?";
+                message = "Thoát chương trình ?\r\n退出应用 ?";
                 caption = "Cảnh báo / 提示";
             }
-            DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.OK)
+            else if (Settings.Default.language == 2)
+            {
+                message = "Exit the application ?";
+                caption = "Warning";
+            }
+            else if (Settings.Default.language == 3)
+            {
+                message = "Thoát chương trình ?";
+                caption = "Cảnh báo";
+            }
+            else if (Settings.Default.language == 4)
+            {
+                message = "退出应用 ?";
+                caption = "提示";
+            }
+            DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.Yes)
             {
                 pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
                 pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
@@ -101,6 +119,7 @@ namespace mixer_control_globalver
                 pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
                 pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
                 pLC.WritebittoPLC(true, db, 24, 0, 1); // Truyền reset variable
+                pLC.Diconnect();
                 Environment.Exit(0);
             }
         }
@@ -140,6 +159,24 @@ namespace mixer_control_globalver
                 btnChooseSpecTab.ButtonText = "Chọn công thức\r\n选择产品型号";
                 btnWeightTab.ButtonText = "Xác nhận nguyên vật liệu\r\n原料确认";
                 btnAutomationTab.ButtonText = "Tự động hóa\r\n自动化";
+            }
+            else if (Settings.Default.language == 2)
+            {
+                btnChooseSpecTab.ButtonText = "Choose formula";
+                btnWeightTab.ButtonText = "Material Confirmation";
+                btnAutomationTab.ButtonText = "Automation";
+            }
+            else if (Settings.Default.language == 3)
+            {
+                btnChooseSpecTab.ButtonText = "Chọn công thức";
+                btnWeightTab.ButtonText = "Xác nhận nguyên vật liệu";
+                btnAutomationTab.ButtonText = "Tự động hóa";
+            }
+            else if (Settings.Default.language == 4)
+            {
+                btnChooseSpecTab.ButtonText = "选择产品型号";
+                btnWeightTab.ButtonText = "原料确认";
+                btnAutomationTab.ButtonText = "自动化";
             }
 
             openSpecTab();
@@ -188,10 +225,25 @@ namespace mixer_control_globalver
                         }
                         else if (TemporaryVariables.language == 1)
                         {
-                            message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác ?" + Environment.NewLine + "您所做的更改可能无法保存。请选择其他产品型号？";
+                            message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác ?\r\n您所做的更改可能无法保存。请选择其他产品型号？";
                             caption = "Cảnh báo / 提示";
                         }
-                        DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        else if (Settings.Default.language == 2)
+                        {
+                            message = "Current data will be lost! Do you want to continue to choose other formula?";
+                            caption = "Warning";
+                        }
+                        else if (Settings.Default.language == 3)
+                        {
+                            message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác ?";
+                            caption = "Cảnh báo";
+                        }
+                        else if (Settings.Default.language == 4)
+                        {
+                            message = "您所做的更改可能无法保存。请选择其他产品型号？";
+                            caption = "提示";
+                        }
+                        DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.OK)
                         {
                             openChildForm(new ChooseSpec());
@@ -234,15 +286,30 @@ namespace mixer_control_globalver
                 {
                     if (TemporaryVariables.language == 0)
                     {
-                        message = "Các dữ liệu đã làm sẽ bị mất! \r\nCurrent data will be lost! ";
+                        message = "Các dữ liệu đã làm sẽ bị mất? \r\nCurrent data will be lost? ";
                         caption = "Cảnh báo / Warning";
                     }
                     else if (TemporaryVariables.language == 1)
                     {
-                        message = "Các dữ liệu đã làm sẽ bị mất! " + Environment.NewLine + "您所做的更改可能无法保存。？";
+                        message = "Các dữ liệu đã làm sẽ bị mất? \r\n您所做的更改可能无法保存？";
                         caption = "Cảnh báo / 提示";
                     }
-                    DialogResult dialog = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    else if (Settings.Default.language == 2)
+                    {
+                        message = "Current data will be lost?";
+                        caption = "Warning";
+                    }
+                    else if (Settings.Default.language == 3)
+                    {
+                        message = "Các dữ liệu đã làm sẽ bị mất?";
+                        caption = "Cảnh báo";
+                    }
+                    else if (Settings.Default.language == 4)
+                    {
+                        message = "您所做的更改可能无法保存？";
+                        caption = "提示";
+                    }
+                    DialogResult dialog = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                     if (dialog == DialogResult.OK)
                     {
                         isAutomation = false;
@@ -273,7 +340,22 @@ namespace mixer_control_globalver
                     message = "Vui lòng chọn một công thức trước!\r\n请先选择需要加工的产品型号！";
                     caption = "Cảnh báo / 提示";
                 }
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else if (Settings.Default.language == 2)
+                {
+                    message = "Please choose a formula first!";
+                    caption = "Warning";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Vui lòng chọn một công thức trước!";
+                    caption = "Cảnh báo";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "请先选择需要加工的产品型号！";
+                    caption = "提示";
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -305,10 +387,25 @@ namespace mixer_control_globalver
                         }
                         else if (TemporaryVariables.language == 1)
                         {
-                            message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!" + Environment.NewLine + "请在设置部分设置全部信息!";
+                            message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!\r\n请在设置部分设置全部信息!";
                             caption = "Cảnh báo / 提示";
                         }
-                        MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        else if (Settings.Default.language == 2)
+                        {
+                            message = "Please input all required setting first!";
+                            caption = "Warning";
+                        }
+                        else if (Settings.Default.language == 3)
+                        {
+                            message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
+                            caption = "Cảnh báo";
+                        }
+                        else if (Settings.Default.language == 4)
+                        {
+                            message = "请在设置部分设置全部信息!";
+                            caption = "提示";
+                        }
+                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         MainSetting mainSetting = new MainSetting();
                         mainSetting.ShowDialog();
                     }
@@ -331,10 +428,25 @@ namespace mixer_control_globalver
                             }
                             else if (TemporaryVariables.language == 1)
                             {
-                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!" + Environment.NewLine + "请在设置部分设置全部信息!";
+                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!\r\n请在设置部分设置全部信息!";
                                 caption = "Cảnh báo / 提示";
                             }
-                            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            else if (Settings.Default.language == 2)
+                            {
+                                message = "Please input all required setting first!";
+                                caption = "Warning";
+                            }
+                            else if (Settings.Default.language == 3)
+                            {
+                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
+                                caption = "Cảnh báo";
+                            }
+                            else if (Settings.Default.language == 4)
+                            {
+                                message = "请在设置部分设置全部信息!";
+                                caption = "提示";
+                            }
+                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             MainSetting mainSetting = new MainSetting();
                             mainSetting.ShowDialog();
                         }
@@ -357,10 +469,25 @@ namespace mixer_control_globalver
                     }
                     else if (TemporaryVariables.language == 1)
                     {
-                        message = "Vui lòng xác các nguyên liệu trước!" + Environment.NewLine + "请先确认好原料！";
+                        message = "Vui lòng xác các nguyên liệu trước!\r\n请先确认好原料！";
                         caption = "Cảnh báo / 提示";
                     }
-                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    else if (Settings.Default.language == 2)
+                    {
+                        message = "Please confirm all materials first!";
+                        caption = "Warning";
+                    }
+                    else if (Settings.Default.language == 3)
+                    {
+                        message = "Vui lòng xác các nguyên liệu trước!";
+                        caption = "Cảnh báo";
+                    }
+                    else if (Settings.Default.language == 4)
+                    {
+                        message = "请先确认好原料！";
+                        caption = "提示";
+                    }
+                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
@@ -372,17 +499,43 @@ namespace mixer_control_globalver
                 }
                 else if (TemporaryVariables.language == 1)
                 {
-                    message = "Vui lòng chọn một công thức trước!" + Environment.NewLine + "请先选择需要加工的产品型号！";
+                    message = "Vui lòng chọn một công thức trước!\r\n请先选择需要加工的产品型号！";
                     caption = "Cảnh báo / 提示";
                 }
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else if (Settings.Default.language == 2)
+                {
+                    message = "Please choose a formula first!";
+                    caption = "Warning";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Vui lòng chọn một công thức trước!";
+                    caption = "Cảnh báo";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "请先选择需要加工的产品型号！";
+                    caption = "提示";
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
+        private void mainSettingFormClosed(object sender, EventArgs e)
+        {
+            ((Form)sender).FormClosed -= mainSettingFormClosed;
+            if(ChooseSpec.isConfirmed)
+            {
+                ChooseSpec.isConfirmed = false;
+                MainSetting mainSetting = new MainSetting();
+                mainSetting.ShowDialog();
+            }
+        }
         private void btnSetting_Click(object sender, EventArgs e)
         {
-            MainSetting mainSetting = new MainSetting();
-            mainSetting.ShowDialog();
+            PasswordConfirm passwordConfirm = new PasswordConfirm();
+            passwordConfirm.FormClosed += mainSettingFormClosed;
+            passwordConfirm.ShowDialog();
+            
         }
 
         private void cbxLanguageChoose_SelectionChangeCommitted(object sender, EventArgs e)
@@ -403,8 +556,23 @@ namespace mixer_control_globalver
                     message = "Cần khởi động lại ứng dụng để áp dụng ngôn ngữ mới. Bạn có muốn thoát ?\r\n切换语言需要重新启动才能生效，点击确认重新启动 ?";
                     caption = "Cảnh báo / 提示";
                 }
+                else if (Settings.Default.language == 2)
+                {
+                    message = "A restart process is required to apply new language. Do you want to close the program ?";
+                    caption = "Warning";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Cần khởi động lại ứng dụng để áp dụng ngôn ngữ mới. Bạn có muốn thoát ?";
+                    caption = "Cảnh báo";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "切换语言需要重新启动才能生效，点击确认重新启动 ?";
+                    caption = "提示";
+                }
 
-                DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
                     Environment.Exit(0);
