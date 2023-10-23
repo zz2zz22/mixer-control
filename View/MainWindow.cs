@@ -44,8 +44,6 @@ namespace mixer_control_globalver
             this.Text = string.Empty;
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
-
-            
         }
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();

@@ -51,18 +51,13 @@ namespace mixer_control_globalver.View.MainUI
         //Methods
         private void TryConnectToPLC()
         {
-            Thread backgroundThreadReconnectPLC = new Thread(
-                    new ThreadStart(() =>
-                    {
-                        pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
-                        db = Settings.Default.database_no;
+            pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+            db = Settings.Default.database_no;
 
-                        pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.max_speed), db, Convert.ToInt32(ini.Read("MS", "start")), 2);
-                        pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.spindle_diameter), db, Convert.ToInt32(ini.Read("SD", "start")), 2);
-                        pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.sensor_diameter), db, Convert.ToInt32(ini.Read("SSD", "start")), 2);
-                        pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.transmission_ratio), db, Convert.ToInt32(ini.Read("TRMS", "start")), 2);
-                    }));
-            backgroundThreadReconnectPLC.Start();
+            pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.max_speed), db, Convert.ToInt32(ini.Read("MS", "start")), 2);
+            pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.spindle_diameter), db, Convert.ToInt32(ini.Read("SD", "start")), 2);
+            pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.sensor_diameter), db, Convert.ToInt32(ini.Read("SSD", "start")), 2);
+            pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.transmission_ratio), db, Convert.ToInt32(ini.Read("TRMS", "start")), 2);
         }
 
         private void ResetVariablesPLC()
@@ -596,19 +591,6 @@ namespace mixer_control_globalver.View.MainUI
             catch (Exception ex) { SystemLog.Output(SystemLog.MSG_TYPE.Err, "Reverse Roll", ex.Message); }
         }
 
-        private void AutomationInfo_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
-            bgWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
-            bgWorker.ProgressChanged -= BW_ProgressChanged;
-            bgWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
-
-            if (m_timerEvent != null)
-                EventBroker.RemoveTimeEvent(EventBroker.EventID.etUpdateMe, m_timerEvent);
-            EventBroker.RemoveObserver(EventBroker.EventID.etLog, m_observerLog);
-            EventBroker.Relase();
-        }
-
         private void btnResetRoll_Click(object sender, EventArgs e)
         {
             try
@@ -776,10 +758,16 @@ namespace mixer_control_globalver.View.MainUI
 
         private void AutomationInfo_FormClosing(object sender, FormClosingEventArgs e)
         {
-            tmrCallBgWorker.Stop();
+            if (tmrCallBgWorker != null)
+            {
+                tmrCallBgWorker.Stop();
+                tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
+                bgWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
+                bgWorker.ProgressChanged -= BW_ProgressChanged;
+                bgWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
+            }
 
             timer.Delete();
-            timer.Dispose();
             ResetVariablesPLC();
 
             increasedTemp = 0;
@@ -882,23 +870,54 @@ namespace mixer_control_globalver.View.MainUI
                 btnResetRoll.Text = "停止旋转";
             }
             lbFormulaName.Text = TemporaryVariables.tempFileName;
-
             TryConnectToPLC();
 
+
             GetNextProcess();
-
-            if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("AM", "start")), Convert.ToInt32(ini.Read("AM", "bit")), 1))
-            {
-                TriggerAutomationON();
-            }
-            else
-            {
-                TriggerAutomationOFF();
-            }
             LoadBackgroundWorker();
-
-            tmrCallBgWorker.Interval = 1000; //3600000;
-            tmrCallBgWorker.Start();
+            try
+            {
+                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("AM", "start")), Convert.ToInt32(ini.Read("AM", "bit")), 1))
+                {
+                    TriggerAutomationON();
+                }
+                else
+                {
+                    TriggerAutomationOFF();
+                }
+                
+                tmrCallBgWorker.Interval = 1000; //3600000;
+                tmrCallBgWorker.Start();
+            }
+            catch (Exception ex)
+            {
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Kết nối với PLC không thành công!\r\nFail to connect to PLC! : " + ex.Message;
+                    caption = "Thông tin / Information";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Kết nối với PLC không thành công!\r\n连接 PLC 失败！" + ex.Message;
+                    caption = "Thông tin / 信息";
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    message = "Fail to connect to PLC!" + ex.Message;
+                    caption = "Information";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Kết nối với PLC không thành công!" + ex.Message;
+                    caption = "Thông tin";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "连接 PLC 失败！" + ex.Message;
+                    caption = "信息";
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

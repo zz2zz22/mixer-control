@@ -348,7 +348,6 @@
             this.ShowInTaskbar = false;
             this.Text = "AutomationInfo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutomationInfo_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AutomationInfo_FormClosed);
             this.Load += new System.EventHandler(this.AutomationInfo_Load);
             this.panelAutomationInfoMain.ResumeLayout(false);
             this.panelAutomationInfoMain.PerformLayout();
