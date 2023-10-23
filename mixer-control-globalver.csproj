@@ -144,9 +144,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\1_Images&amp;Resources\Library\UI\XanderUI.dll</HintPath>
     </Reference>
+    <Reference Include="zxing, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>packages\ZXing.Net.0.16.9\lib\net47\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.9.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>packages\ZXing.Net.0.16.9\lib\net47\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\CountDownTimer.cs" />
+    <Compile Include="Controller\Device\BXLLApi.cs" />
+    <Compile Include="Controller\Device\BXLLApi_x64.cs" />
+    <Compile Include="Controller\Device\BXLLApi_x86.cs" />
+    <Compile Include="Controller\Device\FinalProductLabel.cs" />
+    <Compile Include="Controller\Device\PrintingLabel.cs" />
+    <Compile Include="Controller\Device\QRGenerate.cs" />
     <Compile Include="Controller\IniFile\IniFile.cs" />
     <Compile Include="Controller\LogFile\ClearMemmory.cs" />
     <Compile Include="Controller\LogFile\EventBroker.cs" />
@@ -257,6 +269,12 @@
     <EmbeddedResource Include="View\SideUI\MainSetting.resx">
       <DependentUpon>MainSetting.cs</DependentUpon>
     </EmbeddedResource>
+    <Content Include="BXLLAPI.lib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BXLLAPI_x64.lib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -273,6 +291,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BXLLAPI.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BXLLAPI_x64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="mixer-control.ico" />
     <None Include="Resources\submit.png" />
     <None Include="Resources\msg_question.png" />
