@@ -208,7 +208,6 @@ namespace mixer_control_globalver.Controller
         }
         #endregion
 
-        
         public static void resetAllTempVariables()
         {
             //reset basic variables

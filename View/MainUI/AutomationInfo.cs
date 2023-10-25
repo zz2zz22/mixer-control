@@ -22,7 +22,7 @@ namespace mixer_control_globalver.View.MainUI
         CountDownTimer timer;
         double tempSpeed;
         bool startOne = false;
-        bool AutoTrigger, ManualTrigger;
+        //bool AutoTrigger, ManualTrigger;
         bool isAlarmed = false;
         bool isSafeTemp = false;
         string message = String.Empty, caption = String.Empty;
@@ -82,8 +82,8 @@ namespace mixer_control_globalver.View.MainUI
             if (!timer.IsRunning)
                 timer.Continue();
 
-            AutoTrigger = true;
-            ManualTrigger = false;
+            //AutoTrigger = true;
+            //ManualTrigger = false;
             btnActivateSpeedControl.BackColor = Color.Yellow;
             if (TemporaryVariables.language == 0)
             {
@@ -140,8 +140,8 @@ namespace mixer_control_globalver.View.MainUI
         {
             if (timer.IsRunning)
                 timer.Pause();
-            ManualTrigger = true;
-            AutoTrigger = false;
+            //ManualTrigger = true;
+            //AutoTrigger = false;
             btnActivateSpeedControl.BackColor = Color.White;
             if (TemporaryVariables.language == 0)
             {
@@ -292,8 +292,8 @@ namespace mixer_control_globalver.View.MainUI
             {
                 timer.Delete();
                 timer.Dispose();
-                
-                if(isSkipAnnouce)
+
+                if (isSkipAnnouce)
                 {
                     if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                         pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
@@ -492,26 +492,20 @@ namespace mixer_control_globalver.View.MainUI
                     //Check automation
                     if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("AM", "start")), Convert.ToInt32(ini.Read("AM", "bit")), 1))
                     {
-                        if (!AutoTrigger && ManualTrigger)
+                        TriggerAutomationON();
+                        if (!timer.IsRunning)
                         {
-                            TriggerAutomationON();
-                            if (!timer.IsRunning)
-                            {
-                                pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                                timer.Continue();
-                            }
+                            pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                            timer.Continue();
                         }
                     }
                     else
                     {
-                        if (AutoTrigger && !ManualTrigger)
+                        TriggerAutomationOFF();
+                        if (timer.IsRunning)
                         {
-                            TriggerAutomationOFF();
-                            if (timer.IsRunning)
-                            {
-                                pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                                timer.Pause();
-                            }
+                            pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                            timer.Pause();
                         }
                     }
                 }
@@ -885,7 +879,7 @@ namespace mixer_control_globalver.View.MainUI
                 {
                     TriggerAutomationOFF();
                 }
-                
+
                 tmrCallBgWorker.Interval = 1000; //3600000;
                 tmrCallBgWorker.Start();
             }

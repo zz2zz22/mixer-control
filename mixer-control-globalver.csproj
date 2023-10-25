@@ -166,12 +166,6 @@
     <Compile Include="Controller\TemporaryVariables.cs" />
     <Compile Include="Model\Logics\ExcelDataConnector.cs" />
     <Compile Include="Model\PLC\PLCConnector.cs" />
-    <Compile Include="View\CustomComponent\AppIntro.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\CustomComponent\AppIntro.Designer.cs">
-      <DependentUpon>AppIntro.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\CustomComponent\LoadingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,9 +223,6 @@
     <Compile Include="View\SideUI\MainSetting.Designer.cs">
       <DependentUpon>MainSetting.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="View\CustomComponent\AppIntro.resx">
-      <DependentUpon>AppIntro.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="View\CustomComponent\LoadingDialog.resx">
       <DependentUpon>LoadingDialog.cs</DependentUpon>
     </EmbeddedResource>

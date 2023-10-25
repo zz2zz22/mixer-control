@@ -694,6 +694,10 @@ namespace mixer_control_globalver.View.MainUI
                         foreach (string _file in fileDialog.FileNames)
                         {
                             FileInfo d = new FileInfo(_file);
+                            if (File.Exists(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name)))
+                            {
+                                File.Delete(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
+                            }
                             File.Move(_file, Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
                         }
                         if (TemporaryVariables.language == 0)
