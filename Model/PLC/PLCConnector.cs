@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace mixer_control_globalver.Model.PLC
 {
@@ -28,8 +30,8 @@ namespace mixer_control_globalver.Model.PLC
             _Rack = Rack;
             _Rack = Slot;
             Client.ConnTimeout = 500;
-            Client.RecvTimeout = 500;
-            Client.SendTimeout = 500;
+            Client.RecvTimeout = 200;
+            Client.SendTimeout = 200;
             Result = Client.ConnectTo(_IP, _Rack, _Slot);
             if (Result == 0)
             {
@@ -37,6 +39,8 @@ namespace mixer_control_globalver.Model.PLC
             }
             var StrMessage = Client.ErrorText(0);
         }
+        enum ClientStatus { cStopped, cRunning, cChannelError, cDataError };
+        ClientStatus Status;
         public int Diconnect()
         {
             int Result = -1;
@@ -49,6 +53,26 @@ namespace mixer_control_globalver.Model.PLC
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Diconnect PLC fail", ex.Message);
             }
             return Result;
+        }
+        public bool Connect()
+        {
+            int Result = Client.ConnectTo(_IP, _Rack, _Slot);
+            if (Result == 0)
+                Status = ClientStatus.cRunning;
+            else
+                Status = ClientStatus.cChannelError;
+            return Result == 0;
+        }
+        public bool CheckConnect()
+        {
+            Connect();
+            if (Status == ClientStatus.cChannelError)
+            {
+                Client.Disconnect();
+                return Connect();
+            }
+            else
+                return true;
         }
         public int isConnectionPLC()
         {

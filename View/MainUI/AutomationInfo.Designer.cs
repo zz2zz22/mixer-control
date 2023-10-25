@@ -162,7 +162,6 @@
             this.rtbRemark.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rtbRemark.Location = new System.Drawing.Point(12, 101);
             this.rtbRemark.Name = "rtbRemark";
-            this.rtbRemark.ReadOnly = true;
             this.rtbRemark.Size = new System.Drawing.Size(321, 412);
             this.rtbRemark.TabIndex = 1;
             this.rtbRemark.Text = "";

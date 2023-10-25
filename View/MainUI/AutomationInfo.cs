@@ -21,8 +21,7 @@ namespace mixer_control_globalver.View.MainUI
         System.Windows.Forms.Timer checkTimer;
         CountDownTimer timer;
         double tempSpeed;
-        bool startOne = false;
-        //bool AutoTrigger, ManualTrigger;
+        bool AutoTrigger, ManualTrigger;
         bool isAlarmed = false;
         bool isSafeTemp = false;
         string message = String.Empty, caption = String.Empty;
@@ -62,86 +61,86 @@ namespace mixer_control_globalver.View.MainUI
 
         private void ResetVariablesPLC()
         {
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-            pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
-            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
+            pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+            if (ConnectionPLC == 0)
+            {
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
+                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
+            }
         }
 
         private void TriggerAutomationON()
         {
-            if (!timer.IsRunning)
-                timer.Continue();
-
-            //AutoTrigger = true;
-            //ManualTrigger = false;
-            btnActivateSpeedControl.BackColor = Color.Yellow;
-            if (TemporaryVariables.language == 0)
+            pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+            if (ConnectionPLC == 0)
             {
-                btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
-            }
-            else if (TemporaryVariables.language == 1)
-            {
-                btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\n自动化模式：开";
-            }
-            else if (Settings.Default.language == 2)
-            {
-                btnActivateSpeedControl.Text = "Automation mode ON";
-            }
-            else if (Settings.Default.language == 3)
-            {
-                btnActivateSpeedControl.Text = "Chế độ tự động đang bật";
-            }
-            else if (Settings.Default.language == 4)
-            {
-                btnActivateSpeedControl.Text = "自动化模式：开";
-            }
-            btnNormalRoll.Visible = true;
-            btnReverseRoll.Visible = true;
-            btnResetRoll.Visible = true;
-            btnStartProcess.Enabled = true;
-
-            if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1))
-            {
-                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
-            }
-            if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
-            {
-                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
-                btnNormalRoll.BackColor = Color.Yellow;
-            }
-
-            if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
-            {
-                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-                btnReverseRoll.BackColor = Color.White;
-            }
-
-            if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1) && !pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
-            {
-                btnResetRoll.BackColor = Color.Yellow;
-            }
-            else
-            {
-                btnResetRoll.BackColor = Color.White;
+                AutoTrigger = true;
+                ManualTrigger = false;
+                btnActivateSpeedControl.BackColor = Color.Yellow;
+                if (TemporaryVariables.language == 0)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\n自动化模式：开";
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    btnActivateSpeedControl.Text = "Automation mode ON";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    btnActivateSpeedControl.Text = "Chế độ tự động đang bật";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    btnActivateSpeedControl.Text = "自动化模式：开";
+                }
+                btnNormalRoll.Visible = true;
+                btnReverseRoll.Visible = true;
+                btnResetRoll.Visible = true;
+                btnStartProcess.Enabled = true;
+                if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1))
+                {
+                    pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
+                }
+                if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
+                {
+                    pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                    btnNormalRoll.BackColor = Color.Yellow;
+                }
+                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
+                {
+                    pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                    btnReverseRoll.BackColor = Color.White;
+                }
+                if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1) && !pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
+                {
+                    btnResetRoll.BackColor = Color.Yellow;
+                }
+                else
+                {
+                    btnResetRoll.BackColor = Color.White;
+                }
             }
         }
 
         private void TriggerAutomationOFF()
         {
-            if (timer.IsRunning)
-                timer.Pause();
-            //ManualTrigger = true;
-            //AutoTrigger = false;
+            ManualTrigger = true;
+            AutoTrigger = false;
             btnActivateSpeedControl.BackColor = Color.White;
             if (TemporaryVariables.language == 0)
             {
@@ -261,7 +260,10 @@ namespace mixer_control_globalver.View.MainUI
 
         private void FinishProcess()
         {
+            timer.Delete();
             TemporaryVariables.processDT.Rows[currentRow]["is_finished"] = true;
+            pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+
             if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                 pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
 
@@ -290,14 +292,10 @@ namespace mixer_control_globalver.View.MainUI
 
             if (!isFinished)
             {
-                timer.Delete();
-                timer.Dispose();
-
                 if (isSkipAnnouce)
                 {
                     if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                         pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-                    startOne = false;
                 }
                 else
                 {
@@ -329,32 +327,27 @@ namespace mixer_control_globalver.View.MainUI
                     DialogResult dialog = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                     if (dialog == DialogResult.OK)
                     {
+
                         if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                             pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-
                         if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")), 1))
                         {
                             pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")), 1);
                         }
-                        startOne = false;
                     }
                     else
                     {
                         if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                             pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-                        startOne = false;
                     }
                 }
                 GetNextProcess();
             }
             else
             {
-                timer.Delete();
-                timer.Dispose();
                 btnResetRoll.BackColor = Color.Yellow;
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-
                 pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
@@ -364,7 +357,6 @@ namespace mixer_control_globalver.View.MainUI
 
                 btnNormalRoll.BackColor = Color.White;
                 btnReverseRoll.BackColor = Color.White;
-
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
 
@@ -398,6 +390,7 @@ namespace mixer_control_globalver.View.MainUI
 
                 Program.main.openSpecTab();
             }
+
         }
 
         //Event handler
@@ -429,99 +422,85 @@ namespace mixer_control_globalver.View.MainUI
             var worker = sender as BackgroundWorker;
             try
             {
-                double tempRT = Convert.ToDouble(pLC.ReadRealToString(db, Convert.ToInt32(ini.Read("RT", "start"))));
-                if (tempRT > 0)
+                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                if (ConnectionPLC == 0)
                 {
-                    lbTemperature.Text = Math.Round(tempRT, 2).ToString();
-                    double speed = Convert.ToDouble(pLC.ReadRealToString(db, Convert.ToInt32(ini.Read("RS", "start"))));
-                    if (speed < 0)
+                    double tempRT = Convert.ToDouble(pLC.ReadRealToString(db, Convert.ToInt32(ini.Read("RT", "start"))));
+                    if (tempRT > 0)
                     {
-                        speed = speed * (-1); // Khi chạy ngược tốc độ bị âm
-                    }
-                    lbRollSpeed.Text = Math.Round(speed, 2).ToString();
-                    double maxTemp = Convert.ToDouble(max_temp);
-                    if (increasedTemp == 0)
-                        increasedTemp = maxTemp;
-                    if (tempRT > increasedTemp)
-                    {
-                        if (alarmTick <= 60)
+                        lbTemperature.Text = Math.Round(tempRT, 2).ToString();
+
+                        double speed = Convert.ToDouble(pLC.ReadRealToString(db, Convert.ToInt32(ini.Read("RS", "start"))));
+                        if (speed < 0)
                         {
-                            isAlarmed = true;
-                            alarmTick++;
+                            speed = speed * (-1); // Khi chạy ngược tốc độ bị âm
+                        }
+                        lbRollSpeed.Text = Math.Round(speed, 2).ToString();
+                        double maxTemp = Convert.ToDouble(max_temp);
+                        if (increasedTemp == 0)
+                            increasedTemp = maxTemp;
+                        if (tempRT > increasedTemp)
+                        {
+                            if (alarmTick <= 60)
+                            {
+                                isAlarmed = true;
+                                alarmTick++;
+                            }
+                            else
+                            {
+                                isAlarmed = false;
+                                increasedTemp += 10;
+                                alarmTick = 1;
+                            }
                         }
                         else
                         {
                             isAlarmed = false;
-                            increasedTemp += 10;
-                            alarmTick = 1;
+                            if (tempRT < maxTemp)
+                            {
+                                isSafeTemp = true;
+                            }
+                            else { isSafeTemp = false; }
                         }
-                    }
-                    else
-                    {
-                        isAlarmed = false;
-                        if (tempRT < maxTemp)
-                        {
-                            isSafeTemp = true;
-                        }
-                        else { isSafeTemp = false; }
-                    }
 
-                    if (isAlarmed)
-                    {
-                        if ((tempRT - tempTemp) > 10)
-                            SystemLog.Output(SystemLog.MSG_TYPE.War, "High Temperature", tempRT.ToString());
-                        panelShowTemperature.BackColor = Color.Red;
-                        tempTemp = tempRT;
-                        if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
+                        if (isAlarmed)
                         {
-                            pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
-                        }
-                    }
-                    else
-                    {
-                        if (isSafeTemp)
-                            panelShowTemperature.BackColor = Color.Black;
-                        else
+                            if ((tempRT - tempTemp) > 10)
+                                SystemLog.Output(SystemLog.MSG_TYPE.War, "High Temperature", tempRT.ToString());
                             panelShowTemperature.BackColor = Color.Red;
-                        if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
-                        {
-                            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
+                            tempTemp = tempRT;
+                            if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
+                            {
+                                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
+                            }
                         }
-                    }
+                        else
+                        {
+                            if (isSafeTemp)
+                                panelShowTemperature.BackColor = Color.Black;
+                            else
+                                panelShowTemperature.BackColor = Color.Red;
+                            if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1))
+                            {
+                                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")), 1);
+                            }
+                        }
+                        //Check automation
 
-                    //Check automation
-                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("AM", "start")), Convert.ToInt32(ini.Read("AM", "bit")), 1))
-                    {
-                        TriggerAutomationON();
-                        if (!timer.IsRunning)
+                        if (pLC.ReadBitToBool(db, 18, 0, 1))
                         {
-                            pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                            timer.Continue();
+                            if (!AutoTrigger && ManualTrigger)
+                            {
+                                TriggerAutomationON();
+                                pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                            }
                         }
-                    }
-                    else
-                    {
-                        TriggerAutomationOFF();
-                        if (timer.IsRunning)
+                        else
                         {
-                            pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                            timer.Pause();
-                        }
-                    }
-                }
-                else
-                {
-                    if (ConnectionPLC != 0)
-                    {
-                        TryConnectToPLC();
-                    }
-                    else
-                    {
-                        if (tempRT == 0)
-                        {
-                            if (ConnectionPLC == 0)
-                                pLC.Diconnect();
-                            TryConnectToPLC();
+                            if (AutoTrigger && !ManualTrigger)
+                            {
+                                TriggerAutomationOFF();
+                            }
                         }
                     }
                 }
@@ -571,16 +550,20 @@ namespace mixer_control_globalver.View.MainUI
         {
             try
             {
-                if (!timer.IsRunning)
-                    timer.Continue();
+                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                if (ConnectionPLC == 0)
+                {
+                    if (!timer.IsRunning)
+                        timer.Continue();
+                    pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
+                        pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                    pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                    btnReverseRoll.BackColor = Color.Yellow;
+                    btnNormalRoll.BackColor = Color.White;
+                    btnResetRoll.BackColor = Color.White;
 
-                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
-                    pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
-                pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                btnReverseRoll.BackColor = Color.Yellow;
-                btnNormalRoll.BackColor = Color.White;
-                btnResetRoll.BackColor = Color.White;
+                }
             }
             catch (Exception ex) { SystemLog.Output(SystemLog.MSG_TYPE.Err, "Reverse Roll", ex.Message); }
         }
@@ -589,17 +572,21 @@ namespace mixer_control_globalver.View.MainUI
         {
             try
             {
-                if (timer.IsRunning)
-                    timer.Pause();
-                btnResetRoll.BackColor = Color.Yellow;
-                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
-                    pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                if (ConnectionPLC == 0)
+                {
+                    if (timer.IsRunning)
+                        timer.Pause();
+                    btnResetRoll.BackColor = Color.Yellow;
+                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
+                        pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
 
-                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
-                    pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-                pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                btnNormalRoll.BackColor = Color.White;
-                btnReverseRoll.BackColor = Color.White;
+                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
+                        pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                    pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                    btnNormalRoll.BackColor = Color.White;
+                    btnReverseRoll.BackColor = Color.White;
+                }
             }
             catch (Exception ex) { SystemLog.Output(SystemLog.MSG_TYPE.Err, "Stop Roll", ex.Message); }
         }
@@ -636,17 +623,22 @@ namespace mixer_control_globalver.View.MainUI
                 DialogResult dialog = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 if (dialog == DialogResult.OK)
                 {
-                    pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
-                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1))
-                        pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1);
+                    pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                    if (ConnectionPLC == 0)
+                    {
+                        pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
+                        if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1))
+                            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")), 1);
 
-                    checkTimer = new System.Windows.Forms.Timer();
-                    checkTimer.Tick += checkTimer_Tick;
-                    checkTimer.Interval = 1000;
-                    checkTimer.Enabled = true;
+                        checkTimer = new System.Windows.Forms.Timer();
+                        checkTimer.Tick += checkTimer_Tick;
+                        checkTimer.Interval = 1000;
+                        checkTimer.Enabled = true;
 
-                    btnStartProcess.Enabled = false;
+                        btnStartProcess.Enabled = false;
+                    }
                 }
+
             }
             catch (Exception ex) { SystemLog.Output(SystemLog.MSG_TYPE.Err, "Start Process", ex.Message); }
         }
@@ -657,49 +649,43 @@ namespace mixer_control_globalver.View.MainUI
             {
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("SSCU", "start")), Convert.ToInt32(ini.Read("SSCU", "bit")), 1) && pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("SSCL", "start")), Convert.ToInt32(ini.Read("SSCL", "bit")), 1))
                 {
-                    if (!startOne)
+                    checkTimer.Stop();
+                    checkTimer.Enabled = false;
+                    if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1))
+                        pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
+
+                    if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
                     {
-                        startOne = true;
-                        checkTimer.Enabled = false;
-                        checkTimer.Dispose();
-
-                        if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1))
-                            pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")), 1);
-
-                        if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1))
-                        {
-                            pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
-                            btnNormalRoll.BackColor = Color.Yellow;
-                        }
-
-                        if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
-                        {
-                            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-                            btnReverseRoll.BackColor = Color.White;
-                        }
-                        btnResetRoll.BackColor = Color.White;
-
-                        pLC.WriteRealtoPLC(Convert.ToSingle(speed1), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                        tempSpeed = speed1;
-                        int time = time1 + time2;
-
-                        timer.SetTime(time, 0);
-                        string timeChange = SetTimeChange(time2, 0);
-
-                        if (isVaccum)
-                        {
-                            if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1))
-                            {
-                                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
-                                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
-                            }
-                        }
-
-                        timer.Start();
-                        timer.TimeChanged += () => TimerProcessTrigger(timeChange);
-                        timer.CountDownFinished += () => FinishProcess();
-                        timer.StepMs = 1000;
+                        pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                        btnNormalRoll.BackColor = Color.Yellow;
                     }
+
+                    if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
+                    {
+                        pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                        btnReverseRoll.BackColor = Color.White;
+                    }
+                    btnResetRoll.BackColor = Color.White;
+                    pLC.WriteRealtoPLC(Convert.ToSingle(speed1), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                    tempSpeed = speed1;
+                    int time = time1 + time2;
+
+                    timer.SetTime(time, 0);
+                    string timeChange = SetTimeChange(time2, 0);
+
+                    if (isVaccum)
+                    {
+                        if (!pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1))
+                        {
+                            pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")), 1);
+                            pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")), 1);
+                        }
+                    }
+
+                    timer.Start();
+                    timer.TimeChanged += () => TimerProcessTrigger(timeChange);
+                    timer.CountDownFinished += () => FinishProcess();
+                    timer.StepMs = 1000;
                 }
             }
             catch (Exception ex) { SystemLog.Output(SystemLog.MSG_TYPE.Err, "Check Timer Process", ex.Message); }
@@ -739,7 +725,7 @@ namespace mixer_control_globalver.View.MainUI
                 ResetVariablesPLC();
                 TemporaryVariables.processDT.Rows[currentRow]["is_finished"] = true;
                 timer.Delete();
-                timer.Dispose();
+                lbCountDown.Text = "00:00:00";
 
                 GetNextProcess();
                 increasedTemp = 0;
@@ -776,15 +762,20 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnNormalRoll_Click(object sender, EventArgs e)
         {
-            if (!timer.IsRunning)
-                timer.Continue();
-            pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
-            if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
-                pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
-            pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-            btnNormalRoll.BackColor = Color.Yellow;
-            btnReverseRoll.BackColor = Color.White;
-            btnResetRoll.BackColor = Color.White;
+            pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+            if (ConnectionPLC == 0)
+            {
+                if (!timer.IsRunning)
+                    timer.Continue();
+                pLC.WritebittoPLC(true, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")), 1);
+                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1))
+                    pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")), 1);
+                pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                btnNormalRoll.BackColor = Color.Yellow;
+                btnReverseRoll.BackColor = Color.White;
+                btnResetRoll.BackColor = Color.White;
+
+            }
         }
         private void mainSettingFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -866,12 +857,11 @@ namespace mixer_control_globalver.View.MainUI
             lbFormulaName.Text = TemporaryVariables.tempFileName;
             TryConnectToPLC();
 
-
             GetNextProcess();
             LoadBackgroundWorker();
             try
             {
-                if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("AM", "start")), Convert.ToInt32(ini.Read("AM", "bit")), 1))
+                if (pLC.ReadBitToBool(db, 18, 0, 1))
                 {
                     TriggerAutomationON();
                 }

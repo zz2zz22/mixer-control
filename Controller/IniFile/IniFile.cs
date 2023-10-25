@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using Spire.Pdf.OPC;
 using System.IO;
 
 namespace mixer_control_globalver.Controller.IniFile
