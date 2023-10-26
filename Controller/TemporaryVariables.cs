@@ -204,7 +204,93 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
                 settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
             }
-            
+            else if (Settings.Default.language == 2)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
+                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
+                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
+                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
+                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
+                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
+                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
+            }
+            else if (Settings.Default.language == 3)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
+                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
+                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
+                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
+                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
+                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
+                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
+            }
+            else if (Settings.Default.language == 4)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
+                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
+                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
+                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
+                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
+                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
+                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
+            }
         }
         #endregion
 
