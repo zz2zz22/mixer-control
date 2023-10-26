@@ -1,4 +1,5 @@
 ﻿using mixer_control_globalver.Controller;
+using mixer_control_globalver.Controller.Device;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Model.PLC;
@@ -50,6 +51,7 @@ namespace mixer_control_globalver.View.MainUI
         //Methods
         private void TryConnectToPLC()
         {
+
             pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
             db = Settings.Default.database_no;
 
@@ -58,7 +60,24 @@ namespace mixer_control_globalver.View.MainUI
             pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.sensor_diameter), db, Convert.ToInt32(ini.Read("SSD", "start")), 2);
             pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.transmission_ratio), db, Convert.ToInt32(ini.Read("TRMS", "start")), 2);
         }
-
+        private void lOTInputFormClosed(object sender, EventArgs e)
+        {
+            ((Form)sender).FormClosed -= lOTInputFormClosed;
+            PritingLabel pritingLabel = new PritingLabel();
+            double totalQty = 0;
+            foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+            {
+                totalQty += Convert.ToDouble(dr["weight"].ToString());
+            }
+            FinalProductLabel finalProductLabel = new FinalProductLabel
+            {
+                product_code = lbFormulaName.Text,
+                lot_no = TemporaryVariables.lotNo,
+                total_qty = totalQty.ToString(),
+                date_time = DateTime.Now.ToString("dd/MM/yyyy")
+            };
+            pritingLabel.PrintLabelQR(finalProductLabel, 1);
+        }
         private void ResetVariablesPLC()
         {
             pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
@@ -360,6 +379,9 @@ namespace mixer_control_globalver.View.MainUI
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
 
+                //LOTInput lOTInput = new LOTInput();
+                //lOTInput.FormClosed += lOTInputFormClosed;
+                //lOTInput.Show();
 
                 if (TemporaryVariables.language == 0)
                 {
@@ -858,7 +880,13 @@ namespace mixer_control_globalver.View.MainUI
             TryConnectToPLC();
 
             GetNextProcess();
+
+            LOTInput lOTInput = new LOTInput();
+            lOTInput.FormClosed += lOTInputFormClosed;
+            lOTInput.Show();
+
             LoadBackgroundWorker();
+            
             try
             {
                 if (pLC.ReadBitToBool(db, 18, 0, 1))

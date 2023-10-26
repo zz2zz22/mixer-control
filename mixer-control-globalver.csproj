@@ -188,6 +188,18 @@
     <Compile Include="View\CustomControls\Form_MessageBox.Designer.cs">
       <DependentUpon>Form_MessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\CustomControls\LOTInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CustomControls\LOTInput.Designer.cs">
+      <DependentUpon>LOTInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomControls\QuantityInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CustomControls\QuantityInput.Designer.cs">
+      <DependentUpon>QuantityInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MainUI\AutomationInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +243,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\CustomControls\Form_MessageBox.resx">
       <DependentUpon>Form_MessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\CustomControls\LOTInput.resx">
+      <DependentUpon>LOTInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\CustomControls\QuantityInput.resx">
+      <DependentUpon>QuantityInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MainUI\AutomationInfo.resx">
       <DependentUpon>AutomationInfo.cs</DependentUpon>

@@ -17,60 +17,85 @@ namespace mixer_control_globalver.View.CustomControls
 {
     public partial class CustomMaterialDataRow : UserControl
     {
-        public CustomMaterialDataRow(string matCode, string weight, bool status)
+        public CustomMaterialDataRow()
         {
             InitializeComponent();
-            lbMatCode.Text = matCode;
-            lbWeight.Text = weight + " kg";
+        }
 
-            if (status)
+        private string _code;
+        private double _qty;
+        private bool _fStatus;
+
+        [Category("Custom Props")]
+        public string Code
+        {
+            get { return _code; }
+            set { _code = value; lbMatCode.Text = value; }
+        }
+
+        [Category("Custom Props")]
+        public double Quantity
+        {
+            get { return _qty; }
+            set { _qty = value; lbWeight.Text = value.ToString() + " kg"; }
+        }
+
+        [Category("Custom Props")]
+        public bool Status
+        {
+            get { return _fStatus; }
+            set
             {
-                panelStatus.BackColor = Color.Yellow;
-                lbStatus.ForeColor = Color.Black;
-                if (TemporaryVariables.language == 0)
+                _fStatus = value;
+                if (_fStatus)
                 {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN\r\nCONFIRMED";
+                    panelStatus.BackColor = Color.Yellow;
+                    lbStatus.ForeColor = Color.Black;
+                    if (Settings.Default.language == 0)
+                    {
+                        lbStatus.Text = "ĐÃ XÁC NHẬN\r\nCONFIRMED";
+                    }
+                    else if (Settings.Default.language == 1)
+                    {
+                        lbStatus.Text = "ĐÃ XÁC NHẬN\r\n已确认";
+                    }
+                    else if (Settings.Default.language == 2)
+                    {
+                        lbStatus.Text = "CONFIRMED";
+                    }
+                    else if (Settings.Default.language == 3)
+                    {
+                        lbStatus.Text = "ĐÃ XÁC NHẬN";
+                    }
+                    else if (Settings.Default.language == 4)
+                    {
+                        lbStatus.Text = "已确认";
+                    }
                 }
-                else if (TemporaryVariables.language == 1)
+                else
                 {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN\r\n已确认";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    lbStatus.Text = "CONFIRMED";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    lbStatus.Text = "已确认";
-                }
-            }
-            else
-            {
-                panelStatus.BackColor = Color.Red;
-                lbStatus.ForeColor = Color.White;
-                if (TemporaryVariables.language == 0)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN\r\nNOT CONFIRMED";
-                }
-                else if (TemporaryVariables.language == 1)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN\r\n未确认";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    lbStatus.Text = "NOT CONFIRMED";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    lbStatus.Text = "未确认";
+                    panelStatus.BackColor = Color.Red;
+                    lbStatus.ForeColor = Color.White;
+                    if (Settings.Default.language == 0)
+                    {
+                        lbStatus.Text = "CHƯA XÁC NHẬN\r\nNOT CONFIRMED";
+                    }
+                    else if (Settings.Default.language == 1)
+                    {
+                        lbStatus.Text = "CHƯA XÁC NHẬN\r\n未确认";
+                    }
+                    else if (Settings.Default.language == 2)
+                    {
+                        lbStatus.Text = "NOT CONFIRMED";
+                    }
+                    else if (Settings.Default.language == 3)
+                    {
+                        lbStatus.Text = "CHƯA XÁC NHẬN";
+                    }
+                    else if (Settings.Default.language == 4)
+                    {
+                        lbStatus.Text = "未确认";
+                    }
                 }
             }
         }

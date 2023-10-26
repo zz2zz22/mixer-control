@@ -19,6 +19,12 @@ namespace mixer_control_globalver.Controller
         public static String tempFormulaName { get; set; }
         public static int language { get; set; }
 
+        public static String productCode { get; set; }
+        public static String materialCode { get; set; }
+        public static String lotNo { get; set; }
+        public static bool isFinish { get; set; }
+        public static bool isInputQuantity { get; set; }
+        public static double inputQuantity { get; set; }
         #endregion
 
         #region Temporary Datatables
@@ -204,7 +210,93 @@ namespace mixer_control_globalver.Controller
                 settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
                 settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
             }
-            
+            else if (Settings.Default.language == 2)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - Enable Run");
+                settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
+                settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
+                settingDT.Rows.Add("CD", "Lật thùng - Container Down");
+                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
+                settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
+                settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - Clockwise Roll");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - Reverse Clockwise Roll");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
+            }
+            else if (Settings.Default.language == 3)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - Enable Run");
+                settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
+                settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
+                settingDT.Rows.Add("CD", "Lật thùng - Container Down");
+                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
+                settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
+                settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - Clockwise Roll");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - Reverse Clockwise Roll");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
+            }
+            else if (Settings.Default.language == 4)
+            {
+                settingDT.Rows.Add("ER", "Kích hoạt chạy - Enable Run");
+                settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
+                settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
+                settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
+                settingDT.Rows.Add("CD", "Lật thùng - Container Down");
+                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
+                settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
+                settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
+                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
+                settingDT.Rows.Add("CW", "Quay chiều thuận - Clockwise Roll");
+                settingDT.Rows.Add("RCW", "Quay chiều ngược - Reverse Clockwise Roll");
+                settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
+                settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
+                settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
+
+                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
+                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
+                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
+                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
+                settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
+                settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
+
+                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
+                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
+                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
+                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
+            }
         }
         #endregion
 

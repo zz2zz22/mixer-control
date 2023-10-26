@@ -80,7 +80,8 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
-            switch (TemporaryVariables.language)
+            int lg = Properties.Settings.Default.language;
+            switch (lg)
             {
                 case 0:
                     language = 0; break;
@@ -111,6 +112,48 @@ namespace mixer_control_globalver.View.SideUI
                 btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
             }
             else if (language == 1)
+            {
+                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
+                lb2.Text = "Số thứ tự database:\r\n数据库序号:";
+                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\n捏合机转轴最高速度 （转/分钟）:";
+                label2.Text = "Đường kính động cơ (mm):\r\n速度采集轮直径 (mm):";
+                label3.Text = "Đường kính cảm biến (mm):\r\n捏合机转轴直径 (mm):";
+                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\n速度采集轮与捏合机转轴兑换率:";
+                lb3.Text = "Danh sách các biến cài đặt:\r\n设置变量值名单:";
+                lb4.Text = "Địa chỉ offset:\r\n地址:";
+
+                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\n保存设置";
+                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\n保存Offset";
+            }
+            else if (language == 2)
+            {
+                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC IP address:";
+                lb2.Text = "Số thứ tự database:\r\nDatabase no:";
+                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\nMotor max speed (RPM):";
+                label2.Text = "Đường kính động cơ (mm):\r\nMotor diameter (mm):";
+                label3.Text = "Đường kính cảm biến (mm):\r\nSensor diameter (mm):";
+                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\nTransmission ratio between motor and sensor:";
+                lb3.Text = "Danh sách các biến cài đặt:\r\nSetting variable list:";
+                lb4.Text = "Địa chỉ offset:\r\nOffset address:";
+
+                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\nSave base setting";
+                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
+            }
+            else if (language == 3)
+            {
+                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC IP address:";
+                lb2.Text = "Số thứ tự database:\r\nDatabase no:";
+                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\nMotor max speed (RPM):";
+                label2.Text = "Đường kính động cơ (mm):\r\nMotor diameter (mm):";
+                label3.Text = "Đường kính cảm biến (mm):\r\nSensor diameter (mm):";
+                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\nTransmission ratio between motor and sensor:";
+                lb3.Text = "Danh sách các biến cài đặt:\r\nSetting variable list:";
+                lb4.Text = "Địa chỉ offset:\r\nOffset address:";
+
+                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\nSave base setting";
+                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
+            }
+            else if (language == 4)
             {
                 lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
                 lb2.Text = "Số thứ tự database:\r\n数据库序号:";
@@ -200,6 +243,21 @@ namespace mixer_control_globalver.View.SideUI
                         message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
                         caption = "Thông tin / 信息";
                     }
+                    else if (language == 2)
+                    {
+                        message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
+                        caption = "Thông tin / 信息";
+                    }
+                    else if (language == 3)
+                    {
+                        message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
+                        caption = "Thông tin / 信息";
+                    }
+                    else if (language == 4)
+                    {
+                        message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
+                        caption = "Thông tin / 信息";
+                    }
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "start", txbStartNo.Text);
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "bit", txbBitNo.Text);
                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -269,7 +327,21 @@ namespace mixer_control_globalver.View.SideUI
                 message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
                 caption = "Thông tin / 信息";
             }
-
+            else if (language == 2)
+            {
+                message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
+                caption = "Thông tin / 信息";
+            }
+            else if (language == 3)
+            {
+                message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
+                caption = "Thông tin / 信息";
+            }
+            else if (language == 4)
+            {
+                message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
+                caption = "Thông tin / 信息";
+            }
             Settings.Default.plc_ip = txbPLCIpSetting.Text;
             Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
             Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
