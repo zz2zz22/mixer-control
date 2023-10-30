@@ -391,6 +391,12 @@ namespace mixer_control_globalver.View.SideUI
             }
         }
 
+        private void btnHelp_Click(object sender, EventArgs e)
+        {
+            MailSetting mailSetting = new MailSetting();
+            mailSetting.ShowDialog();
+        }
+
         private void txbTransmissionRatio_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))

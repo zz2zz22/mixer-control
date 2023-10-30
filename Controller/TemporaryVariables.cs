@@ -11,6 +11,8 @@ namespace mixer_control_globalver.Controller
     public class TemporaryVariables
     {
         #region Basic Variables
+
+        public static String tempReportFilePath { get; set; }
         public static String tempFileName { get; set; }
         public static String tempFilePath { get; set; }
 

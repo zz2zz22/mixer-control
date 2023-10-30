@@ -2,15 +2,20 @@
 using mixer_control_globalver.Controller.Device;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Controller.LogFile;
+using mixer_control_globalver.Controller.Report;
 using mixer_control_globalver.Model.PLC;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using System.Net.Mail;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace mixer_control_globalver.View.MainUI
 {
@@ -49,6 +54,72 @@ namespace mixer_control_globalver.View.MainUI
         }
 
         //Methods
+        
+        private void TryExportExcelAndMail(DataTable dt)
+        {
+            try
+            {
+                if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\report"))
+                {
+                    Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\report");
+                }
+                string pathsave = AppDomain.CurrentDomain.BaseDirectory + "report";
+                List<EndProcessReport> details = new List<EndProcessReport> ();
+                for(int i = 0; i < dt.Rows.Count; i ++)
+                {
+                    EndProcessReport d = new EndProcessReport();
+                    d.Code = dt.Rows[i]["mat_name"].ToString();
+                    d.LOT = dt.Rows[i]["lot_no"].ToString();
+                    d.Weight = dt.Rows[i]["weight"].ToString();
+                    d.Tolerance = dt.Rows[i]["tolerance"].ToString();
+                    details.Add(d);
+                }
+                TemporaryVariables.tempReportFilePath = pathsave + "\\mixer_report.xlsx";
+                ReportExport exportReport = new ReportExport();
+                exportReport.ExportExcelEndProcess(TemporaryVariables.tempReportFilePath, details);
+
+                string smtp = Properties.Settings.Default.cfg_senders.Substring(Properties.Settings.Default.cfg_senders.IndexOf('@'));
+                if (smtp == "@gmail.com")
+                {
+                    Properties.Settings.Default.smtp_server = "smtp.gmail.com";
+                    Properties.Settings.Default.smtp_port = "587";
+                }
+                else if (smtp == "@techlink.vn")
+                {
+                    Properties.Settings.Default.smtp_server = "pro56.emailserver.vn";
+                    Properties.Settings.Default.smtp_port = "587";
+                }
+
+                Properties.Settings.Default.Save();
+                string[] receivers = Properties.Settings.Default.cfg_receivers.Split(';');
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient(Properties.Settings.Default.smtp_server);
+                mail.From = new MailAddress(Properties.Settings.Default.cfg_senders);
+                for (int i = 0; i < receivers.Length; i++)
+                {
+                    mail.To.Add(receivers[i]);
+                }
+                mail.Subject = "Mixer end process report : " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                mail.Body = "This is an auto generated report! Please don't reply!";
+
+                System.Net.Mail.Attachment attachment;
+                attachment = new System.Net.Mail.Attachment(TemporaryVariables.tempReportFilePath);
+                mail.Attachments.Add(attachment);
+
+                SmtpServer.Port = int.Parse(Properties.Settings.Default.smtp_port);
+                SmtpServer.UseDefaultCredentials = true;
+                SmtpServer.Credentials = new System.Net.NetworkCredential(Properties.Settings.Default.cfg_senders, Properties.Settings.Default.cfg_senderPW);
+                SmtpServer.EnableSsl = true;
+
+                SmtpServer.Send(mail);
+                mail.Dispose();
+            }
+            catch (Exception )
+            {
+                throw;
+            }
+        }
+
         private void TryConnectToPLC()
         {
 
@@ -60,24 +131,7 @@ namespace mixer_control_globalver.View.MainUI
             pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.sensor_diameter), db, Convert.ToInt32(ini.Read("SSD", "start")), 2);
             pLC.WriteRealtoPLC(Convert.ToSingle(Settings.Default.transmission_ratio), db, Convert.ToInt32(ini.Read("TRMS", "start")), 2);
         }
-        private void lOTInputFormClosed(object sender, EventArgs e)
-        {
-            ((Form)sender).FormClosed -= lOTInputFormClosed;
-            PritingLabel pritingLabel = new PritingLabel();
-            double totalQty = 0;
-            foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
-            {
-                totalQty += Convert.ToDouble(dr["weight"].ToString());
-            }
-            FinalProductLabel finalProductLabel = new FinalProductLabel
-            {
-                product_code = lbFormulaName.Text,
-                lot_no = TemporaryVariables.lotNo,
-                total_qty = totalQty.ToString(),
-                date_time = DateTime.Now.ToString("dd/MM/yyyy")
-            };
-            pritingLabel.PrintLabelQR(finalProductLabel, 1);
-        }
+        
         private void ResetVariablesPLC()
         {
             pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
@@ -378,10 +432,6 @@ namespace mixer_control_globalver.View.MainUI
                 btnReverseRoll.BackColor = Color.White;
                 if (pLC.ReadBitToBool(db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1))
                     pLC.WritebittoPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")), 1);
-
-                //LOTInput lOTInput = new LOTInput();
-                //lOTInput.FormClosed += lOTInputFormClosed;
-                //lOTInput.Show();
 
                 if (TemporaryVariables.language == 0)
                 {
@@ -878,12 +928,8 @@ namespace mixer_control_globalver.View.MainUI
             }
             lbFormulaName.Text = TemporaryVariables.tempFileName;
             TryConnectToPLC();
-
+            TryExportExcelAndMail(TemporaryVariables.materialDT);
             GetNextProcess();
-
-            LOTInput lOTInput = new LOTInput();
-            lOTInput.FormClosed += lOTInputFormClosed;
-            lOTInput.Show();
 
             LoadBackgroundWorker();
             

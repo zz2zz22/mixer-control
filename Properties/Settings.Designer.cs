@@ -12,7 +12,7 @@ namespace mixer_control_globalver.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -134,6 +134,66 @@ namespace mixer_control_globalver.Properties {
         public string master_pw {
             get {
                 return ((string)(this["master_pw"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string smtp_server {
+            get {
+                return ((string)(this["smtp_server"]));
+            }
+            set {
+                this["smtp_server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string smtp_port {
+            get {
+                return ((string)(this["smtp_port"]));
+            }
+            set {
+                this["smtp_port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tlms@techlink.vn")]
+        public string cfg_senders {
+            get {
+                return ((string)(this["cfg_senders"]));
+            }
+            set {
+                this["cfg_senders"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("techlink@123")]
+        public string cfg_senderPW {
+            get {
+                return ((string)(this["cfg_senderPW"]));
+            }
+            set {
+                this["cfg_senderPW"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("erp@techlink.vn;erp03@techlink.vn;erp04@techlink.vn")]
+        public string cfg_receivers {
+            get {
+                return ((string)(this["cfg_receivers"]));
+            }
+            set {
+                this["cfg_receivers"] = value;
             }
         }
     }

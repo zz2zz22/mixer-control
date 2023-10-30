@@ -1,4 +1,5 @@
 ﻿using mixer_control_globalver.Controller;
+using mixer_control_globalver.Controller.Device;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
@@ -70,7 +71,7 @@ namespace mixer_control_globalver.View.MainUI
                                     TemporaryVariables.isInputQuantity = false;
                                     QuantityInput quantityInput = new QuantityInput();
                                     quantityInput.FormClosed += quantityInputFormClosed;
-                                    quantityInput.Show();
+                                    quantityInput.ShowDialog();
                                 }
                             }
                         }
@@ -135,9 +136,6 @@ namespace mixer_control_globalver.View.MainUI
                     flpMaterialList.Controls.Add(listItems[i]);
                 }
             }
-            //(bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"]
-            //dt.Rows[i]["mat_name"].ToString()
-            //dt.Rows[i]["weight"].ToString()
         }
 
         private void MaterialScale_Load(object sender, EventArgs e)
@@ -184,9 +182,39 @@ namespace mixer_control_globalver.View.MainUI
 
         }
 
+        private void lOTInputFormClosed(object sender, EventArgs e)
+        {
+            ((Form)sender).FormClosed -= lOTInputFormClosed;
+            PritingLabel pritingLabel = new PritingLabel();
+            double totalQty = 0;
+            foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+            {
+                totalQty += Convert.ToDouble(dr["weight"].ToString());
+            }
+            FinalProductLabel finalProductLabel = new FinalProductLabel
+            {
+                product_code = lbFormulaName.Text,
+                lot_no = TemporaryVariables.lotNo,
+                total_qty = totalQty.ToString(),
+                date_time = DateTime.Now.ToString("dd/MM/yyyy")
+            };
+            pritingLabel.PrintLabelQR(finalProductLabel, 1);
+            Program.main.openAutomationTab();
+        }
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            Program.main.openAutomationTab();
+            //foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+            //{
+            //    dr["is_confirmed"] = true;
+            //    dr["weight"] = 20;
+            //}
+            //foreach (CustomMaterialDataRow c in flpMaterialList.Controls)
+            //{
+            //    c.Status = true;
+            //}
+            LOTInput lOTInput = new LOTInput();
+            lOTInput.FormClosed += lOTInputFormClosed;
+            lOTInput.ShowDialog();
         }
 
         private bool CheckMaterialLeft()

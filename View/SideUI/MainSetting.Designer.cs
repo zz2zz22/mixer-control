@@ -30,8 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainSetting));
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.btnClose = new XanderUI.XUIButton();
-            this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
             this.lb1 = new System.Windows.Forms.Label();
             this.txbPLCIpSetting = new System.Windows.Forms.TextBox();
             this.txbDatabaseNo = new System.Windows.Forms.TextBox();
@@ -43,8 +41,6 @@
             this.txbStartNo = new System.Windows.Forms.TextBox();
             this.txbBitNo = new System.Windows.Forms.TextBox();
             this.lb5 = new System.Windows.Forms.Label();
-            this.btnSaveBaseSetting = new XanderUI.XUIButton();
-            this.btnSaveOffset = new XanderUI.XUIButton();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -53,6 +49,11 @@
             this.txbMotorDiameter = new System.Windows.Forms.TextBox();
             this.txbSensorDiameter = new System.Windows.Forms.TextBox();
             this.txbTransmissionRatio = new System.Windows.Forms.TextBox();
+            this.btnHelp = new XanderUI.XUIButton();
+            this.btnSaveBaseSetting = new XanderUI.XUIButton();
+            this.btnSaveOffset = new XanderUI.XUIButton();
+            this.btnClose = new XanderUI.XUIButton();
+            this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.SuspendLayout();
@@ -66,44 +67,9 @@
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(787, 65);
+            this.panelHeader.Size = new System.Drawing.Size(782, 65);
             this.panelHeader.TabIndex = 5;
             this.panelHeader.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelHeader_MouseDown);
-            // 
-            // btnClose
-            // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnClose.ButtonImage = global::mixer_control_globalver.Properties.Resources.cancel;
-            this.btnClose.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnClose.ButtonText = "Button";
-            this.btnClose.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnClose.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnClose.CornerRadius = 5;
-            this.btnClose.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnClose.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnClose.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnClose.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnClose.Location = new System.Drawing.Point(727, 3);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(56, 56);
-            this.btnClose.TabIndex = 2;
-            this.btnClose.TextColor = System.Drawing.Color.DodgerBlue;
-            this.btnClose.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
-            // pbxCompanyLogo
-            // 
-            this.pbxCompanyLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pbxCompanyLogo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pbxCompanyLogo.Image = global::mixer_control_globalver.Properties.Resources.logoTechlinkFix;
-            this.pbxCompanyLogo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.pbxCompanyLogo.Location = new System.Drawing.Point(0, 0);
-            this.pbxCompanyLogo.Name = "pbxCompanyLogo";
-            this.pbxCompanyLogo.Size = new System.Drawing.Size(246, 63);
-            this.pbxCompanyLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbxCompanyLogo.TabIndex = 0;
-            this.pbxCompanyLogo.TabStop = false;
             // 
             // lb1
             // 
@@ -205,51 +171,6 @@
             this.lb5.TabIndex = 20;
             this.lb5.Text = ".";
             // 
-            // btnSaveBaseSetting
-            // 
-            this.btnSaveBaseSetting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveBaseSetting.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnSaveBaseSetting.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
-            this.btnSaveBaseSetting.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnSaveBaseSetting.ButtonText = "Save setting";
-            this.btnSaveBaseSetting.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnSaveBaseSetting.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnSaveBaseSetting.CornerRadius = 10;
-            this.btnSaveBaseSetting.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveBaseSetting.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnSaveBaseSetting.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnSaveBaseSetting.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnSaveBaseSetting.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnSaveBaseSetting.Location = new System.Drawing.Point(581, 306);
-            this.btnSaveBaseSetting.Name = "btnSaveBaseSetting";
-            this.btnSaveBaseSetting.Size = new System.Drawing.Size(194, 67);
-            this.btnSaveBaseSetting.TabIndex = 7;
-            this.btnSaveBaseSetting.TextColor = System.Drawing.Color.Black;
-            this.btnSaveBaseSetting.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnSaveBaseSetting.Click += new System.EventHandler(this.btnSaveBaseSetting_Click);
-            // 
-            // btnSaveOffset
-            // 
-            this.btnSaveOffset.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnSaveOffset.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
-            this.btnSaveOffset.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnSaveOffset.ButtonText = "Save offset";
-            this.btnSaveOffset.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnSaveOffset.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnSaveOffset.CornerRadius = 10;
-            this.btnSaveOffset.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveOffset.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnSaveOffset.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnSaveOffset.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnSaveOffset.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnSaveOffset.Location = new System.Drawing.Point(572, 549);
-            this.btnSaveOffset.Name = "btnSaveOffset";
-            this.btnSaveOffset.Size = new System.Drawing.Size(194, 67);
-            this.btnSaveOffset.TabIndex = 11;
-            this.btnSaveOffset.TextColor = System.Drawing.Color.Black;
-            this.btnSaveOffset.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnSaveOffset.Click += new System.EventHandler(this.btnSaveOffset_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -319,11 +240,114 @@
             this.txbTransmissionRatio.TabIndex = 6;
             this.txbTransmissionRatio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbTransmissionRatio_KeyPress);
             // 
+            // btnHelp
+            // 
+            this.btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHelp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnHelp.ButtonImage = global::mixer_control_globalver.Properties.Resources.email;
+            this.btnHelp.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnHelp.ButtonText = "Button";
+            this.btnHelp.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnHelp.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnHelp.CornerRadius = 5;
+            this.btnHelp.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnHelp.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnHelp.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnHelp.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
+            this.btnHelp.Location = new System.Drawing.Point(714, 71);
+            this.btnHelp.Name = "btnHelp";
+            this.btnHelp.Size = new System.Drawing.Size(56, 56);
+            this.btnHelp.TabIndex = 21;
+            this.btnHelp.TextColor = System.Drawing.Color.DodgerBlue;
+            this.btnHelp.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
+            // 
+            // btnSaveBaseSetting
+            // 
+            this.btnSaveBaseSetting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveBaseSetting.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSaveBaseSetting.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
+            this.btnSaveBaseSetting.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnSaveBaseSetting.ButtonText = "Save setting";
+            this.btnSaveBaseSetting.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnSaveBaseSetting.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveBaseSetting.CornerRadius = 10;
+            this.btnSaveBaseSetting.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveBaseSetting.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnSaveBaseSetting.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnSaveBaseSetting.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveBaseSetting.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
+            this.btnSaveBaseSetting.Location = new System.Drawing.Point(576, 306);
+            this.btnSaveBaseSetting.Name = "btnSaveBaseSetting";
+            this.btnSaveBaseSetting.Size = new System.Drawing.Size(194, 67);
+            this.btnSaveBaseSetting.TabIndex = 7;
+            this.btnSaveBaseSetting.TextColor = System.Drawing.Color.Black;
+            this.btnSaveBaseSetting.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnSaveBaseSetting.Click += new System.EventHandler(this.btnSaveBaseSetting_Click);
+            // 
+            // btnSaveOffset
+            // 
+            this.btnSaveOffset.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnSaveOffset.ButtonImage = global::mixer_control_globalver.Properties.Resources.right_arrow;
+            this.btnSaveOffset.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnSaveOffset.ButtonText = "Save offset";
+            this.btnSaveOffset.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnSaveOffset.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveOffset.CornerRadius = 10;
+            this.btnSaveOffset.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSaveOffset.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnSaveOffset.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnSaveOffset.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveOffset.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
+            this.btnSaveOffset.Location = new System.Drawing.Point(572, 549);
+            this.btnSaveOffset.Name = "btnSaveOffset";
+            this.btnSaveOffset.Size = new System.Drawing.Size(194, 67);
+            this.btnSaveOffset.TabIndex = 11;
+            this.btnSaveOffset.TextColor = System.Drawing.Color.Black;
+            this.btnSaveOffset.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnSaveOffset.Click += new System.EventHandler(this.btnSaveOffset_Click);
+            // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.btnClose.ButtonImage = global::mixer_control_globalver.Properties.Resources.cancel;
+            this.btnClose.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnClose.ButtonText = "Button";
+            this.btnClose.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnClose.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnClose.CornerRadius = 5;
+            this.btnClose.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnClose.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnClose.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnClose.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
+            this.btnClose.Location = new System.Drawing.Point(722, 3);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(56, 56);
+            this.btnClose.TabIndex = 2;
+            this.btnClose.TextColor = System.Drawing.Color.DodgerBlue;
+            this.btnClose.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // pbxCompanyLogo
+            // 
+            this.pbxCompanyLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pbxCompanyLogo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pbxCompanyLogo.Image = global::mixer_control_globalver.Properties.Resources.logoTechlinkFix;
+            this.pbxCompanyLogo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.pbxCompanyLogo.Location = new System.Drawing.Point(0, 0);
+            this.pbxCompanyLogo.Name = "pbxCompanyLogo";
+            this.pbxCompanyLogo.Size = new System.Drawing.Size(246, 63);
+            this.pbxCompanyLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbxCompanyLogo.TabIndex = 0;
+            this.pbxCompanyLogo.TabStop = false;
+            // 
             // MainSetting
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ClientSize = new System.Drawing.Size(787, 643);
+            this.ClientSize = new System.Drawing.Size(782, 643);
+            this.Controls.Add(this.btnHelp);
             this.Controls.Add(this.txbTransmissionRatio);
             this.Controls.Add(this.txbSensorDiameter);
             this.Controls.Add(this.txbMotorDiameter);
@@ -389,5 +413,6 @@
         private System.Windows.Forms.TextBox txbMotorDiameter;
         private System.Windows.Forms.TextBox txbSensorDiameter;
         private System.Windows.Forms.TextBox txbTransmissionRatio;
+        private XanderUI.XUIButton btnHelp;
     }
 }

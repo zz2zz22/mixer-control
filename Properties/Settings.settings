@@ -32,5 +32,20 @@
     <Setting Name="master_pw" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="smtp_server" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="smtp_port" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="cfg_senders" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tlms@techlink.vn</Value>
+    </Setting>
+    <Setting Name="cfg_senderPW" Type="System.String" Scope="User">
+      <Value Profile="(Default)">techlink@123</Value>
+    </Setting>
+    <Setting Name="cfg_receivers" Type="System.String" Scope="User">
+      <Value Profile="(Default)">erp@techlink.vn;erp03@techlink.vn;erp04@techlink.vn</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
