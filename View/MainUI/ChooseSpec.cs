@@ -27,6 +27,7 @@ namespace mixer_control_globalver.View.MainUI
         string message = String.Empty, caption = String.Empty;
         string loadMsg = String.Empty;
         public static bool isConfirmed;
+        Workbook workbook;
         public ChooseSpec()
         {
             InitializeComponent();
@@ -214,7 +215,7 @@ namespace mixer_control_globalver.View.MainUI
 
                     TemporaryVariables.InitMaterialDT();
                     TemporaryVariables.InitProcessDT();
-                    Workbook workbook = new Workbook();
+                    workbook = new Workbook();
                     workbook.LoadFromFile(TemporaryVariables.tempFilePath);
                     materialSheet = workbook.Worksheets["material_info"];
                     processSheet = workbook.Worksheets["process_info"];

@@ -928,7 +928,7 @@ namespace mixer_control_globalver.View.MainUI
             }
             lbFormulaName.Text = TemporaryVariables.tempFileName;
             TryConnectToPLC();
-            TryExportExcelAndMail(TemporaryVariables.materialDT);
+            //TryExportExcelAndMail(TemporaryVariables.materialDT);
             GetNextProcess();
 
             LoadBackgroundWorker();

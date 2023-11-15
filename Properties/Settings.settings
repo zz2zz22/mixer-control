@@ -47,5 +47,8 @@
     <Setting Name="cfg_receivers" Type="System.String" Scope="User">
       <Value Profile="(Default)">erp@techlink.vn;erp03@techlink.vn;erp04@techlink.vn</Value>
     </Setting>
+    <Setting Name="comPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -69,9 +69,56 @@ namespace mixer_control_globalver.View.MainUI
                                 {
                                     TemporaryVariables.materialCode = QRresult[1].Trim();
                                     TemporaryVariables.isInputQuantity = false;
-                                    QuantityInput quantityInput = new QuantityInput();
-                                    quantityInput.FormClosed += quantityInputFormClosed;
-                                    quantityInput.ShowDialog();
+                                    double upTolerance = 0, downTolerance = 0, initTolerance, initWeight;
+                                    bool isConfirmed = false;
+                                    foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+                                    {
+                                        if (dr["mat_name"].ToString().Contains(TemporaryVariables.materialCode))
+                                        {
+                                            initTolerance = Convert.ToDouble(dr["tolerance"].ToString());
+                                            initWeight = Convert.ToDouble(dr["weight"].ToString());
+                                            upTolerance = initWeight + initTolerance;
+                                            downTolerance = initWeight - initTolerance;
+                                            if(downTolerance < 0)
+                                                downTolerance = 0;
+                                            isConfirmed = Convert.ToBoolean(dr["is_confirmed"]);
+                                        }
+                                    }
+                                    if(!isConfirmed)
+                                    {
+                                        QuantityInput quantityInput = new QuantityInput(TemporaryVariables.materialCode, upTolerance, downTolerance);
+                                        quantityInput.FormClosed += quantityInputFormClosed;
+                                        quantityInput.ShowDialog();
+                                    }
+                                    else
+                                    {
+                                        if (TemporaryVariables.language == 0)
+                                        {
+                                            message = "Nguyên vật liệu đã đủ trọng lượng!\r\nThe materials have enough weight!";
+                                            caption = "Thông tin / Information";
+                                        }
+                                        else if (TemporaryVariables.language == 1)
+                                        {
+                                            message = "Nguyên vật liệu đã đủ trọng lượng!\r\n材料有足够的重量！";
+                                            caption = "Thông tin / 空中";
+                                        }
+                                        else if (Settings.Default.language == 2)
+                                        {
+                                            message = "The materials have enough weight!";
+                                            caption = "Information";
+                                        }
+                                        else if (Settings.Default.language == 3)
+                                        {
+                                            message = "Nguyên vật liệu đã đủ trọng lượng!";
+                                            caption = "Thông tin";
+                                        }
+                                        else if (Settings.Default.language == 4)
+                                        {
+                                            message = "材料有足够的重量！";
+                                            caption = "空中";
+                                        }
+                                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
                                 }
                             }
                         }
@@ -203,18 +250,42 @@ namespace mixer_control_globalver.View.MainUI
         }
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            //foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
-            //{
-            //    dr["is_confirmed"] = true;
-            //    dr["weight"] = 20;
-            //}
-            //foreach (CustomMaterialDataRow c in flpMaterialList.Controls)
-            //{
-            //    c.Status = true;
-            //}
-            LOTInput lOTInput = new LOTInput();
-            lOTInput.FormClosed += lOTInputFormClosed;
-            lOTInput.ShowDialog();
+            if(CheckMaterialLeft())
+            {
+                //LOTInput lOTInput = new LOTInput();
+                //lOTInput.FormClosed += lOTInputFormClosed;
+                //lOTInput.ShowDialog();
+                Program.main.openAutomationTab();
+            }
+            else
+            {
+                if (TemporaryVariables.language == 0)
+                {
+                    message = "Vui lòng tiến hành quét mã và cân nguyên vật liệu!\r\nPlease proceed to scan the code and weigh the materials!";
+                    caption = "Thông tin / Information";
+                }
+                else if (TemporaryVariables.language == 1)
+                {
+                    message = "Vui lòng tiến hành quét mã và cân nguyên vật liệu!\r\n请继续扫码称重材料！";
+                    caption = "Thông tin / 空中";
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    message = "Please proceed to scan the code and weigh the materials!";
+                    caption = "Information";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Vui lòng tiến hành quét mã và cân nguyên vật liệu!";
+                    caption = "Thông tin";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "请继续扫码称重材料！";
+                    caption = "空中";
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private bool CheckMaterialLeft()

@@ -196,5 +196,17 @@ namespace mixer_control_globalver.Properties {
                 this["cfg_receivers"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string comPort {
+            get {
+                return ((string)(this["comPort"]));
+            }
+            set {
+                this["comPort"] = value;
+            }
+        }
     }
 }
