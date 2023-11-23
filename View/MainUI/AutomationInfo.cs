@@ -491,6 +491,10 @@ namespace mixer_control_globalver.View.MainUI
                         {
                             if (!AutoTrigger && ManualTrigger)
                             {
+                                if (!timer.IsRunning)
+                                {
+                                    timer.Continue();
+                                }
                                 TriggerAutomationON();
                                 pLC.WriteRealtoPLC(Convert.ToSingle(tempSpeed), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
                             }
@@ -499,6 +503,10 @@ namespace mixer_control_globalver.View.MainUI
                         {
                             if (AutoTrigger && !ManualTrigger)
                             {
+                                if (timer.IsRunning)
+                                {
+                                    timer.Pause();
+                                }
                                 TriggerAutomationOFF();
                             }
                         }
