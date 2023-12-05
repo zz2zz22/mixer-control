@@ -62,96 +62,113 @@ namespace mixer_control_globalver.View.MainUI
                         _keyCount = 0;
                         if (_buffer.Length > SCAN_MIN_LENGTH)
                         {
-                            string[] QRresult = _buffer.ToString().Split(';');
+                            string[] QRresult = _buffer.ToString().Substring(1, _buffer.ToString().Length - 2).Split(';');
                             if (QRresult.Length > 1)
                             {
-                                if (TemporaryVariables.materialDT.AsEnumerable().Any(row => row.Field<String>("mat_name").Contains(QRresult[1].Trim())))
+                                foreach (CustomMaterialDataRow c in flpMaterialList.Controls)
                                 {
-                                    TemporaryVariables.materialCode = QRresult[1].Trim();
-                                    TemporaryVariables.isInputQuantity = false;
-                                    double upTolerance = 0, downTolerance = 0, initTolerance, initWeight;
-                                    bool isConfirmed = false;
-                                    foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+                                    if (c.Code.Contains(QRresult[0].Trim()))
                                     {
-                                        if (dr["mat_name"].ToString().Contains(TemporaryVariables.materialCode))
+                                        foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
                                         {
-                                            initTolerance = Convert.ToDouble(dr["tolerance"].ToString());
-                                            initWeight = Convert.ToDouble(dr["weight"].ToString());
-                                            upTolerance = initWeight + initTolerance;
-                                            downTolerance = initWeight - initTolerance;
-                                            if(downTolerance < 0)
-                                                downTolerance = 0;
-                                            isConfirmed = Convert.ToBoolean(dr["is_confirmed"]);
+                                            if (dr["mat_name"].ToString().Contains(QRresult[0].Trim()))
+                                            {
+                                                c.Quantity = Convert.ToDouble(QRresult[1]);
+                                                dr["is_confirmed"] = true;
+                                                c.Status = (bool)dr["is_confirmed"];
+                                                dr["weight"] = c.Quantity;
+                                                break;
+                                            }
                                         }
-                                    }
-                                    if(!isConfirmed)
-                                    {
-                                        QuantityInput quantityInput = new QuantityInput(TemporaryVariables.materialCode, upTolerance, downTolerance);
-                                        quantityInput.FormClosed += quantityInputFormClosed;
-                                        quantityInput.ShowDialog();
-                                    }
-                                    else
-                                    {
-                                        if (TemporaryVariables.language == 0)
-                                        {
-                                            message = "Nguyên vật liệu đã đủ trọng lượng!\r\nThe materials have enough weight!";
-                                            caption = "Thông tin / Information";
-                                        }
-                                        else if (TemporaryVariables.language == 1)
-                                        {
-                                            message = "Nguyên vật liệu đã đủ trọng lượng!\r\n材料有足够的重量！";
-                                            caption = "Thông tin / 空中";
-                                        }
-                                        else if (Settings.Default.language == 2)
-                                        {
-                                            message = "The materials have enough weight!";
-                                            caption = "Information";
-                                        }
-                                        else if (Settings.Default.language == 3)
-                                        {
-                                            message = "Nguyên vật liệu đã đủ trọng lượng!";
-                                            caption = "Thông tin";
-                                        }
-                                        else if (Settings.Default.language == 4)
-                                        {
-                                            message = "材料有足够的重量！";
-                                            caption = "空中";
-                                        }
-                                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     }
                                 }
+                                //if (TemporaryVariables.materialDT.AsEnumerable().Any(row => row.Field<String>("mat_name").Contains(QRresult[0].Trim())))
+                                //{
+                                //    TemporaryVariables.materialCode = QRresult[1].Trim();
+                                //    TemporaryVariables.isInputQuantity = false;
+                                //    double upTolerance = 0, downTolerance = 0, initTolerance, initWeight;
+                                //    bool isConfirmed = false;
+                                //    foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+                                //    {
+                                //        if (dr["mat_name"].ToString().Contains(TemporaryVariables.materialCode))
+                                //        {
+                                //            initTolerance = Convert.ToDouble(dr["tolerance"].ToString());
+                                //            initWeight = Convert.ToDouble(dr["weight"].ToString());
+                                //            upTolerance = initWeight + initTolerance;
+                                //            downTolerance = initWeight - initTolerance;
+                                //            if(downTolerance < 0)
+                                //                downTolerance = 0;
+                                //            isConfirmed = Convert.ToBoolean(dr["is_confirmed"]);
+                                //        }
+                                //    }
+                                //    if(!isConfirmed)
+                                //    {
+                                //        QuantityInput quantityInput = new QuantityInput(TemporaryVariables.materialCode, upTolerance, downTolerance);
+                                //        quantityInput.FormClosed += quantityInputFormClosed;
+                                //        quantityInput.ShowDialog();
+                                //    }
+                                //    else
+                                //    {
+                                //        if (TemporaryVariables.language == 0)
+                                //        {
+                                //            message = "Nguyên vật liệu đã đủ trọng lượng!\r\nThe materials have enough weight!";
+                                //            caption = "Thông tin / Information";
+                                //        }
+                                //        else if (TemporaryVariables.language == 1)
+                                //        {
+                                //            message = "Nguyên vật liệu đã đủ trọng lượng!\r\n材料有足够的重量！";
+                                //            caption = "Thông tin / 空中";
+                                //        }
+                                //        else if (Settings.Default.language == 2)
+                                //        {
+                                //            message = "The materials have enough weight!";
+                                //            caption = "Information";
+                                //        }
+                                //        else if (Settings.Default.language == 3)
+                                //        {
+                                //            message = "Nguyên vật liệu đã đủ trọng lượng!";
+                                //            caption = "Thông tin";
+                                //        }
+                                //        else if (Settings.Default.language == 4)
+                                //        {
+                                //            message = "材料有足够的重量！";
+                                //            caption = "空中";
+                                //        }
+                                //        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                //    }
+                                //}
                             }
                         }
                     }
                 });
         }
 
-        private void quantityInputFormClosed(object sender, EventArgs e)
-        {
-            ((Form)sender).FormClosed -= quantityInputFormClosed;
-            if (TemporaryVariables.isInputQuantity)
-            {
-                TemporaryVariables.isInputQuantity = false;
-                foreach (CustomMaterialDataRow c in flpMaterialList.Controls)
-                {
-                    if (c.Code.Contains(TemporaryVariables.materialCode))
-                    {
-                        foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
-                        {
-                            if (dr["mat_name"].ToString().Contains(TemporaryVariables.materialCode))
-                            {
-                                c.Quantity += TemporaryVariables.inputQuantity;
-                                dr["is_confirmed"] = true;
-                                c.Status = (bool)dr["is_confirmed"];
-                                dr["weight"] = c.Quantity;
-                                TemporaryVariables.inputQuantity = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //private void quantityInputFormClosed(object sender, EventArgs e)
+        //{
+        //    ((Form)sender).FormClosed -= quantityInputFormClosed;
+        //    if (TemporaryVariables.isInputQuantity)
+        //    {
+        //        TemporaryVariables.isInputQuantity = false;
+        //        foreach (CustomMaterialDataRow c in flpMaterialList.Controls)
+        //        {
+        //            if (c.Code.Contains(TemporaryVariables.materialCode))
+        //            {
+        //                foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
+        //                {
+        //                    if (dr["mat_name"].ToString().Contains(TemporaryVariables.materialCode))
+        //                    {
+        //                        c.Quantity += TemporaryVariables.inputQuantity;
+        //                        dr["is_confirmed"] = true;
+        //                        c.Status = (bool)dr["is_confirmed"];
+        //                        dr["weight"] = c.Quantity;
+        //                        TemporaryVariables.inputQuantity = 0;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public void LoadFlowLayoutMaterial(DataTable dt)
         {
