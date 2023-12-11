@@ -214,12 +214,19 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\SideUI\CheckFormulaProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SideUI\CheckFormulaProcess.Designer.cs">
+      <DependentUpon>CheckFormulaProcess.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\SideUI\MainSetting.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\SideUI\MainSetting.Designer.cs">
       <DependentUpon>MainSetting.cs</DependentUpon>
     </Compile>
+    <None Include="Resources\information1.png" />
     <EmbeddedResource Include="View\CustomComponent\LoadingDialog.resx">
       <DependentUpon>LoadingDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,6 +261,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="View\SideUI\CheckFormulaProcess.resx">
+      <DependentUpon>CheckFormulaProcess.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\SideUI\MainSetting.resx">
       <DependentUpon>MainSetting.cs</DependentUpon>
     </EmbeddedResource>
@@ -294,6 +304,7 @@
     <None Include="Resources\msg_chat.png" />
     <None Include="Resources\confirmation.png" />
     <None Include="Resources\cycle.png" />
+    <None Include="Resources\choose1.png" />
     <Content Include="Resources\data-template%28Chinese%29.xlsx" />
     <Content Include="Resources\data-template%28English%29.xlsx" />
     <None Include="Resources\time.png" />

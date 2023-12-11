@@ -17,6 +17,7 @@ using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
+using mixer_control_globalver.View.SideUI;
 using Spire.Xls;
 
 
@@ -36,53 +37,53 @@ namespace mixer_control_globalver.View.MainUI
         {
             if (TemporaryVariables.language == 0)
             {
+                lb1.Text = "Công thức đã chọn:\r\nSelected Formula:";
                 lb2.Text = "Danh sách công thức:\r\nFormula setting files:";
-                lb3.Text = "Danh sách liệu:\r\nMaterials list:";
-                lb4.Text = "Danh sách quy trình:\r\nProcess list:";
-
+                
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu\r\nBegin Material Confirmation";
                 btnGetTemplate.ButtonText = "Tải mẫu\r\nDownload template";
                 btnImportTemplate.ButtonText = "Nhập công thức\r\nImport formula";
+                btnCheckProcess.ButtonText = "Xem quy trình\r\nCheck process step";
             }
             else if (TemporaryVariables.language == 1)
             {
+                lb1.Text = "Công thức đã chọn:\r\n选定的配方:";
                 lb2.Text = "Danh sách công thức:\r\n产品型号列表:";
-                lb3.Text = "Danh sách liệu:\r\n原料列表:";
-                lb4.Text = "Danh sách quy trình:\r\n操作步骤:";
 
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu\r\n开始材料确认。";
                 btnGetTemplate.ButtonText = "Tải mẫu\r\n下载模板";
                 btnImportTemplate.ButtonText = "Nhập công thức\r\n输入公式";
+                btnCheckProcess.ButtonText = "Xem quy trình\r\n检查流程步骤";
             }
             else if (Settings.Default.language == 2)
             {
+                lb1.Text = "Selected Formula:";
                 lb2.Text = "Formula setting files:";
-                lb3.Text = "Materials list:";
-                lb4.Text = "Process list:";
 
                 btnConfirmChoose.ButtonText = "Begin Material Confirmation";
                 btnGetTemplate.ButtonText = "Download template";
                 btnImportTemplate.ButtonText = "Import formula";
+                btnCheckProcess.ButtonText = "Check process step";
             }
             else if (Settings.Default.language == 3)
             {
+                lb1.Text = "Công thức đã chọn:";
                 lb2.Text = "Danh sách công thức:";
-                lb3.Text = "Danh sách liệu:";
-                lb4.Text = "Danh sách quy trình:";
 
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu";
                 btnGetTemplate.ButtonText = "Tải mẫu";
                 btnImportTemplate.ButtonText = "Nhập công thức";
+                btnCheckProcess.ButtonText = "Xem quy trình";
             }
             else if (Settings.Default.language == 4)
             {
+                lb1.Text = "选定的配方:";
                 lb2.Text = "产品型号列表:";
-                lb3.Text = "原料列表:";
-                lb4.Text = "操作步骤:";
 
                 btnConfirmChoose.ButtonText = "开始材料确认。";
                 btnGetTemplate.ButtonText = "下载模板";
                 btnImportTemplate.ButtonText = "输入公式";
+                btnCheckProcess.ButtonText = "检查流程步骤";
             }
 
             if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
@@ -206,98 +207,99 @@ namespace mixer_control_globalver.View.MainUI
                     DataGridViewRow selectedRow = dtgvListSpecification.Rows[selectedrowindex];
                     TemporaryVariables.tempFileName = Convert.ToString(selectedRow.Cells["file_name"].Value);
                     TemporaryVariables.tempFilePath = Convert.ToString(selectedRow.Cells["file_path"].Value);
+                    lbFormulaName.Text = TemporaryVariables.tempFileName;
 
                     //Save variable to Datatable
-                    Worksheet materialSheet = null, processSheet = null;
-                    DataTable matDT = new DataTable();
+                    Worksheet /*materialSheet = null*/ processSheet = null;
+                    //DataTable matDT = new DataTable();
                     DataTable processDT = new DataTable();
 
-                    TemporaryVariables.InitMaterialDT();
+                    //TemporaryVariables.InitMaterialDT();
                     TemporaryVariables.InitProcessDT();
                     Workbook workbook = new Workbook();
                     workbook.LoadFromFile(TemporaryVariables.tempFilePath);
-                    materialSheet = workbook.Worksheets["material_info"];
+                    //materialSheet = workbook.Worksheets["material_info"];
                     processSheet = workbook.Worksheets["process_info"];
 
-                    if (materialSheet != null && processSheet != null)
+                    if (/*materialSheet != null &&*/ processSheet != null)
                     {
-                        matDT = materialSheet.ExportDataTable(materialSheet.AllocatedRange, true, true);
+                        //matDT = materialSheet.ExportDataTable(materialSheet.AllocatedRange, true, true);
                         processDT = processSheet.ExportDataTable(processSheet.AllocatedRange, true, true);
 
-                        if (matDT.Rows.Count > 0 && processDT.Rows.Count > 0)
+                        if (/*matDT.Rows.Count > 0 &&*/ processDT.Rows.Count > 0)
                         {
                             LoadingDialog loadingDialog = new LoadingDialog();
                             Thread backgroundThreadGetData = new Thread(
                                 new ThreadStart(() =>
                                 {
-                                    try
-                                    {
-                                        for (int i = 0; i < matDT.Rows.Count; i++)
-                                        {
-                                            if (!String.IsNullOrEmpty(matDT.Rows[i][0].ToString())
-                                            && !String.IsNullOrEmpty(matDT.Rows[i][1].ToString())
-                                            && !String.IsNullOrEmpty(matDT.Rows[i][3].ToString())
-                                            && !String.IsNullOrEmpty(matDT.Rows[i][4].ToString()))
-                                            {
-                                                TemporaryVariables.materialDT.Rows.Add(matDT.Rows[i][0].ToString(),
-                                                    matDT.Rows[i][1].ToString(),
-                                                    matDT.Rows[i][2].ToString(),
-                                                    matDT.Rows[i][3].ToString(),
-                                                    matDT.Rows[i][4].ToString(),
-                                                    false);
-                                            }
-                                            if (TemporaryVariables.language == 0)
-                                            {
-                                                loadMsg = "Lấy dữ liệu nguyên vật liệu ...\r\nGetting material data ...";
-                                            }
-                                            else if (TemporaryVariables.language == 1)
-                                            {
-                                                loadMsg = "Lấy dữ liệu nguyên vật liệu ...\r\n获取原料信息 ...";
-                                            }
-                                            else if (Settings.Default.language == 2)
-                                            {
-                                                loadMsg = "Getting material data ...";
-                                            }
-                                            else if (Settings.Default.language == 3)
-                                            {
-                                                loadMsg = "Lấy dữ liệu nguyên vật liệu ...";
-                                            }
-                                            else if (Settings.Default.language == 4)
-                                            {
-                                                loadMsg = "获取原料信息 ...";
-                                            }
-                                            loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, loadMsg);
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        if (TemporaryVariables.language == 0)
-                                        {
-                                            message = "Tải dữ liệu nguyên liệu không thành công!\r\nFailed to load material data!";
-                                            caption = "Lỗi / Error";
-                                        }
-                                        else if (TemporaryVariables.language == 1)
-                                        {
-                                            message = "Tải dữ liệu nguyên liệu không thành công!\r\n加载材质数据失败！";
-                                            caption = "Lỗi / 错误";
-                                        }
-                                        else if (Settings.Default.language == 2)
-                                        {
-                                            message = "Failed to load material data!";
-                                            caption = "Error";
-                                        }
-                                        else if (Settings.Default.language == 3)
-                                        {
-                                            message = "Tải dữ liệu nguyên liệu không thành công!";
-                                            caption = "Lỗi";
-                                        }
-                                        else if (Settings.Default.language == 4)
-                                        {
-                                            message = "加载材质数据失败！";
-                                            caption = "错误";
-                                        }
-                                        CTMessageBox.Show(message + ex.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    }
+                                    //try
+                                    //{
+                                    //    for (int i = 0; i < matDT.Rows.Count; i++)
+                                    //    {
+                                    //        if (!String.IsNullOrEmpty(matDT.Rows[i][0].ToString())
+                                    //        && !String.IsNullOrEmpty(matDT.Rows[i][1].ToString())
+                                    //        && !String.IsNullOrEmpty(matDT.Rows[i][3].ToString())
+                                    //        && !String.IsNullOrEmpty(matDT.Rows[i][4].ToString()))
+                                    //        {
+                                    //            TemporaryVariables.materialDT.Rows.Add(matDT.Rows[i][0].ToString(),
+                                    //                matDT.Rows[i][1].ToString(),
+                                    //                matDT.Rows[i][2].ToString(),
+                                    //                matDT.Rows[i][3].ToString(),
+                                    //                matDT.Rows[i][4].ToString(),
+                                    //                false);
+                                    //        }
+                                    //        if (TemporaryVariables.language == 0)
+                                    //        {
+                                    //            loadMsg = "Lấy dữ liệu nguyên vật liệu ...\r\nGetting material data ...";
+                                    //        }
+                                    //        else if (TemporaryVariables.language == 1)
+                                    //        {
+                                    //            loadMsg = "Lấy dữ liệu nguyên vật liệu ...\r\n获取原料信息 ...";
+                                    //        }
+                                    //        else if (Settings.Default.language == 2)
+                                    //        {
+                                    //            loadMsg = "Getting material data ...";
+                                    //        }
+                                    //        else if (Settings.Default.language == 3)
+                                    //        {
+                                    //            loadMsg = "Lấy dữ liệu nguyên vật liệu ...";
+                                    //        }
+                                    //        else if (Settings.Default.language == 4)
+                                    //        {
+                                    //            loadMsg = "获取原料信息 ...";
+                                    //        }
+                                    //        loadingDialog.UpdateProgress(100 * i / matDT.Rows.Count, loadMsg);
+                                    //    }
+                                    //}
+                                    //catch (Exception ex)
+                                    //{
+                                    //    if (TemporaryVariables.language == 0)
+                                    //    {
+                                    //        message = "Tải dữ liệu nguyên liệu không thành công!\r\nFailed to load material data!";
+                                    //        caption = "Lỗi / Error";
+                                    //    }
+                                    //    else if (TemporaryVariables.language == 1)
+                                    //    {
+                                    //        message = "Tải dữ liệu nguyên liệu không thành công!\r\n加载材质数据失败！";
+                                    //        caption = "Lỗi / 错误";
+                                    //    }
+                                    //    else if (Settings.Default.language == 2)
+                                    //    {
+                                    //        message = "Failed to load material data!";
+                                    //        caption = "Error";
+                                    //    }
+                                    //    else if (Settings.Default.language == 3)
+                                    //    {
+                                    //        message = "Tải dữ liệu nguyên liệu không thành công!";
+                                    //        caption = "Lỗi";
+                                    //    }
+                                    //    else if (Settings.Default.language == 4)
+                                    //    {
+                                    //        message = "加载材质数据失败！";
+                                    //        caption = "错误";
+                                    //    }
+                                    //    CTMessageBox.Show(message + ex.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    //}
 
                                     for (int j = 0; j < processDT.Rows.Count; j++)
                                     {
@@ -400,68 +402,35 @@ namespace mixer_control_globalver.View.MainUI
                             backgroundThreadGetData.Start();
                             loadingDialog.ShowDialog();
 
-                            dtgvSpecMaterialList.DataSource = TemporaryVariables.materialDT;
-                            dtgvSpecMaterialList.Columns["mat_no"].Visible = false;
-                            dtgvSpecMaterialList.Columns["lot_no"].Visible = false;
-                            dtgvSpecMaterialList.Columns["tolerance"].Visible = false;
-                            if (TemporaryVariables.language == 0)
-                            {
-                                dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\nMaterial name";
-                            }
-                            else if (TemporaryVariables.language == 1)
-                            {
-                                dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\n原料名称";
-                            }
-                            else if (Settings.Default.language == 2)
-                            {
-                                dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Material name";
-                            }
-                            else if (Settings.Default.language == 3)
-                            {
-                                dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu";
-                            }
-                            else if (Settings.Default.language == 4)
-                            {
-                                dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "原料名称";
-                            }
+                            //dtgvSpecMaterialList.DataSource = TemporaryVariables.materialDT;
+                            //dtgvSpecMaterialList.Columns["mat_no"].Visible = false;
+                            //dtgvSpecMaterialList.Columns["lot_no"].Visible = false;
+                            //dtgvSpecMaterialList.Columns["tolerance"].Visible = false;
+                            //if (TemporaryVariables.language == 0)
+                            //{
+                            //    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\nMaterial name";
+                            //}
+                            //else if (TemporaryVariables.language == 1)
+                            //{
+                            //    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu\r\n原料名称";
+                            //}
+                            //else if (Settings.Default.language == 2)
+                            //{
+                            //    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Material name";
+                            //}
+                            //else if (Settings.Default.language == 3)
+                            //{
+                            //    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "Tên nguyên liệu";
+                            //}
+                            //else if (Settings.Default.language == 4)
+                            //{
+                            //    dtgvSpecMaterialList.Columns["mat_name"].HeaderText = "原料名称";
+                            //}
 
-                            dtgvSpecMaterialList.Columns["weight"].Visible = false;
-                            dtgvSpecMaterialList.Columns["is_confirmed"].Visible = false;
+                            //dtgvSpecMaterialList.Columns["weight"].Visible = false;
+                            //dtgvSpecMaterialList.Columns["is_confirmed"].Visible = false;
 
-                            dtgvSpecProcessList.DataSource = TemporaryVariables.processDT;
-                            dtgvSpecProcessList.Columns["init_speed"].Visible = false;
-                            dtgvSpecProcessList.Columns["init_time"].Visible = false;
-                            dtgvSpecProcessList.Columns["change_speed"].Visible = false;
-                            dtgvSpecProcessList.Columns["change_time"].Visible = false;
-                            dtgvSpecProcessList.Columns["is_vaccum"].Visible = false;
-                            dtgvSpecProcessList.Columns["max_temperature"].Visible = false;
-                            dtgvSpecProcessList.Columns["is_skip_announce"].Visible = false;
-                            dtgvSpecProcessList.Columns["is_finished"].Visible = false;
-                            if (TemporaryVariables.language == 0)
-                            {
-                                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\nStep No.";
-                                dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\nDescription";
-                            }
-                            else if (TemporaryVariables.language == 1)
-                            {
-                                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\n序号";
-                                dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\n描述";
-                            }
-                            else if (Settings.Default.language == 2)
-                            {
-                                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Step No.";
-                                dtgvSpecProcessList.Columns["description"].HeaderText = "Description";
-                            }
-                            else if (Settings.Default.language == 3)
-                            {
-                                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước";
-                                dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả";
-                            }
-                            else if (Settings.Default.language == 4)
-                            {
-                                dtgvSpecProcessList.Columns["process_no"].HeaderText = "序号";
-                                dtgvSpecProcessList.Columns["description"].HeaderText = "描述";
-                            }
+                            
 
                         }
                         else
@@ -493,8 +462,8 @@ namespace mixer_control_globalver.View.MainUI
                 catch (Exception ex)
                 {
                     TemporaryVariables.resetAllTempVariables();
-                    dtgvSpecMaterialList.DataSource = null;
-                    dtgvSpecProcessList.DataSource = null;
+                    //dtgvSpecMaterialList.DataSource = null;
+                    //dtgvSpecProcessList.DataSource = null;
                     SystemLog.Output(SystemLog.MSG_TYPE.Err, "Excel Load error", ex.Message);
                     if (TemporaryVariables.language == 0)
                     {
@@ -759,6 +728,68 @@ namespace mixer_control_globalver.View.MainUI
                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SystemLog.Output(SystemLog.MSG_TYPE.Err, "Lỗi lưu file mẫu", ex.Message);
                 }
+            }
+        }
+
+        private void txbSearchFormula_TextChanged(object sender, EventArgs e)
+        {
+            if (dtgvListSpecification.Rows.Count > 0)
+            {
+                string searchForText = txbSearchFormula.Text.Trim();
+                CurrencyManager currencyManager1 = (CurrencyManager)BindingContext[dtgvListSpecification.DataSource];
+                currencyManager1.SuspendBinding();
+                for (int i = 0; i < dtgvListSpecification.Rows.Count; i++)
+                {
+                    if (dtgvListSpecification.Rows[i].Cells[0].Value.ToString().ToLower().Contains(searchForText))
+                    {
+                        dtgvListSpecification.Rows[i].Selected = true;
+                        dtgvListSpecification.Rows[i].Visible = true;
+                    }
+                    else
+                    {
+                        dtgvListSpecification.Rows[i].Visible = false;
+                        dtgvListSpecification.Rows[i].Selected = false;
+                    }
+                }
+                currencyManager1.ResumeBinding();
+            }
+        }
+
+        private void btnCheckProcess_Click(object sender, EventArgs e)
+        {
+            if (TemporaryVariables.processDT.Rows.Count > 0)
+            {
+                CheckFormulaProcess checkFormula = new CheckFormulaProcess();
+                checkFormula.ShowDialog();
+            }
+            else
+            {
+                if (Settings.Default.language == 0)
+                {
+                    message = "Chưa chọn công thức hoặc công thức không có dữ liệu !\r\nNo formula has been selected or the formula has no data!";
+                    caption = "Lỗi / Error";
+                }
+                else if (Settings.Default.language == 1)
+                {
+                    message = "Chưa chọn công thức hoặc công thức không có dữ liệu !\r\n未选择公式或公式没有数据！";
+                    caption = "Lỗi / 错误";
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    message = "No formula has been selected or the formula has no data!";
+                    caption = "Error";
+                }
+                else if (Settings.Default.language == 3)
+                {
+                    message = "Chưa chọn công thức hoặc công thức không có dữ liệu !";
+                    caption = "Lỗi";
+                }
+                else if (Settings.Default.language == 4)
+                {
+                    message = "未选择公式或公式没有数据！";
+                    caption = "错误";
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
