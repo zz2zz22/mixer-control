@@ -1,4 +1,5 @@
 ﻿using mixer_control_globalver.Controller;
+using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
@@ -6,218 +7,220 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Media3D;
 
 namespace mixer_control_globalver.View.MainUI
 {
-    public partial class MaterialScale : Form
+    public partial class MaterialScale : Form, IMessageFilter
     {
-        int flag;
-        string scaleMatName, scaleMatNo;
+        int totalMaterial = 0;
+
         string message = String.Empty, caption = String.Empty;
+
+        private readonly StringBuilder _buffer = new StringBuilder();
+        const int WM_CHAR = 0x0102;
+        int _keyCount = 0;
+        const int SCAN_MIN_LENGTH = 8;
+        const double SECONDS_PER_CHARACTER_MIN_PERIOD = 0.3;
+
         public MaterialScale()
         {
             InitializeComponent();
+            // Add message filter to hook WM_KEYDOWN events.
+            Application.AddMessageFilter(this);
+            Disposed += (sender, e) => Application.RemoveMessageFilter(this);
         }
-        public void LoadFlowLayoutMaterial(DataTable dt)
+
+        //Methods
+        public bool PreFilterMessage(ref Message m)
         {
-            flag = 0;
-            flpMaterialList.Controls.Clear();
-            CustomMaterialDataRow customMaterial;
-            for (int j = 0; j < dt.Rows.Count; j++)
-            {
-                if (!(bool)TemporaryVariables.materialDT.Rows[j]["is_confirmed"])
+            // SOLUTION DO THIS (Thanks Jimi!)
+            if (m.Msg.Equals(WM_CHAR)) detectScan((char)m.WParam);
+            // NOT THIS
+            // if(m.Msg.Equals(WM_KEYDOWN)) detectScan((char)m.WParam);
+            return false;
+        }
+        private void detectScan(char @char)
+        {
+            Debug.WriteLine(@char);
+            if (_keyCount == 0) _buffer.Clear();
+            int charCountCapture = ++_keyCount;
+
+            _buffer.Append(@char);
+            Task
+                .Delay(TimeSpan.FromSeconds(SECONDS_PER_CHARACTER_MIN_PERIOD))
+                .GetAwaiter()
+                .OnCompleted(() =>
                 {
-                    flag = j;
-                    break;
-                }
-                else
-                {
-                    flag++;
-                }
-            }
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                if (!(bool)TemporaryVariables.materialDT.Rows[i]["is_confirmed"])
-                    customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), false);
-                else
-                    customMaterial = new CustomMaterialDataRow(dt.Rows[i]["mat_name"].ToString(), dt.Rows[i]["weight"].ToString(), true);
-                flpMaterialList.Controls.Add(customMaterial);
-            }
+                    if (charCountCapture.Equals(_keyCount))
+                    {
+                        _keyCount = 0;
+                        if (_buffer.Length > SCAN_MIN_LENGTH)
+                        {
+                            int countSharp = _buffer.ToString().Count(f => f == '#');
+                            int countSemiColon = _buffer.ToString().Count(f => f == ';');
+                            if (countSharp >= 3)
+                            {
+                                string[] data = _buffer.ToString().Split('#');
+                                if (data[0] == lbFormulaName.Text.Trim() || lbFormulaName.Text.Trim().Contains(data[0]))
+                                {
+                                    if (!String.IsNullOrEmpty(data[3]))
+                                        totalMaterial = Convert.ToInt32(data[3]);
+                                }
+                                else
+                                {
+                                    if (Settings.Default.language == 0)
+                                    {
+                                        message = "Công thức không trùng khớp!";
+                                        caption = "Cảnh báo";
+                                    }
+                                    else if (Settings.Default.language == 1)
+                                    {
+                                        message = "公式不符！";
+                                        caption = "警报";
+                                    }
+                                    else if (Settings.Default.language == 2)
+                                    {
+                                        message = "Formula is not match!";
+                                        caption = "Warning";
+                                    }
+                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    Program.main.openSpecTab();
+                                }
+                            }
+                            else if (countSemiColon >= 2)
+                            {
+                                if (totalMaterial == 0)
+                                {
+                                    if (Settings.Default.language == 0)
+                                    {
+                                        message = "Vui lòng quét mã vạch của công thức trước!";
+                                        caption = "Cảnh báo";
+                                    }
+                                    else if (Settings.Default.language == 1)
+                                    {
+                                        message = "请先扫描菜谱条形码！";
+                                        caption = "警报";
+                                    }
+                                    else if (Settings.Default.language == 2)
+                                    {
+                                        message = "Please scan the formula barcode first!";
+                                        caption = "Warning";
+                                    }
+                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                }
+                                else
+                                {
+                                    string result = _buffer.ToString().Substring(_buffer.ToString().IndexOf("s") + 1, _buffer.ToString().LastIndexOf("e") - _buffer.ToString().IndexOf("s") - 1);
+                                    string[] data = result.Split(';');
+                                    if (data.Length > 3)
+                                    {
+                                        DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0] + "' and id = '" + data[1] +"'");
+                                        if (foundAuthors.Length == 0)
+                                        {
+                                            TemporaryVariables.materialDT.Rows.Add(data[0], Convert.ToInt32(data[1]), Convert.ToDouble(data[2]), data[3]);
+                                            CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(data[0], data[2], data[3]);
+                                            lbJustConfirm.Text = data[0];
+                                            lbConfirmAmount.Text = TemporaryVariables.materialDT.Rows.Count.ToString() + "/" + totalMaterial;
+                                            flpMaterialList.Controls.Add(customMaterial);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Settings.Default.language == 0)
+                            {
+                                message = "Không thể nhận dạng mã QR!";
+                                caption = "Lỗi";
+                            }
+                            else if (Settings.Default.language == 1)
+                            {
+                                message = "无法识别二维码！";
+                                caption = "错误";
+                            }
+                            else if (Settings.Default.language == 2)
+                            {
+                                message = "Can not read QR code!";
+                                caption = "Error";
+                            }
+                            SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
+                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                });
         }
 
         private void MaterialScale_Load(object sender, EventArgs e)
         {
             lbFormulaName.Text = TemporaryVariables.tempFileName;
-            LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
-            NextMatScale(TemporaryVariables.materialDT, flag);
-
-            if (TemporaryVariables.language == 0)
+            if (TemporaryVariables.materialDT.Rows.Count > 0)
             {
-                lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:\r\nConfirmation required materials list:";
-                lb2.Text = "Tên nguyên liệu:\r\nMaterial name:";
-                lb3.Text = "Công thức:\r\nFormula:";
-
-                btnConfirm.ButtonText = "Xác nhận nguyên liệu\r\nConfirm material";
-                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động\r\nBegin automation process";
+                flpMaterialList.Controls.Clear();
+                for (int i= 0; i < TemporaryVariables.materialDT.Rows.Count; i ++)
+                {
+                    CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(TemporaryVariables.materialDT.Rows[i]["mat_name"].ToString(), TemporaryVariables.materialDT.Rows[i]["weight"].ToString(), TemporaryVariables.materialDT.Rows[i]["lot_no"].ToString());
+                    flpMaterialList.Controls.Add(customMaterial);
+                }
+            }     
+            totalMaterial = TemporaryVariables.materialDT.Rows.Count;
+            if (Settings.Default.language == 0)
+            {
+                lb1.Text = "Danh sách nguyên vật liệu đã xác nhận:";
+                lb2.Text = "Số nguyên vật liệu đã xác nhận:";
+                lb3.Text = "Công thức:";
+                lb4.Text = "Nguyên vật liệu vừa xác nhận:";
+                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động";
             }
-            else if (TemporaryVariables.language == 1)
+            else if (Settings.Default.language == 1)
             {
-                lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:\r\n需要确认的原料列表:";
-                lb2.Text = "Tên nguyên liệu:\r\n原料名称:";
-                lb3.Text = "Công thức:\r\n型号:";
-
-                btnConfirm.ButtonText = "Xác nhận nguyên liệu\r\n点击确认原料";
-                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động\r\n开始运行";
+                lb1.Text = "确认材料清单：";
+                lb2.Text = "确认材料数量：";
+                lb3.Text = "型号:";
+                lb4.Text = "最新确认材料：";
+                btnProceedAutomation.ButtonText = "开始运行";
             }
             else if (Settings.Default.language == 2)
             {
-                lb1.Text = "Confirmation required materials list:";
-                lb2.Text = "Material name:";
+                lb1.Text = "Confirmed materials list:";
+                lb2.Text = "Confirmed materials amount:";
                 lb3.Text = "Formula:";
-
-                btnConfirm.ButtonText = "Confirm material";
+                lb4.Text = "Latest confirmed material:";
                 btnProceedAutomation.ButtonText = "Begin automation process";
             }
-            else if (Settings.Default.language == 3)
-            {
-                lb1.Text = "Danh sách nguyên vật liệu cần xác nhận:";
-                lb2.Text = "Tên nguyên liệu:";
-                lb3.Text = "Công thức:";
-
-                btnConfirm.ButtonText = "Xác nhận nguyên liệu";
-                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động";
-            }
-            else if (Settings.Default.language == 4)
-            {
-                lb1.Text = "需要确认的原料列表:";
-                lb2.Text = "原料名称:";
-                lb3.Text = "型号:";
-
-                btnConfirm.ButtonText = "点击确认原料";
-                btnProceedAutomation.ButtonText = "开始运行";
-            }
-
         }
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            Program.main.openAutomationTab();
-        }
-
-        private void NextMatScale(DataTable dt, int i)
-        {
-            if (i < dt.Rows.Count)
-            {
-                scaleMatName = dt.Rows[i]["mat_name"].ToString();
-                lbMaterialName.Text = scaleMatName;
-                scaleMatNo = dt.Rows[i]["mat_no"].ToString();
-            }
+            if(TemporaryVariables.materialDT.Rows.Count == totalMaterial)
+                Program.main.openAutomationTab();
             else
             {
-                scaleMatName = null;
-                scaleMatNo = null;
-                if (TemporaryVariables.language == 0)
+                if (Settings.Default.language == 0)
                 {
-                    lbMaterialName.Text = "Đã hoàn thành xác nhận!\r\nConfirmation has completed!";
+                    message = "Chưa quét đủ số lượng nguyên vật liệu. Vui lòng kiểm tra lại.";
+                    caption = "Cảnh báo";
                 }
-                else if (TemporaryVariables.language == 1)
+                else if (Settings.Default.language == 1)
                 {
-                    lbMaterialName.Text = "Đã hoàn thành xác nhận!\r\n已确认！";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    lbMaterialName.Text = "Confirmation has completed!";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    lbMaterialName.Text = "Đã hoàn thành xác nhận!";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    lbMaterialName.Text = "已确认！";
-                }
-            }
-        }
-
-        private void btnSaveWeight_Click(object sender, EventArgs e)
-        {
-            if (!String.IsNullOrEmpty(scaleMatName))
-            {
-                if (TemporaryVariables.language == 0)
-                {
-                    message = "Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?\r\nConfirm \"" + scaleMatName + "\" material is ready ?";
-                    caption = "Xác nhận / Confirmation";
-                }
-                else if (TemporaryVariables.language == 1)
-                {
-                    message = "Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?\r\n确认原料 \"" + scaleMatName + "\" 已经准备好？";
-                    caption = "Xác nhận / 确认";
+                    message = "没有扫描足够的材料。请再检查一次。";
+                    caption = "警报";
                 }
                 else if (Settings.Default.language == 2)
                 {
-                    message = "Confirm \"" + scaleMatName + "\" material is ready ?";
-                    caption = "Confirmation";
+                    message = "Not scanning enough materials. Please check again.";
+                    caption = "Warning";
                 }
-                else if (Settings.Default.language == 3)
-                {
-                    message = "Xác nhận liệu \"" + scaleMatName + "\" đã sẵn sàng ?";
-                    caption = "Xác nhận";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    message = "确认原料 \"" + scaleMatName + "\" 已经准备好？";
-                    caption = "确认";
-                }
-                DialogResult dialog = CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialog == DialogResult.Yes)
-                {
-                    foreach (DataRow dr in TemporaryVariables.materialDT.Rows)
-                    {
-                        if (dr["mat_name"].ToString() == scaleMatName && dr["mat_no"].ToString() == scaleMatNo)
-                        {
-                            dr["is_confirmed"] = true;
-                            break;
-                        }
-                    }
-                    LoadFlowLayoutMaterial(TemporaryVariables.materialDT);
-                    NextMatScale(TemporaryVariables.materialDT, flag);
-                }
-            }
-            else
-            {
-                if (TemporaryVariables.language == 0)
-                {
-                    message = "Đã hoàn thành xác nhận!\r\nConfirmation has completed!";
-                    caption = "Thông tin / Information";
-                }
-                else if (TemporaryVariables.language == 1)
-                {
-                    message = "Đã hoàn thành xác nhận!\r\n已确认！";
-                    caption = "Thông tin / Information";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "Confirmation has completed!";
-                    caption = "Information";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    message = "Đã hoàn thành xác nhận!";
-                    caption = "Thông tin";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    message = "已确认！";
-                    caption = "Information";
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

@@ -143,19 +143,9 @@ namespace mixer_control_globalver.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] data_template_Chinese_ {
+        public static byte[] data_template {
             get {
-                object obj = ResourceManager.GetObject("data_template_Chinese_", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] data_template_English_ {
-            get {
-                object obj = ResourceManager.GetObject("data_template_English_", resourceCulture);
+                object obj = ResourceManager.GetObject("data_template", resourceCulture);
                 return ((byte[])(obj));
             }
         }

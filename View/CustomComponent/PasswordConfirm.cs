@@ -31,12 +31,12 @@ namespace mixer_control_globalver.View.CustomComponent
             }
             else
             {
-                if (TemporaryVariables.language == 0)
+                if (Settings.Default.language == 0)
                 {
                     message = "Sai mật khẩu!\r\nWrong password";
                     caption = "Thông tin / Information";
                 }
-                else if (TemporaryVariables.language == 1)
+                else if (Settings.Default.language == 1)
                 {
                     message = "Sai mật khẩu!\r\n密码错误！";
                     caption = "Lỗi / 错误";
@@ -75,12 +75,12 @@ namespace mixer_control_globalver.View.CustomComponent
 
         private void PasswordConfirm_Load(object sender, EventArgs e)
         {
-            if (TemporaryVariables.language == 0)
+            if (Settings.Default.language == 0)
             {
                 lbAnnounce.Text = "Nhập mật khẩu\r\nEnter password";
                 btnConfirm.ButtonText = "Xác nhận\r\nConfirm";
             }
-            else if (TemporaryVariables.language == 1)
+            else if (Settings.Default.language == 1)
             {
                 lbAnnounce.Text = "Nhập mật khẩu\r\n输入密码";
                 btnConfirm.ButtonText = "Xác nhận\r\n确认";
@@ -89,16 +89,6 @@ namespace mixer_control_globalver.View.CustomComponent
             {
                 lbAnnounce.Text = "Enter password";
                 btnConfirm.ButtonText = "Confirm";
-            }
-            else if (Settings.Default.language == 3)
-            {
-                lbAnnounce.Text = "Nhập mật khẩu";
-                btnConfirm.ButtonText = "Xác nhận";
-            }
-            else if (Settings.Default.language == 4)
-            {
-                lbAnnounce.Text = "输入密码";
-                btnConfirm.ButtonText = "确认";
             }
         }
 

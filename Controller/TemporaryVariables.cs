@@ -17,8 +17,6 @@ namespace mixer_control_globalver.Controller
         public static String tempMatName { get; set; }
         public static String tempMatNo { get; set; }
         public static String tempFormulaName { get; set; }
-        public static int language { get; set; }
-
         #endregion
 
         #region Temporary Datatables
@@ -37,18 +35,13 @@ namespace mixer_control_globalver.Controller
             DataColumn matCol;
 
             matCol = new DataColumn();
-            matCol.DataType = Type.GetType("System.Int32");
-            matCol.ColumnName = "mat_no";
-            materialDT.Columns.Add(matCol);
-
-            matCol = new DataColumn();
             matCol.DataType = Type.GetType("System.String");
             matCol.ColumnName = "mat_name";
             materialDT.Columns.Add(matCol);
 
             matCol = new DataColumn();
-            matCol.DataType = Type.GetType("System.String");
-            matCol.ColumnName = "lot_no";
+            matCol.DataType = Type.GetType("System.Int32");
+            matCol.ColumnName = "id";
             materialDT.Columns.Add(matCol);
 
             matCol = new DataColumn();
@@ -57,14 +50,10 @@ namespace mixer_control_globalver.Controller
             materialDT.Columns.Add(matCol);
 
             matCol = new DataColumn();
-            matCol.DataType = Type.GetType("System.Double");
-            matCol.ColumnName = "tolerance";
+            matCol.DataType = Type.GetType("System.String");
+            matCol.ColumnName = "lot_no";
             materialDT.Columns.Add(matCol);
-            
-            matCol = new DataColumn();
-            matCol.DataType = Type.GetType("System.Boolean");
-            matCol.ColumnName = "is_confirmed";
-            materialDT.Columns.Add(matCol);
+
         }
 
         public static void InitProcessDT()
@@ -125,6 +114,21 @@ namespace mixer_control_globalver.Controller
             processCol.DataType = Type.GetType("System.Boolean");
             processCol.ColumnName = "is_finished";
             processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Boolean");
+            processCol.ColumnName = "is_oilfeed";
+            processDT.Columns.Add(processCol);
+            
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Double");
+            processCol.ColumnName = "oil_mass";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.String");
+            processCol.ColumnName = "oil_type";
+            processDT.Columns.Add(processCol);
         }
 
         public static void InitSettingDT()
@@ -146,151 +150,37 @@ namespace mixer_control_globalver.Controller
             settingCol.ColumnName = "display_member";
             settingDT.Columns.Add(settingCol);
 
-            if (Settings.Default.language == 0)
-            {
-                settingDT.Rows.Add("ER", "Kích hoạt chạy - Enable Run");
-                settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
-                settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
-                settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
-                settingDT.Rows.Add("CD", "Lật thùng - Container Down");
-                settingDT.Rows.Add("CU", "Lên thùng - Container Up");
-                settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
-                settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
-                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
-                settingDT.Rows.Add("CW", "Quay chiều thuận - Clockwise Roll");
-                settingDT.Rows.Add("RCW", "Quay chiều ngược - Reverse Clockwise Roll");
-                settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
-                settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
-                settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
+            settingDT.Rows.Add("ER", "Kích hoạt chạy - Enable Run");
+            settingDT.Rows.Add("SR", "Dừng chạy - Stop Run");
+            settingDT.Rows.Add("AM", "Tự động/Thủ công - Auto/Manual");
+            settingDT.Rows.Add("LA", "Đèn báo - Light Alarm");
+            settingDT.Rows.Add("CD", "Lật thùng - Container Down");
+            settingDT.Rows.Add("CU", "Lên thùng - Container Up");
+            settingDT.Rows.Add("OL", "Mở nắp - Open Lid");
+            settingDT.Rows.Add("CL", "Đóng nắp - Close Lid");
+            settingDT.Rows.Add("TS", "Kích hoạt tốc độ - Toggle Speed");
+            settingDT.Rows.Add("CW", "Quay chiều thuận - Clockwise Roll");
+            settingDT.Rows.Add("RCW", "Quay chiều ngược - Reverse Clockwise Roll");
+            settingDT.Rows.Add("WS", "Ghi tốc độ - Write Speed");
+            settingDT.Rows.Add("RS", "Đọc tốc độ - Read Speed");
+            settingDT.Rows.Add("RT", "Đọc nhiệt độ - Read Temperature");
+            settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
+            settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
+            settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
+            settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
+            settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
+            settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
+            settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
+            settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
+            settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
+            settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
 
-                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - Container Down Sensor");
-                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - Container Up Sensor");
-                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - Open Lid Sensor");
-                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - Close Lid Sensor");
-                settingDT.Rows.Add("ONV", "Mở hút chân không - Turn On Vaccum");
-                settingDT.Rows.Add("OFFV", "Tắt hút chân không - Turn Off Vaccum");
-
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder Spindle Diameter");
-                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
-                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
-            }
-            else if (Settings.Default.language == 1)
-            {
-                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
-                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
-                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
-                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
-                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
-                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
-                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
-                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
-                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
-                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
-                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
-                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
-                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
-                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
-
-                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
-                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
-                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
-                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
-                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
-                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
-
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
-                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
-                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
-            }
-            else if (Settings.Default.language == 2)
-            {
-                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
-                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
-                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
-                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
-                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
-                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
-                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
-                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
-                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
-                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
-                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
-                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
-                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
-                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
-
-                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
-                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
-                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
-                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
-                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
-                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
-
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
-                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
-                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
-            }
-            else if (Settings.Default.language == 3)
-            {
-                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
-                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
-                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
-                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
-                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
-                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
-                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
-                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
-                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
-                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
-                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
-                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
-                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
-                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
-
-                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
-                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
-                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
-                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
-                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
-                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
-
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
-                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
-                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
-            }
-            else if (Settings.Default.language == 4)
-            {
-                settingDT.Rows.Add("ER", "Kích hoạt chạy - 启动运行");
-                settingDT.Rows.Add("SR", "Dừng chạy - 停此运行");
-                settingDT.Rows.Add("AM", "Tự động/Thủ công - 自动/手动");
-                settingDT.Rows.Add("LA", "Đèn báo - 报警灯");
-                settingDT.Rows.Add("CD", "Lật thùng - 翻缸");
-                settingDT.Rows.Add("CU", "Lên thùng - 复缸");
-                settingDT.Rows.Add("OL", "Mở nắp - 开盖");
-                settingDT.Rows.Add("CL", "Đóng nắp - 关盖");
-                settingDT.Rows.Add("TS", "Kích hoạt tốc độ - 速度启动");
-                settingDT.Rows.Add("CW", "Quay chiều thuận - 顺转");
-                settingDT.Rows.Add("RCW", "Quay chiều ngược - 逆转");
-                settingDT.Rows.Add("WS", "Ghi tốc độ - 从软件下发转速信息到PLC");
-                settingDT.Rows.Add("RS", "Đọc tốc độ - 从PLC回传转速信息到软件");
-                settingDT.Rows.Add("RT", "Đọc nhiệt độ - 从PLC回传温度信息到软件");
-
-                settingDT.Rows.Add("SSCD", "Cảm biến lật thùng - 翻缸转感机");
-                settingDT.Rows.Add("SSCU", "Cảm biến lên thùng - 复缸转感机");
-                settingDT.Rows.Add("SSOL", "Cảm biến mở nắp - 开盖转感机");
-                settingDT.Rows.Add("SSCL", "Cảm biến đóng nắp - 关盖转关机");
-                settingDT.Rows.Add("ONV", "Mở hút chân không - 打开抽真空");
-                settingDT.Rows.Add("OFFV", "Tắt hút chân không - 关闭抽真空");
-
-                settingDT.Rows.Add("SSD", "Đường kính trục xoay Encoder - Encoder 转轴直径");
-                settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - 转轴直径");
-                settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - 兑换比率");
-                settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - 转轴最高速度");
-            }
+            //Máy dầu
+            settingDT.Rows.Add("StartOil", "Bắt đầu cấp dầu - Start oil feeding");
+            settingDT.Rows.Add("StopOil", "Dừng cấp dầu - Stop oil feeding");
+            settingDT.Rows.Add("MachineLocation", "Vị trí thiết bị - Machine Location");
+            settingDT.Rows.Add("OilMass", "Khối lượng dầu - Mass of oil");
+            settingDT.Rows.Add("OilType", "Loại dầu - OilType");
         }
         #endregion
 

@@ -62,6 +62,7 @@
             // 
             // panelStatus
             // 
+            this.panelStatus.BackColor = System.Drawing.Color.LightGray;
             this.panelStatus.Controls.Add(this.lbStatus);
             this.panelStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStatus.Location = new System.Drawing.Point(232, 4);

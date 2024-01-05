@@ -50,6 +50,9 @@ namespace mixer_control_globalver.View.SideUI
             dtgvSpecProcessList.Columns["max_temperature"].Visible = false;
             dtgvSpecProcessList.Columns["is_skip_announce"].Visible = false;
             dtgvSpecProcessList.Columns["is_finished"].Visible = false;
+            dtgvSpecProcessList.Columns["is_oilfeed"].Visible = false;
+            dtgvSpecProcessList.Columns["oil_mass"].Visible = false;
+            dtgvSpecProcessList.Columns["oil_type"].Visible = false;
             if (Settings.Default.language == 0)
             {
                 dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\nStep No.";

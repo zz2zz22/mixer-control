@@ -13,6 +13,7 @@ namespace mixer_control_globalver.Model.PLC
 {
     public class PLCConnector
     {
+
         private S7Client Client;
         private string _IP;
         private int _Rack;
@@ -23,15 +24,17 @@ namespace mixer_control_globalver.Model.PLC
         private byte[] DB_C = new byte[1024];
         private byte[] DB_D = new byte[1024];
         public string ConnectionMessage;
+
         public PLCConnector(string IP, int Rack, int Slot, out int Result)
         {
             Client = new S7Client();
             _IP = IP;
             _Rack = Rack;
-            _Rack = Slot;
-            Client.ConnTimeout = 500;
-            Client.RecvTimeout = 200;
-            Client.SendTimeout = 200;
+            _Slot = Slot; // Corrected assignment
+
+            Client.ConnTimeout = 1000;
+            Client.RecvTimeout = 1000;
+            Client.SendTimeout = 1000;
             Result = Client.ConnectTo(_IP, _Rack, _Slot);
             if (Result == 0)
             {
@@ -52,6 +55,7 @@ namespace mixer_control_globalver.Model.PLC
             {
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Diconnect PLC fail", ex.Message);
             }
+            
             return Result;
         }
         public bool Connect()
@@ -65,14 +69,20 @@ namespace mixer_control_globalver.Model.PLC
         }
         public bool CheckConnect()
         {
-            Connect();
             if (Status == ClientStatus.cChannelError)
             {
                 Client.Disconnect();
                 return Connect();
             }
             else
+            {
+                // Check the connection status and decide whether to reconnect
+                if (!Client.Connected)
+                {
+                    return Connect();
+                }
                 return true;
+            }
         }
         public int isConnectionPLC()
         {
@@ -94,9 +104,9 @@ namespace mixer_control_globalver.Model.PLC
             try
             {
                 Client.ReadArea(S7Area.DB, DbNumber, Start, Amount, S7WordLength.Byte, Buffer);
-                for (int i = 0; i <= Amount - 1; i++)
+                for (int i = 0; i < Amount; i++)
                 {
-                    Result = Result + (Convert.ToString((char)Buffer[i]));
+                    Result += (char)Buffer[i];
                 }
             }
             catch (Exception ex)
@@ -141,17 +151,21 @@ namespace mixer_control_globalver.Model.PLC
             }
             return Result;
         }
-        public void WritebittoPLC(bool value, int db, int start, int bit, int size)
+        public void WriteBoolToPLC(bool value, int db, int startByte, int bit)
         {
             try
             {
                 byte[] buffer = new byte[1];
+
+                // Set the specified bit in the buffer
                 Sharp7.S7.SetBitAt(buffer, 0, bit, value);
-                Client.DBWrite(db, start, size, buffer);
+
+                // Write the buffer to the PLC
+                Client.DBWrite(db, startByte, 1, buffer);
             }
             catch (Exception ex)
             {
-                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Write bit to PLC fail", ex.Message);
+                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Write Bool to PLC fail", ex.Message);
             }
         }
         public string ReadRealToString(int DbNumber, int Start)

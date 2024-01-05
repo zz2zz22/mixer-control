@@ -25,7 +25,7 @@ namespace mixer_control_globalver.Controller.LogFile
                 dir.Create();
             m_startUpPath = dirPath + "\\Log_";
         }
-        private void DeleteOldLog() //Delete 3 months old logs
+        public static void DeleteOldLog() //Delete 3 months old logs
         {
             string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\Logfile";
             System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);

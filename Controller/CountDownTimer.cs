@@ -24,6 +24,7 @@ namespace mixer_control_globalver.Controller
         }
 
         private Timer timer = new Timer();
+        private bool isPaused;
 
         private TimeSpan _max = TimeSpan.FromSeconds(30);
 
@@ -86,20 +87,29 @@ namespace mixer_control_globalver.Controller
         {
             timer.Stop();
             _stpWatch.Stop();
+            isPaused = true;
         }
         public void Continue()
         {
-            timer.Start();
-            _stpWatch.Start();
+            if (isPaused && !IsCountDownFinished())
+            {
+                timer.Start();
+                _stpWatch.Start();
+                isPaused = false;
+            }
         }
 
         public void Delete()
         {
-            _stpWatch.Stop();
             _stpWatch.Reset();
-            timer.Enabled = false;
+            timer.Stop();
         }
 
         public void Dispose() => timer.Dispose();
+
+        private bool IsCountDownFinished()
+        {
+            return _mustStop;
+        }
     }
 }

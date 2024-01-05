@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Media.Media3D;
-using mixer_control_globalver.Controller;
+﻿using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace mixer_control_globalver.View.SideUI
 {
@@ -20,7 +12,6 @@ namespace mixer_control_globalver.View.SideUI
     {
         string message = String.Empty, caption = String.Empty;
         IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
-        int language;
         public MainSetting()
         {
             InitializeComponent();
@@ -49,29 +40,11 @@ namespace mixer_control_globalver.View.SideUI
             {
                 if (notSettingList.Items.Count > 1)
                 {
-                    if (language == 0)
-                    {
-                        lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" và " + (notSettingList.Items.Count - 1) + " giá trị khác chưa được cài đặt!"
-    + Environment.NewLine + "There are variable \"" + notSettingList.Items[0].ToString() + "\" and " + (notSettingList.Items.Count - 1) + " other not yet setting!";
-                    }
-                    else if (language == 1)
-                    {
-                        lbSettingAnnounce.Text = lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" và " + (notSettingList.Items.Count - 1) + " giá trị khác chưa được cài đặt!"
-    + Environment.NewLine + "存在 \"" + notSettingList.Items[0].ToString() + "\" 变量值和其他 " + (notSettingList.Items.Count - 1) + " 个未设置。";
-                    }
+                    lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" và " + (notSettingList.Items.Count - 1) + " giá trị khác chưa được cài đặt!";
                 }
                 else
                 {
-                    if (language == 0)
-                    {
-                        lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" chưa được cài đặt!"
-                                                + Environment.NewLine + "There is variable \"" + notSettingList.Items[0].ToString() + "\" not yet setting!";
-                    }
-                    else if (language == 1)
-                    {
-                        lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" chưa được cài đặt!"
-                                                + Environment.NewLine + "存在 \"" + notSettingList.Items[0].ToString() + "\" 变量值未设置!";
-                    }
+                    lbSettingAnnounce.Text = "Có giá trị \"" + notSettingList.Items[0].ToString() + "\" chưa được cài đặt!";
                 }
             }
             else
@@ -80,92 +53,8 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
-            switch (TemporaryVariables.language)
-            {
-                case 0:
-                    language = 0; break;
-                case 1: 
-                    language = 1; break;
-                case 2: 
-                    language = 0; break;
-                case 3:
-                    language = 0; break;
-                case 4:
-                    language = 1; break;
-                default:
-                    language = 0; break;
-            }
-            
-            if (language == 0)
-            {
-                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC IP address:";
-                lb2.Text = "Số thứ tự database:\r\nDatabase no:";
-                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\nMotor max speed (RPM):";
-                label2.Text = "Đường kính động cơ (mm):\r\nMotor diameter (mm):";
-                label3.Text = "Đường kính cảm biến (mm):\r\nSensor diameter (mm):";
-                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\nTransmission ratio between motor and sensor:";
-                lb3.Text = "Danh sách các biến cài đặt:\r\nSetting variable list:";
-                lb4.Text = "Địa chỉ offset:\r\nOffset address:";
-
-                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\nSave base setting";
-                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
-            }
-            else if (language == 1)
-            {
-                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
-                lb2.Text = "Số thứ tự database:\r\n数据库序号:";
-                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\n捏合机转轴最高速度 （转/分钟）:";
-                label2.Text = "Đường kính động cơ (mm):\r\n速度采集轮直径 (mm):";
-                label3.Text = "Đường kính cảm biến (mm):\r\n捏合机转轴直径 (mm):";
-                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\n速度采集轮与捏合机转轴兑换率:";
-                lb3.Text = "Danh sách các biến cài đặt:\r\n设置变量值名单:";
-                lb4.Text = "Địa chỉ offset:\r\n地址:";
-
-                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\n保存设置";
-                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\n保存Offset";
-            }
-            else if (language == 2)
-            {
-                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC IP address:";
-                lb2.Text = "Số thứ tự database:\r\nDatabase no:";
-                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\nMotor max speed (RPM):";
-                label2.Text = "Đường kính động cơ (mm):\r\nMotor diameter (mm):";
-                label3.Text = "Đường kính cảm biến (mm):\r\nSensor diameter (mm):";
-                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\nTransmission ratio between motor and sensor:";
-                lb3.Text = "Danh sách các biến cài đặt:\r\nSetting variable list:";
-                lb4.Text = "Địa chỉ offset:\r\nOffset address:";
-
-                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\nSave base setting";
-                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\nSave offset setting";
-            }
-            else if (language == 3)
-            {
-                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
-                lb2.Text = "Số thứ tự database:\r\n数据库序号:";
-                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\n捏合机转轴最高速度 （转/分钟）:";
-                label2.Text = "Đường kính động cơ (mm):\r\n速度采集轮直径 (mm):";
-                label3.Text = "Đường kính cảm biến (mm):\r\n捏合机转轴直径 (mm):";
-                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\n速度采集轮与捏合机转轴兑换率:";
-                lb3.Text = "Danh sách các biến cài đặt:\r\n设置变量值名单:";
-                lb4.Text = "Địa chỉ offset:\r\n地址:";
-
-                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\n保存设置";
-                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\n保存Offset";
-            }
-            else if (language == 4)
-            {
-                lb1.Text = "Địa chỉ IP của PLC:\r\nPLC的IP地址:";
-                lb2.Text = "Số thứ tự database:\r\n数据库序号:";
-                label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):\r\n捏合机转轴最高速度 （转/分钟）:";
-                label2.Text = "Đường kính động cơ (mm):\r\n速度采集轮直径 (mm):";
-                label3.Text = "Đường kính cảm biến (mm):\r\n捏合机转轴直径 (mm):";
-                label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:\r\n速度采集轮与捏合机转轴兑换率:";
-                lb3.Text = "Danh sách các biến cài đặt:\r\n设置变量值名单:";
-                lb4.Text = "Địa chỉ offset:\r\n地址:";
-
-                btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản\r\n保存设置";
-                btnSaveOffset.ButtonText = "Lưu cài đặt offset\r\n保存Offset";
-            }
+            btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản";
+            btnSaveOffset.ButtonText = "Lưu cài đặt offset";
 
             lbSettingAnnounce.Text = String.Empty;
             txbPLCIpSetting.Text = Settings.Default.plc_ip;
@@ -174,6 +63,25 @@ namespace mixer_control_globalver.View.SideUI
             txbMotorDiameter.Text = Settings.Default.spindle_diameter.ToString();
             txbSensorDiameter.Text = Settings.Default.sensor_diameter.ToString();
             txbTransmissionRatio.Text = Settings.Default.transmission_ratio.ToString();
+            txbOilFeederIP.Text = Settings.Default.oil_feeder_ip;
+            txbOilFeederDatabase.Text = Settings.Default.oil_feeder_db.ToString();
+            if(Settings.Default.isOilFeed)
+            {
+                switchOilMode.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchOilMode.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isStopBetweenStep)
+            {
+                switchStopMode.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchStopMode.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
 
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
@@ -232,37 +140,15 @@ namespace mixer_control_globalver.View.SideUI
             {
                 if (!String.IsNullOrEmpty(cbxPLCValueSetting.Text))
                 {
-                    if (language == 0)
-                    {
-                        message = "Lưu địa chỉ offset thành công!\r\nSuccessfully saved offset address !";
-                        caption = "Thông tin / Information";
-                    }
-                    else if (language == 1)
-                    {
-                        message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
-                        caption = "Thông tin / 信息";
-                    }
-                    else if (language == 2)
-                    {
-                        message = "Lưu địa chỉ offset thành công!\r\nSuccessfully saved offset address !";
-                        caption = "Thông tin / Information";
-                    }
-                    else if (language == 3)
-                    {
-                        message = "Lưu địa chỉ offset thành công!\r\nSuccessfully saved offset address !";
-                        caption = "Thông tin / Information";
-                    }
-                    else if (language == 4)
-                    {
-                        message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
-                        caption = "Thông tin / 信息";
-                    }
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "start", txbStartNo.Text);
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "bit", txbBitNo.Text);
+
+                    message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
+                    caption = "Thông tin / 信息";
                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    btnSaveBaseSetting.ButtonText = "Lưu cài đặt\r\nSave Settings";
-                    btnSaveOffset.ButtonText = "Lưu offset\r\nSave Offsets";
+                    btnSaveBaseSetting.ButtonText = "Lưu cài đặt";
+                    btnSaveOffset.ButtonText = "Lưu offset";
 
                     txbStartNo.Text = String.Empty;
                     txbBitNo.Text = String.Empty;
@@ -316,39 +202,27 @@ namespace mixer_control_globalver.View.SideUI
 
         private void btnSaveBaseSetting_Click(object sender, EventArgs e)
         {
-            if (language == 0)
-            {
-                message = "Lưu cài đặt thành công!\r\nSuccessfully saved base settings !";
-                caption = "Thông tin / Information";
-            }
-            else if (language == 1)
-            {
-                message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
-                caption = "Thông tin / 信息";
-            }
-            else if (language == 2)
-            {
-                message = "Lưu cài đặt thành công!\r\nSuccessfully saved base settings !";
-                caption = "Thông tin / Information";
-            }
-            else if (language == 3)
-            {
-                message = "Lưu cài đặt thành công!\r\nSuccessfully saved base settings !";
-                caption = "Thông tin / Information";
-            }
-            else if (language == 4)
-            {
-                message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
-                caption = "Thông tin / 信息";
-            }
+            message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
+            caption = "Thông tin / 信息";
 
-
-            Settings.Default.plc_ip = txbPLCIpSetting.Text;
+            Settings.Default.plc_ip = txbPLCIpSetting.Text.Trim();
             Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
             Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
             Settings.Default.spindle_diameter = Convert.ToDouble(txbMotorDiameter.Text.Trim());
             Settings.Default.sensor_diameter = Convert.ToDouble(txbSensorDiameter.Text.Trim());
             Settings.Default.transmission_ratio = Convert.ToDouble(txbTransmissionRatio.Text.Trim());
+            Settings.Default.oil_feeder_ip = txbOilFeederIP.Text.Trim();
+            Settings.Default.oil_feeder_db = Convert.ToInt32(txbOilFeederDatabase.Text.Trim());
+
+            if (switchOilMode.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isOilFeed = true;
+            else
+                Settings.Default.isOilFeed = false;
+
+            if (switchStopMode.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isStopBetweenStep = true;
+            else
+                Settings.Default.isStopBetweenStep = false;
             Settings.Default.Save();
 
             CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);

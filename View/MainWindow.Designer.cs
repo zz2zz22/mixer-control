@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btnSetting = new XanderUI.XUIButton();
-            this.btnHelp = new XanderUI.XUIButton();
             this.btnMaximize = new XanderUI.XUIButton();
             this.btnClose = new XanderUI.XUIButton();
             this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
@@ -58,7 +57,6 @@
             this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.panelHeader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelHeader.Controls.Add(this.btnSetting);
-            this.panelHeader.Controls.Add(this.btnHelp);
             this.panelHeader.Controls.Add(this.btnMaximize);
             this.panelHeader.Controls.Add(this.btnClose);
             this.panelHeader.Controls.Add(this.pbxCompanyLogo);
@@ -90,28 +88,6 @@
             this.btnSetting.TextColor = System.Drawing.Color.DodgerBlue;
             this.btnSetting.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
-            // 
-            // btnHelp
-            // 
-            this.btnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHelp.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.btnHelp.ButtonImage = global::mixer_control_globalver.Properties.Resources.question;
-            this.btnHelp.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnHelp.ButtonText = "Button";
-            this.btnHelp.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnHelp.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnHelp.CornerRadius = 5;
-            this.btnHelp.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnHelp.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnHelp.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnHelp.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnHelp.Location = new System.Drawing.Point(637, 3);
-            this.btnHelp.Name = "btnHelp";
-            this.btnHelp.Size = new System.Drawing.Size(56, 56);
-            this.btnHelp.TabIndex = 5;
-            this.btnHelp.TextColor = System.Drawing.Color.DodgerBlue;
-            this.btnHelp.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnHelp.Click += new System.EventHandler(this.btnHelp_Click);
             // 
             // btnMaximize
             // 
@@ -193,7 +169,7 @@
             this.lbVersion.Name = "lbVersion";
             this.lbVersion.Size = new System.Drawing.Size(119, 19);
             this.lbVersion.TabIndex = 4;
-            this.lbVersion.Text = "Version 1.0.42";
+            this.lbVersion.Text = "Version 1.0.45";
             // 
             // cbxLanguageChoose
             // 
@@ -201,11 +177,9 @@
             this.cbxLanguageChoose.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLanguageChoose.FormattingEnabled = true;
             this.cbxLanguageChoose.Items.AddRange(new object[] {
-            "Vietnamese - English",
-            "越南语 - 中文",
-            "English",
             "Tiếng Việt",
-            "中文"});
+            "中文",
+            "English"});
             this.cbxLanguageChoose.Location = new System.Drawing.Point(12, 534);
             this.cbxLanguageChoose.Name = "cbxLanguageChoose";
             this.cbxLanguageChoose.Size = new System.Drawing.Size(229, 27);
@@ -355,7 +329,6 @@
         private System.Windows.Forms.Panel panelSideMenu;
         private XanderUI.XUIButton btnClose;
         private XanderUI.XUIButton btnMaximize;
-        private XanderUI.XUIButton btnHelp;
         private XanderUI.XUIButton btnChooseSpecTab;
         private XanderUI.XUIWidgetPanel panelMainForm;
         private System.Windows.Forms.Panel panelBtnChoose;

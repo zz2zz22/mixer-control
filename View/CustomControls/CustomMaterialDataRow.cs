@@ -17,62 +17,17 @@ namespace mixer_control_globalver.View.CustomControls
 {
     public partial class CustomMaterialDataRow : UserControl
     {
-        public CustomMaterialDataRow(string matCode, string weight, bool status)
+        public CustomMaterialDataRow(string matCode, string weight, string lot_no)
         {
             InitializeComponent();
             lbMatCode.Text = matCode;
             lbWeight.Text = weight + " kg";
-
-            if (status)
+            if(String.IsNullOrEmpty(lot_no.Trim()))
             {
-                panelStatus.BackColor = Color.Yellow;
-                lbStatus.ForeColor = Color.Black;
-                if (TemporaryVariables.language == 0)
-                {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN\r\nCONFIRMED";
-                }
-                else if (TemporaryVariables.language == 1)
-                {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN\r\n已确认";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    lbStatus.Text = "CONFIRMED";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    lbStatus.Text = "ĐÃ XÁC NHẬN";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    lbStatus.Text = "已确认";
-                }
+                lot_no = "N/A";
             }
-            else
-            {
-                panelStatus.BackColor = Color.Red;
-                lbStatus.ForeColor = Color.White;
-                if (TemporaryVariables.language == 0)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN\r\nNOT CONFIRMED";
-                }
-                else if (TemporaryVariables.language == 1)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN\r\n未确认";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    lbStatus.Text = "NOT CONFIRMED";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    lbStatus.Text = "CHƯA XÁC NHẬN";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    lbStatus.Text = "未确认";
-                }
-            }
+            lbStatus.Text = lot_no;
+            panel2.BackColor = Color.Yellow;
         }
     }
 }

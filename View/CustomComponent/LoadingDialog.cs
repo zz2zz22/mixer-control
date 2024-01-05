@@ -1,4 +1,5 @@
 ﻿using mixer_control_globalver.Controller;
+using mixer_control_globalver.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,39 +18,18 @@ namespace mixer_control_globalver.View.CustomComponent
         public LoadingDialog()
         {
             InitializeComponent();
-            if (TemporaryVariables.language == 0)
+            if (Settings.Default.language == 0)
             {
-                lb1.Text = "Đang thực hiện, vui lòng chờ.\r\nProcessing, please wait.";
+                lb1.Text = "Đang tiến hành cấp dầu.";
             }
-            else if (TemporaryVariables.language == 1)
+            else if (Settings.Default.language == 1)
             {
-                lb1.Text = "Đang thực hiện, vui lòng chờ.\r\n加载中，请稍等。";
+                lb1.Text = "石油供应正在进行中。";
             }
-        }
-        public void UpdateProgress(int progress, string announce)
-        {
-            while (!this.IsHandleCreated)
-                System.Threading.Thread.Sleep(100);
-            lbAnnounce.BeginInvoke(
-                new Action(() =>
-                {
-                    lbAnnounce.Text = announce;
-                }));
-            while (!this.IsHandleCreated)
-                System.Threading.Thread.Sleep(100);
-            pgbProcess.BeginInvoke(
-                new Action(() =>
-                {
-                    pgbProcess.Value = progress;
-                }
-                ));
-            while (!this.IsHandleCreated)
-                System.Threading.Thread.Sleep(100);
-            lbPercentage.BeginInvoke(
-                new Action(() =>
-                {
-                    lbPercentage.Text = progress + "%";
-                }));
+            else if (Settings.Default.language == 2)
+            {
+                lb1.Text = "Feeding Oil";
+            }
         }
     }
 }

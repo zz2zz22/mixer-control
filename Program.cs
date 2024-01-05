@@ -40,14 +40,20 @@ namespace mixer_control_globalver
             {
                 if (Properties.Settings.Default.language == 0)
                 {
-                    message = "Phần mềm đang chạy.\r\nProgram is running.";
-                    caption = "Thông tin / Information";
+                    message = "Phần mềm đang chạy.";
+                    caption = "Thông tin";
                 }
                 else if (Properties.Settings.Default.language == 1)
                 {
-                    message = "Phần mềm đang chạy.\r\n软件正在运行";
-                    caption = "Thông tin / 信息";
+                    message = "软件正在运行";
+                    caption = "信息";
                 }
+                else if (Properties.Settings.Default.language == 2)
+                {
+                    message = "Program is running.";
+                    caption = "Information";
+                }
+
                 CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
