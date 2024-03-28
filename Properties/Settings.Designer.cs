@@ -184,5 +184,41 @@ namespace mixer_control_globalver.Properties {
                 this["isStopBetweenStep"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isSkipOpenLid {
+            get {
+                return ((bool)(this["isSkipOpenLid"]));
+            }
+            set {
+                this["isSkipOpenLid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isHideReverse {
+            get {
+                return ((bool)(this["isHideReverse"]));
+            }
+            set {
+                this["isHideReverse"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isTesting {
+            get {
+                return ((bool)(this["isTesting"]));
+            }
+            set {
+                this["isTesting"] = value;
+            }
+        }
     }
 }

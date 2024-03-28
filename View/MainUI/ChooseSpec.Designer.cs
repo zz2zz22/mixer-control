@@ -34,13 +34,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbFormulaName = new System.Windows.Forms.Label();
             this.lb1 = new System.Windows.Forms.Label();
+            this.lb2 = new System.Windows.Forms.Label();
+            this.dtgvListSpecification = new System.Windows.Forms.DataGridView();
             this.btnCheckProcess = new XanderUI.XUIButton();
             this.btnImportTemplate = new XanderUI.XUIButton();
             this.btnGetTemplate = new XanderUI.XUIButton();
             this.btnConfirmChoose = new XanderUI.XUIButton();
             this.btnRefreshFileList = new XanderUI.XUIButton();
-            this.lb2 = new System.Windows.Forms.Label();
-            this.dtgvListSpecification = new System.Windows.Forms.DataGridView();
             this.picbtnChooseDirectory = new System.Windows.Forms.PictureBox();
             this.panelChooseSpecMain.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -105,6 +105,49 @@
             this.lb1.TabIndex = 17;
             this.lb1.Text = "Công thức đã chọn:\r\nSelected formula:";
             // 
+            // lb2
+            // 
+            this.lb2.AutoSize = true;
+            this.lb2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb2.Location = new System.Drawing.Point(12, 73);
+            this.lb2.Name = "lb2";
+            this.lb2.Size = new System.Drawing.Size(172, 38);
+            this.lb2.TabIndex = 5;
+            this.lb2.Text = "Danh sách công thức:\r\nFormula setting files:";
+            // 
+            // dtgvListSpecification
+            // 
+            this.dtgvListSpecification.AllowUserToAddRows = false;
+            this.dtgvListSpecification.AllowUserToDeleteRows = false;
+            this.dtgvListSpecification.AllowUserToOrderColumns = true;
+            this.dtgvListSpecification.AllowUserToResizeColumns = false;
+            this.dtgvListSpecification.AllowUserToResizeRows = false;
+            this.dtgvListSpecification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dtgvListSpecification.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtgvListSpecification.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgvListSpecification.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dtgvListSpecification.ColumnHeadersHeight = 60;
+            this.dtgvListSpecification.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dtgvListSpecification.EnableHeadersVisualStyles = false;
+            this.dtgvListSpecification.Location = new System.Drawing.Point(12, 159);
+            this.dtgvListSpecification.MultiSelect = false;
+            this.dtgvListSpecification.Name = "dtgvListSpecification";
+            this.dtgvListSpecification.ReadOnly = true;
+            this.dtgvListSpecification.RowHeadersVisible = false;
+            this.dtgvListSpecification.RowHeadersWidth = 51;
+            this.dtgvListSpecification.RowTemplate.Height = 40;
+            this.dtgvListSpecification.Size = new System.Drawing.Size(373, 437);
+            this.dtgvListSpecification.TabIndex = 4;
+            this.dtgvListSpecification.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvListSpecification_CellClick);
+            // 
             // btnCheckProcess
             // 
             this.btnCheckProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -143,7 +186,7 @@
             this.btnImportTemplate.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnImportTemplate.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnImportTemplate.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnImportTemplate.Location = new System.Drawing.Point(74, 9);
+            this.btnImportTemplate.Location = new System.Drawing.Point(113, 9);
             this.btnImportTemplate.Name = "btnImportTemplate";
             this.btnImportTemplate.Size = new System.Drawing.Size(179, 59);
             this.btnImportTemplate.TabIndex = 15;
@@ -211,7 +254,7 @@
             this.btnRefreshFileList.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnRefreshFileList.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnRefreshFileList.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnRefreshFileList.Location = new System.Drawing.Point(329, 57);
+            this.btnRefreshFileList.Location = new System.Drawing.Point(397, 119);
             this.btnRefreshFileList.Name = "btnRefreshFileList";
             this.btnRefreshFileList.Size = new System.Drawing.Size(56, 51);
             this.btnRefreshFileList.TabIndex = 6;
@@ -219,52 +262,9 @@
             this.btnRefreshFileList.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnRefreshFileList.Click += new System.EventHandler(this.btnRefreshFileList_Click);
             // 
-            // lb2
-            // 
-            this.lb2.AutoSize = true;
-            this.lb2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb2.Location = new System.Drawing.Point(12, 73);
-            this.lb2.Name = "lb2";
-            this.lb2.Size = new System.Drawing.Size(172, 38);
-            this.lb2.TabIndex = 5;
-            this.lb2.Text = "Danh sách công thức:\r\nFormula setting files:";
-            // 
-            // dtgvListSpecification
-            // 
-            this.dtgvListSpecification.AllowUserToAddRows = false;
-            this.dtgvListSpecification.AllowUserToDeleteRows = false;
-            this.dtgvListSpecification.AllowUserToOrderColumns = true;
-            this.dtgvListSpecification.AllowUserToResizeColumns = false;
-            this.dtgvListSpecification.AllowUserToResizeRows = false;
-            this.dtgvListSpecification.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dtgvListSpecification.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dtgvListSpecification.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgvListSpecification.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dtgvListSpecification.ColumnHeadersHeight = 60;
-            this.dtgvListSpecification.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dtgvListSpecification.EnableHeadersVisualStyles = false;
-            this.dtgvListSpecification.Location = new System.Drawing.Point(12, 159);
-            this.dtgvListSpecification.MultiSelect = false;
-            this.dtgvListSpecification.Name = "dtgvListSpecification";
-            this.dtgvListSpecification.ReadOnly = true;
-            this.dtgvListSpecification.RowHeadersVisible = false;
-            this.dtgvListSpecification.RowHeadersWidth = 51;
-            this.dtgvListSpecification.RowTemplate.Height = 40;
-            this.dtgvListSpecification.Size = new System.Drawing.Size(373, 437);
-            this.dtgvListSpecification.TabIndex = 4;
-            this.dtgvListSpecification.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvListSpecification_CellClick);
-            // 
             // picbtnChooseDirectory
             // 
-            this.picbtnChooseDirectory.Image = global::mixer_control_globalver.Properties.Resources.control;
+            this.picbtnChooseDirectory.Image = global::mixer_control_globalver.Properties.Resources.folder;
             this.picbtnChooseDirectory.Location = new System.Drawing.Point(12, 12);
             this.picbtnChooseDirectory.Name = "picbtnChooseDirectory";
             this.picbtnChooseDirectory.Size = new System.Drawing.Size(56, 51);

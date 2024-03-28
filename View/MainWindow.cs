@@ -1,4 +1,5 @@
-﻿using mixer_control_globalver.Controller;
+﻿using Microsoft.Win32;
+using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Model.PLC;
 using mixer_control_globalver.Properties;
@@ -10,7 +11,9 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace mixer_control_globalver
@@ -18,6 +21,7 @@ namespace mixer_control_globalver
     public partial class MainWindow : Form
     {
         public static int ConnectionPLC;
+        public static int ConnectionOilPLC;
         public static PLCConnector pLC;
         public static PLCConnector pLCOil;
         int db = Settings.Default.database_no;
@@ -33,6 +37,31 @@ namespace mixer_control_globalver
                 Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\data");
             }
             TemporaryVariables.resetAllTempVariables();
+
+            // Replace "YourAppName" with the actual name of your application.
+            string appName = "Mixer Controller";
+            string uninstallKeyPath = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{appName}";
+
+            try
+            {
+                // Attempt to read the "DisplayVersion" registry value.
+                object displayVersion = Registry.GetValue(uninstallKeyPath, "DisplayVersion", null);
+
+                if (displayVersion != null)
+                {
+                    lbVersion.Text = "Version: " + displayVersion.ToString();
+                }
+                else
+                {
+                    lbVersion.Text = "Version information not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading registry: {ex.Message}");
+            }
+
+            
 
             this.Text = string.Empty;
             this.ControlBox = false;
@@ -87,29 +116,34 @@ namespace mixer_control_globalver
             {
                 pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
                 //Oil comment
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")));
-                pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")));
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")));
-                pLC.WriteBoolToPLC(true, db, 24, 0); // Truyền reset variable
-                pLC.Diconnect();
-
+                if(ConnectionPLC == 0)
+                {
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")));
+                    pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")));
+                    pLC.WriteBoolToPLC(true, db, 24, 0); // Truyền reset variable
+                    pLC.Diconnect();
+                }
                 if (Settings.Default.isOilFeed)
                 {
-                    pLCOil = new PLCConnector(Settings.Default.oil_feeder_ip, 0, 0, out ConnectionPLC);
+                    pLCOil = new PLCConnector(Settings.Default.oil_feeder_ip, 0, 0, out ConnectionOilPLC);
                     //Reset 2 bit bắt đầu cấp dầu và dừng cấp dầu
-                    pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StopOil", "start")), Convert.ToInt32(ini.Read("StopOil", "bit")));
-                    pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StartOil", "start")), Convert.ToInt32(ini.Read("StartOil", "bit")));
-                    pLCOil.Diconnect();
+                    if(ConnectionOilPLC == 0)
+                    {
+                        pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StopOil", "start")), Convert.ToInt32(ini.Read("StopOil", "bit")));
+                        pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StartOil", "start")), Convert.ToInt32(ini.Read("StartOil", "bit")));
+                        pLCOil.Diconnect();
+                    }
                 }
 
                 Environment.Exit(0);
@@ -277,71 +311,82 @@ namespace mixer_control_globalver
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
-                if (TemporaryVariables.materialDT.Rows.Count > 0)
+                if(!Settings.Default.isTesting)
                 {
-                    bool notSettingEnough = false;
-                    for (int i = 0; i < TemporaryVariables.settingDT.Rows.Count; i++)
+                    if (TemporaryVariables.materialDT.Rows.Count > 0)
                     {
-                        if (String.IsNullOrEmpty(ini.Read(TemporaryVariables.settingDT.Rows[i]["value_member"].ToString(), "start")))
+                        bool notSettingEnough = false;
+                        for (int i = 0; i < TemporaryVariables.settingDT.Rows.Count; i++)
                         {
-                            notSettingEnough = true;
+                            if (String.IsNullOrEmpty(ini.Read(TemporaryVariables.settingDT.Rows[i]["value_member"].ToString(), "start")))
+                            {
+                                notSettingEnough = true;
+                            }
+                        }
+                        if (String.IsNullOrEmpty(Settings.Default.plc_ip)
+                    || Settings.Default.database_no == 0
+                    || Settings.Default.max_speed == 0
+                    || Settings.Default.spindle_diameter == 0
+                    || Settings.Default.sensor_diameter == 0
+                    || Settings.Default.transmission_ratio == 0
+                    || notSettingEnough)
+                        //|| String.IsNullOrEmpty(Settings.Default.oil_feeder_ip)
+                        //|| String.IsNullOrEmpty(Settings.Default.oil_feeder_db))
+                        {
+                            if (Settings.Default.language == 0)
+                            {
+                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
+                                caption = "Cảnh báo";
+                            }
+                            else if (Settings.Default.language == 1)
+                            {
+                                message = "请在设置部分设置全部信息!";
+                                caption = "提示";
+                            }
+                            else if (Settings.Default.language == 2)
+                            {
+                                message = "Please input all required setting first!";
+                                caption = "Warning";
+                            }
+                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MainSetting mainSetting = new MainSetting();
+                            mainSetting.ShowDialog();
+                        }
+                        else
+                        {
+                            openChildForm(new AutomationInfo());
+                            btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                         }
                     }
-                    if (String.IsNullOrEmpty(Settings.Default.plc_ip)
-                || Settings.Default.database_no == 0
-                || Settings.Default.max_speed == 0
-                || Settings.Default.spindle_diameter == 0
-                || Settings.Default.sensor_diameter == 0
-                || Settings.Default.transmission_ratio == 0
-                || notSettingEnough)
-                    //|| String.IsNullOrEmpty(Settings.Default.oil_feeder_ip)
-                    //|| String.IsNullOrEmpty(Settings.Default.oil_feeder_db))
+                    else
                     {
                         if (Settings.Default.language == 0)
                         {
-                            message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
+                            message = "Vui lòng xác các nguyên liệu trước!";
                             caption = "Cảnh báo";
                         }
                         else if (Settings.Default.language == 1)
                         {
-                            message = "请在设置部分设置全部信息!";
+                            message = "请先确认好原料！";
                             caption = "提示";
                         }
                         else if (Settings.Default.language == 2)
                         {
-                            message = "Please input all required setting first!";
+                            message = "Please confirm all materials first!";
                             caption = "Warning";
                         }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        MainSetting mainSetting = new MainSetting();
-                        mainSetting.ShowDialog();
+                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    else
-                    {
-                        openChildForm(new AutomationInfo());
-                        btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-                        btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
-                        btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
-                    }
+
                 }
                 else
                 {
-                    if (Settings.Default.language == 0)
-                    {
-                        message = "Vui lòng xác các nguyên liệu trước!";
-                        caption = "Cảnh báo";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        message = "请先确认好原料！";
-                        caption = "提示";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        message = "Please confirm all materials first!";
-                        caption = "Warning";
-                    }
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    openChildForm(new AutomationInfo());
+                    btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                 }
             }
             else

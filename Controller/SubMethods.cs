@@ -1,24 +1,27 @@
-﻿using Spire.Xls;
-using System;
-using System.Collections.Generic;
+﻿using ExcelDataReader;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 class SubMethods
 {
-    public static DataTable ImportExceltoDatatable(string filePath, string sheetName)
+    public static DataTable ImportExceltoDatatable(string filePath)
     {
-        DataTable dataTable = new DataTable();
+        using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+        {
 
-        Workbook workbook = new Workbook();
-        workbook.LoadFromFile(filePath);
-        Worksheet worksheet = workbook.Worksheets[sheetName];
+            IExcelDataReader excelDataReader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream);
 
-        dataTable = worksheet.ExportDataTable(worksheet.AllocatedRange, true, true);
+            var conf = new ExcelDataSetConfiguration()
+            {
+                ConfigureDataTable = a => new ExcelDataTableConfiguration
+                {
+                    UseHeaderRow = true
+                }
+            };
 
-        return dataTable;
+            DataSet dataSet = excelDataReader.AsDataSet(conf);
+
+            return dataSet.Tables["process_info"];
+        }
     }
-
 }

@@ -96,7 +96,7 @@ namespace mixer_control_globalver.View.MainUI
                                     Program.main.openSpecTab();
                                 }
                             }
-                            else if (countSemiColon >= 2)
+                            else if (countSemiColon >= 3)
                             {
                                 if (totalMaterial == 0)
                                 {
@@ -201,26 +201,33 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            if(TemporaryVariables.materialDT.Rows.Count == totalMaterial)
-                Program.main.openAutomationTab();
+            if(!Properties.Settings.Default.isTesting)
+            {
+                if (TemporaryVariables.materialDT.Rows.Count == totalMaterial)
+                    Program.main.openAutomationTab();
+                else
+                {
+                    if (Settings.Default.language == 0)
+                    {
+                        message = "Chưa quét đủ số lượng nguyên vật liệu. Vui lòng kiểm tra lại.";
+                        caption = "Cảnh báo";
+                    }
+                    else if (Settings.Default.language == 1)
+                    {
+                        message = "没有扫描足够的材料。请再检查一次。";
+                        caption = "警报";
+                    }
+                    else if (Settings.Default.language == 2)
+                    {
+                        message = "Not scanning enough materials. Please check again.";
+                        caption = "Warning";
+                    }
+                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
             else
             {
-                if (Settings.Default.language == 0)
-                {
-                    message = "Chưa quét đủ số lượng nguyên vật liệu. Vui lòng kiểm tra lại.";
-                    caption = "Cảnh báo";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    message = "没有扫描足够的材料。请再检查一次。";
-                    caption = "警报";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "Not scanning enough materials. Please check again.";
-                    caption = "Warning";
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Program.main.openAutomationTab();
             }
         }
     }

@@ -40,9 +40,9 @@
             this.panelProgressInfo.BackColor = System.Drawing.Color.White;
             this.panelProgressInfo.Controls.Add(this.lb1);
             this.panelProgressInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelProgressInfo.Location = new System.Drawing.Point(369, 0);
+            this.panelProgressInfo.Location = new System.Drawing.Point(263, 0);
             this.panelProgressInfo.Name = "panelProgressInfo";
-            this.panelProgressInfo.Size = new System.Drawing.Size(392, 287);
+            this.panelProgressInfo.Size = new System.Drawing.Size(443, 245);
             this.panelProgressInfo.TabIndex = 1;
             // 
             // lb1
@@ -51,7 +51,7 @@
             this.lb1.Font = new System.Drawing.Font("Microsoft YaHei UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb1.Location = new System.Drawing.Point(0, 0);
             this.lb1.Name = "lb1";
-            this.lb1.Size = new System.Drawing.Size(392, 287);
+            this.lb1.Size = new System.Drawing.Size(443, 245);
             this.lb1.TabIndex = 2;
             this.lb1.Text = "Đang thực hiện, vui lòng chờ.\r\nProcessing, please wait.";
             this.lb1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -62,7 +62,7 @@
             this.ptbxLoadingAnimated.Image = global::mixer_control_globalver.Properties.Resources.loading;
             this.ptbxLoadingAnimated.Location = new System.Drawing.Point(0, 0);
             this.ptbxLoadingAnimated.Name = "ptbxLoadingAnimated";
-            this.ptbxLoadingAnimated.Size = new System.Drawing.Size(369, 287);
+            this.ptbxLoadingAnimated.Size = new System.Drawing.Size(263, 245);
             this.ptbxLoadingAnimated.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ptbxLoadingAnimated.TabIndex = 0;
             this.ptbxLoadingAnimated.TabStop = false;
@@ -70,7 +70,7 @@
             // LoadingDialog
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(761, 287);
+            this.ClientSize = new System.Drawing.Size(706, 245);
             this.Controls.Add(this.panelProgressInfo);
             this.Controls.Add(this.ptbxLoadingAnimated);
             this.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

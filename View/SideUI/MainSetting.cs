@@ -83,6 +83,33 @@ namespace mixer_control_globalver.View.SideUI
                 switchStopMode.SwitchState = XanderUI.XUISwitch.State.Off;
             }
 
+            if (Settings.Default.isSkipOpenLid)
+            {
+                switchOpenLit.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchOpenLit.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isHideReverse)
+            {
+                switchHideReverse.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchHideReverse.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isTesting)
+            {
+                switchTest.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchTest.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
             cbxPLCValueSetting.DisplayMember = "display_member";
@@ -223,6 +250,21 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isStopBetweenStep = true;
             else
                 Settings.Default.isStopBetweenStep = false;
+
+            if (switchOpenLit.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isSkipOpenLid = true;
+            else
+                Settings.Default.isSkipOpenLid = false;
+
+            if (switchHideReverse.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isHideReverse = true;
+            else
+                Settings.Default.isHideReverse = false;
+
+            if (switchTest.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isTesting = true;
+            else
+                Settings.Default.isTesting = false;
             Settings.Default.Save();
 
             CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);

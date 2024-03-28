@@ -54,6 +54,10 @@
             this.txbTransmissionRatio = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.switchOpenLit = new XanderUI.XUISwitch();
+            this.label9 = new System.Windows.Forms.Label();
+            this.switchStopMode = new XanderUI.XUISwitch();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.switchOilMode = new XanderUI.XUISwitch();
@@ -62,8 +66,10 @@
             this.txbOilFeederIP = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.txbOilFeederDatabase = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.switchStopMode = new XanderUI.XUISwitch();
+            this.label10 = new System.Windows.Forms.Label();
+            this.switchHideReverse = new XanderUI.XUISwitch();
+            this.switchTest = new XanderUI.XUISwitch();
+            this.label11 = new System.Windows.Forms.Label();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -123,32 +129,32 @@
             // lb1
             // 
             this.lb1.AutoSize = true;
-            this.lb1.Location = new System.Drawing.Point(6, 35);
+            this.lb1.Location = new System.Drawing.Point(6, 32);
             this.lb1.Name = "lb1";
-            this.lb1.Size = new System.Drawing.Size(88, 19);
+            this.lb1.Size = new System.Drawing.Size(68, 19);
             this.lb1.TabIndex = 11;
-            this.lb1.Text = "Địa chỉ IP:";
+            this.lb1.Text = "PLC IP:";
             // 
             // txbPLCIpSetting
             // 
-            this.txbPLCIpSetting.Location = new System.Drawing.Point(100, 32);
+            this.txbPLCIpSetting.Location = new System.Drawing.Point(80, 29);
             this.txbPLCIpSetting.Name = "txbPLCIpSetting";
-            this.txbPLCIpSetting.Size = new System.Drawing.Size(280, 27);
+            this.txbPLCIpSetting.Size = new System.Drawing.Size(265, 27);
             this.txbPLCIpSetting.TabIndex = 1;
             this.txbPLCIpSetting.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbPLCIpSetting_KeyPress);
             // 
             // txbDatabaseNo
             // 
-            this.txbDatabaseNo.Location = new System.Drawing.Point(493, 32);
+            this.txbDatabaseNo.Location = new System.Drawing.Point(445, 29);
             this.txbDatabaseNo.Name = "txbDatabaseNo";
-            this.txbDatabaseNo.Size = new System.Drawing.Size(114, 27);
+            this.txbDatabaseNo.Size = new System.Drawing.Size(60, 27);
             this.txbDatabaseNo.TabIndex = 2;
             this.txbDatabaseNo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbDatabaseNo_KeyPress);
             // 
             // lb2
             // 
             this.lb2.AutoSize = true;
-            this.lb2.Location = new System.Drawing.Point(397, 35);
+            this.lb2.Location = new System.Drawing.Point(351, 32);
             this.lb2.Name = "lb2";
             this.lb2.Size = new System.Drawing.Size(88, 19);
             this.lb2.TabIndex = 12;
@@ -259,68 +265,68 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 71);
+            this.label1.Location = new System.Drawing.Point(6, 68);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(319, 19);
+            this.label1.Size = new System.Drawing.Size(314, 19);
             this.label1.TabIndex = 13;
-            this.label1.Text = "Tốc độ tối đa của động cơ (vòng/phút):";
+            this.label1.Text = "Maximum motor speed (round/minute):";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(459, 71);
+            this.label2.Location = new System.Drawing.Point(6, 101);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(262, 19);
+            this.label2.Size = new System.Drawing.Size(223, 19);
             this.label2.TabIndex = 14;
-            this.label2.Text = "Đường kính trục động cơ (mm):";
+            this.label2.Text = "Motor shaft diameter (mm):";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(476, 109);
+            this.label3.Location = new System.Drawing.Point(6, 138);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(266, 19);
+            this.label3.Size = new System.Drawing.Size(233, 19);
             this.label3.TabIndex = 15;
-            this.label3.Text = "Đường kính trục cảm biến (mm):";
+            this.label3.Text = "Sensor shaft diameter (mm):";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 109);
+            this.label4.Location = new System.Drawing.Point(6, 173);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(338, 19);
+            this.label4.Size = new System.Drawing.Size(146, 19);
             this.label4.TabIndex = 16;
-            this.label4.Text = "Tỉ lệ chuyển đổi giữ động cơ và cảm biến:";
+            this.label4.Text = "Conversion ratio:";
             // 
             // txbMotorMaxSpeed
             // 
-            this.txbMotorMaxSpeed.Location = new System.Drawing.Point(331, 68);
+            this.txbMotorMaxSpeed.Location = new System.Drawing.Point(326, 65);
             this.txbMotorMaxSpeed.Name = "txbMotorMaxSpeed";
-            this.txbMotorMaxSpeed.Size = new System.Drawing.Size(120, 27);
+            this.txbMotorMaxSpeed.Size = new System.Drawing.Size(99, 27);
             this.txbMotorMaxSpeed.TabIndex = 3;
             this.txbMotorMaxSpeed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMotorMaxSpeed_KeyPress);
             // 
             // txbMotorDiameter
             // 
-            this.txbMotorDiameter.Location = new System.Drawing.Point(727, 68);
+            this.txbMotorDiameter.Location = new System.Drawing.Point(235, 98);
             this.txbMotorDiameter.Name = "txbMotorDiameter";
-            this.txbMotorDiameter.Size = new System.Drawing.Size(137, 27);
+            this.txbMotorDiameter.Size = new System.Drawing.Size(98, 27);
             this.txbMotorDiameter.TabIndex = 4;
             this.txbMotorDiameter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbMotorDiameter_KeyPress);
             // 
             // txbSensorDiameter
             // 
-            this.txbSensorDiameter.Location = new System.Drawing.Point(748, 106);
+            this.txbSensorDiameter.Location = new System.Drawing.Point(243, 135);
             this.txbSensorDiameter.Name = "txbSensorDiameter";
-            this.txbSensorDiameter.Size = new System.Drawing.Size(137, 27);
+            this.txbSensorDiameter.Size = new System.Drawing.Size(102, 27);
             this.txbSensorDiameter.TabIndex = 5;
             this.txbSensorDiameter.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbSensorDiameter_KeyPress);
             // 
             // txbTransmissionRatio
             // 
-            this.txbTransmissionRatio.Location = new System.Drawing.Point(350, 106);
+            this.txbTransmissionRatio.Location = new System.Drawing.Point(158, 170);
             this.txbTransmissionRatio.Name = "txbTransmissionRatio";
-            this.txbTransmissionRatio.Size = new System.Drawing.Size(120, 27);
+            this.txbTransmissionRatio.Size = new System.Drawing.Size(95, 27);
             this.txbTransmissionRatio.TabIndex = 6;
             this.txbTransmissionRatio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbTransmissionRatio_KeyPress);
             // 
@@ -335,6 +341,10 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.groupBox1.Controls.Add(this.switchHideReverse);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.switchOpenLit);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.switchStopMode);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.lb1);
@@ -354,7 +364,55 @@
             this.groupBox1.Size = new System.Drawing.Size(953, 211);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Cài đặt máy trộn";
+            this.groupBox1.Text = "Mixer Settings";
+            // 
+            // switchOpenLit
+            // 
+            this.switchOpenLit.BackColor = System.Drawing.Color.Transparent;
+            this.switchOpenLit.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchOpenLit.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchOpenLit.Location = new System.Drawing.Point(819, 83);
+            this.switchOpenLit.Name = "switchOpenLit";
+            this.switchOpenLit.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchOpenLit.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchOpenLit.Size = new System.Drawing.Size(60, 30);
+            this.switchOpenLit.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchOpenLit.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchOpenLit.TabIndex = 21;
+            this.switchOpenLit.Text = "xuiSwitch1";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(598, 94);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(213, 19);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Open lid if announce skip:";
+            // 
+            // switchStopMode
+            // 
+            this.switchStopMode.BackColor = System.Drawing.Color.Transparent;
+            this.switchStopMode.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchStopMode.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchStopMode.Location = new System.Drawing.Point(819, 21);
+            this.switchStopMode.Name = "switchStopMode";
+            this.switchStopMode.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchStopMode.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchStopMode.Size = new System.Drawing.Size(60, 30);
+            this.switchStopMode.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchStopMode.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchStopMode.TabIndex = 19;
+            this.switchStopMode.Text = "xuiSwitch1";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(597, 32);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(214, 19);
+            this.label8.TabIndex = 18;
+            this.label8.Text = "Stop motor between step:";
             // 
             // groupBox2
             // 
@@ -371,7 +429,7 @@
             this.groupBox2.Size = new System.Drawing.Size(949, 145);
             this.groupBox2.TabIndex = 23;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Cài đặt offset";
+            this.groupBox2.Text = "Offset Settings";
             // 
             // groupBox3
             // 
@@ -387,14 +445,14 @@
             this.groupBox3.Size = new System.Drawing.Size(953, 125);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Cài đặt máy cấp dầu";
+            this.groupBox3.Text = "Oil Feeder Settings";
             // 
             // switchOilMode
             // 
             this.switchOilMode.BackColor = System.Drawing.Color.Transparent;
             this.switchOilMode.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchOilMode.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchOilMode.Location = new System.Drawing.Point(119, 83);
+            this.switchOilMode.Location = new System.Drawing.Point(140, 81);
             this.switchOilMode.Name = "switchOilMode";
             this.switchOilMode.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchOilMode.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -407,26 +465,26 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 83);
+            this.label7.Location = new System.Drawing.Point(6, 92);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(107, 19);
+            this.label7.Size = new System.Drawing.Size(128, 19);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Mở cấp dầu:";
+            this.label7.Text = "Toggle oil feed:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 42);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(88, 19);
+            this.label5.Size = new System.Drawing.Size(94, 19);
             this.label5.TabIndex = 15;
-            this.label5.Text = "Địa chỉ IP:";
+            this.label5.Text = "Oil PLC IP:";
             // 
             // txbOilFeederIP
             // 
-            this.txbOilFeederIP.Location = new System.Drawing.Point(100, 39);
+            this.txbOilFeederIP.Location = new System.Drawing.Point(106, 39);
             this.txbOilFeederIP.Name = "txbOilFeederIP";
-            this.txbOilFeederIP.Size = new System.Drawing.Size(280, 27);
+            this.txbOilFeederIP.Size = new System.Drawing.Size(259, 27);
             this.txbOilFeederIP.TabIndex = 13;
             // 
             // label6
@@ -434,47 +492,73 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(397, 42);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(225, 19);
+            this.label6.Size = new System.Drawing.Size(266, 19);
             this.label6.TabIndex = 16;
-            this.label6.Text = "Database (Số máy hiện tại):";
+            this.label6.Text = "Database (Current machine no.):";
             // 
             // txbOilFeederDatabase
             // 
-            this.txbOilFeederDatabase.Location = new System.Drawing.Point(628, 39);
+            this.txbOilFeederDatabase.Location = new System.Drawing.Point(669, 39);
             this.txbOilFeederDatabase.Name = "txbOilFeederDatabase";
-            this.txbOilFeederDatabase.Size = new System.Drawing.Size(114, 27);
+            this.txbOilFeederDatabase.Size = new System.Drawing.Size(52, 27);
             this.txbOilFeederDatabase.TabIndex = 14;
             // 
-            // label8
+            // label10
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 157);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(241, 19);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Dừng động cơ giữ các bước:";
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(597, 158);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(171, 19);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "Hide reverse button:";
             // 
-            // switchStopMode
+            // switchHideReverse
             // 
-            this.switchStopMode.BackColor = System.Drawing.Color.Transparent;
-            this.switchStopMode.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
-            this.switchStopMode.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchStopMode.Location = new System.Drawing.Point(253, 157);
-            this.switchStopMode.Name = "switchStopMode";
-            this.switchStopMode.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
-            this.switchStopMode.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
-            this.switchStopMode.Size = new System.Drawing.Size(60, 30);
-            this.switchStopMode.SwitchState = XanderUI.XUISwitch.State.On;
-            this.switchStopMode.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
-            this.switchStopMode.TabIndex = 19;
-            this.switchStopMode.Text = "xuiSwitch1";
+            this.switchHideReverse.BackColor = System.Drawing.Color.Transparent;
+            this.switchHideReverse.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchHideReverse.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchHideReverse.Location = new System.Drawing.Point(819, 147);
+            this.switchHideReverse.Name = "switchHideReverse";
+            this.switchHideReverse.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchHideReverse.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchHideReverse.Size = new System.Drawing.Size(60, 30);
+            this.switchHideReverse.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchHideReverse.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchHideReverse.TabIndex = 23;
+            this.switchHideReverse.Text = "xuiSwitch1";
+            // 
+            // switchTest
+            // 
+            this.switchTest.BackColor = System.Drawing.Color.Transparent;
+            this.switchTest.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchTest.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchTest.Location = new System.Drawing.Point(272, 437);
+            this.switchTest.Name = "switchTest";
+            this.switchTest.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchTest.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchTest.Size = new System.Drawing.Size(60, 30);
+            this.switchTest.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchTest.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchTest.TabIndex = 25;
+            this.switchTest.Text = "xuiSwitch1";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(29, 437);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(236, 19);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "Skip material confirm to test:";
             // 
             // MainSetting
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(977, 643);
+            this.Controls.Add(this.switchTest);
             this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnSaveBaseSetting);
@@ -500,6 +584,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -539,5 +624,11 @@
         private XanderUI.XUISwitch switchOilMode;
         private XanderUI.XUISwitch switchStopMode;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private XanderUI.XUISwitch switchOpenLit;
+        private XanderUI.XUISwitch switchHideReverse;
+        private System.Windows.Forms.Label label10;
+        private XanderUI.XUISwitch switchTest;
+        private System.Windows.Forms.Label label11;
     }
 }

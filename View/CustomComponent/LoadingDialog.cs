@@ -20,15 +20,15 @@ namespace mixer_control_globalver.View.CustomComponent
             InitializeComponent();
             if (Settings.Default.language == 0)
             {
-                lb1.Text = "Đang tiến hành cấp dầu.";
+                lb1.Text = "Đang xử lý dữ liệu ...";
             }
             else if (Settings.Default.language == 1)
             {
-                lb1.Text = "石油供应正在进行中。";
+                lb1.Text = "处理数据...";
             }
             else if (Settings.Default.language == 2)
             {
-                lb1.Text = "Feeding Oil";
+                lb1.Text = "Loading data ...";
             }
         }
     }

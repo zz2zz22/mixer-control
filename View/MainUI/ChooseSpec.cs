@@ -5,11 +5,11 @@ using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
 using mixer_control_globalver.View.SideUI;
-using Spire.Xls;
 using System;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace mixer_control_globalver.View.MainUI
@@ -158,96 +158,106 @@ namespace mixer_control_globalver.View.MainUI
 
         private void dtgvListSpecification_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dtgvListSpecification.SelectedCells.Count > 0)
-            {
-                try
-                {
-                    int selectedrowindex = dtgvListSpecification.SelectedCells[0].RowIndex;
-                    DataGridViewRow selectedRow = dtgvListSpecification.Rows[selectedrowindex];
-                    TemporaryVariables.tempFileName = Convert.ToString(selectedRow.Cells["file_name"].Value);
-                    TemporaryVariables.tempFilePath = Convert.ToString(selectedRow.Cells["file_path"].Value);
-                    lbFormulaName.Text = TemporaryVariables.tempFileName;
-
-                    //Save variable to Datatable
-                    TemporaryVariables.InitMaterialDT();
-                    TemporaryVariables.InitProcessDT();
-                    DataTable processDT = SubMethods.ImportExceltoDatatable(TemporaryVariables.tempFilePath, "process_info");
-
-                    if (processDT.Rows.Count > 0)
+            LoadingDialog loading = new LoadingDialog();
+            Thread backgroundThreadSaveData = new Thread(
+                    new ThreadStart(() =>
                     {
-                        for (int j = 0; j < processDT.Rows.Count; j++)
+                        if (dtgvListSpecification.SelectedCells.Count > 0)
                         {
-
-                            if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][6].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString())
-                                && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
+                            try
                             {
-                                int changeSpeed = 0, changeTime = 0;
-                                double oilMass = 0;
-                                bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
+                                int selectedrowindex = dtgvListSpecification.SelectedCells[0].RowIndex;
+                                DataGridViewRow selectedRow = dtgvListSpecification.Rows[selectedrowindex];
+                                TemporaryVariables.tempFileName = Convert.ToString(selectedRow.Cells["file_name"].Value);
+                                TemporaryVariables.tempFilePath = Convert.ToString(selectedRow.Cells["file_path"].Value);
 
-                                if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
-                                    changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
+                                //Save variable to Datatable
+                                TemporaryVariables.InitMaterialDT();
+                                TemporaryVariables.InitProcessDT();
+                                DataTable processDT = SubMethods.ImportExceltoDatatable(TemporaryVariables.tempFilePath);
 
-                                if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
-                                    changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
+                                if (processDT.Rows.Count > 0)
+                                {
+                                    for (int j = 0; j < processDT.Rows.Count; j++)
+                                    {
+                                        if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][6].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString())
+                                            && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
+                                        {
+                                            int changeSpeed = 0, changeTime = 0;
+                                            double oilMass = 0;
+                                            bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
 
-                                if (processDT.Rows[j][5].ToString().ToLower() == "yes")
-                                    isVaccum = true;
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
+                                                changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
 
-                                if (processDT.Rows[j][7].ToString().ToLower() == "yes")
-                                    isSkipAnnounce = true;
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
+                                                changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
 
-                                if (processDT.Rows[j][8].ToString().ToLower() == "yes")
-                                    isOilFeed = true;
+                                            if (processDT.Rows[j][5].ToString().ToLower() == "yes")
+                                                isVaccum = true;
 
-                                if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                    oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
+                                            if (processDT.Rows[j][7].ToString().ToLower() == "yes")
+                                                isSkipAnnounce = true;
 
-                                TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
-                                processDT.Rows[j][1].ToString(),
-                                processDT.Rows[j][2].ToString(),
-                                changeSpeed,
-                                changeTime,
-                                isVaccum,
-                                processDT.Rows[j][6].ToString(),
-                                isSkipAnnounce,
-                                processDT.Rows[j][11].ToString(),
-                                false,
-                                isOilFeed,
-                                oilMass,
-                                processDT.Rows[j][10].ToString());
+                                            if (processDT.Rows[j][8].ToString().ToLower() == "yes")
+                                                isOilFeed = true;
+
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
+
+                                            TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
+                                            processDT.Rows[j][1].ToString(),
+                                            processDT.Rows[j][2].ToString(),
+                                            changeSpeed,
+                                            changeTime,
+                                            isVaccum,
+                                            processDT.Rows[j][6].ToString(),
+                                            isSkipAnnounce,
+                                            processDT.Rows[j][11].ToString(),
+                                            false,
+                                            isOilFeed,
+                                            oilMass,
+                                            processDT.Rows[j][10].ToString());
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (Settings.Default.language == 0)
-                    {
-                        message = "Lỗi khi tải dữ liệu excel!" + "\r\n\r\n" + ex.Message;
-                        caption = "Lỗi";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        message = "下载EXCEL失败!" + "\r\n\r\n" + ex.Message;
-                        caption = "错误";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        message = "Load Excel data failed!" + "\r\n\r\n" + ex.Message;
-                        caption = "Error";
-                    }
-                    TemporaryVariables.resetAllTempVariables();
+                            catch (Exception ex)
+                            {
+                                if (Settings.Default.language == 0)
+                                {
+                                    message = "Lỗi khi tải dữ liệu excel!" + "\r\n\r\n" + ex.Message;
+                                    caption = "Lỗi";
+                                }
+                                else if (Settings.Default.language == 1)
+                                {
+                                    message = "下载EXCEL失败!" + "\r\n\r\n" + ex.Message;
+                                    caption = "错误";
+                                }
+                                else if (Settings.Default.language == 2)
+                                {
+                                    message = "Load Excel data failed!" + "\r\n\r\n" + ex.Message;
+                                    caption = "Error";
+                                }
+                                TemporaryVariables.resetAllTempVariables();
 
-                    SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+                                SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
+                                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            loading.BeginInvoke(new Action(() => loading.Close()));
+                        }
+
+                    }));
+            backgroundThreadSaveData.Start();
+            loading.ShowDialog();
+            backgroundThreadSaveData.Join();
+
+            lbFormulaName.Text = TemporaryVariables.tempFileName;
         }
 
         private void btnRefreshFileList_Click(object sender, EventArgs e)
