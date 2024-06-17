@@ -61,8 +61,6 @@ namespace mixer_control_globalver
                 Console.WriteLine($"Error reading registry: {ex.Message}");
             }
 
-            
-
             this.Text = string.Empty;
             this.ControlBox = false;
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;

@@ -1,4 +1,5 @@
-﻿using mixer_control_globalver.Controller;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
@@ -53,7 +54,6 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
-            btnSaveBaseSetting.ButtonText = "Lưu cài đặt cơ bản";
             btnSaveOffset.ButtonText = "Lưu cài đặt offset";
 
             lbSettingAnnounce.Text = String.Empty;
@@ -65,6 +65,8 @@ namespace mixer_control_globalver.View.SideUI
             txbTransmissionRatio.Text = Settings.Default.transmission_ratio.ToString();
             txbOilFeederIP.Text = Settings.Default.oil_feeder_ip;
             txbOilFeederDatabase.Text = Settings.Default.oil_feeder_db.ToString();
+            txbAuthorSkipPass.Text = Settings.Default.authorSkipPassword;
+
             if(Settings.Default.isOilFeed)
             {
                 switchOilMode.SwitchState = XanderUI.XUISwitch.State.On;
@@ -110,6 +112,33 @@ namespace mixer_control_globalver.View.SideUI
                 switchTest.SwitchState = XanderUI.XUISwitch.State.Off;
             }
 
+            if (Settings.Default.isAlertPowder)
+            {
+                switchAlertPowder.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchAlertPowder.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isShowHiddenInfo)
+            {
+                switchShowHiddenInfo.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchShowHiddenInfo.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isHaveSkipPassword)
+            {
+                switchSkipPassword.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchSkipPassword.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
             cbxPLCValueSetting.DisplayMember = "display_member";
@@ -127,6 +156,57 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Settings.Default.plc_ip = txbPLCIpSetting.Text.Trim();
+            Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
+            Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
+            Settings.Default.spindle_diameter = Convert.ToDouble(txbMotorDiameter.Text.Trim());
+            Settings.Default.sensor_diameter = Convert.ToDouble(txbSensorDiameter.Text.Trim());
+            Settings.Default.transmission_ratio = Convert.ToDouble(txbTransmissionRatio.Text.Trim());
+            Settings.Default.oil_feeder_ip = txbOilFeederIP.Text.Trim();
+            Settings.Default.oil_feeder_db = Convert.ToInt32(txbOilFeederDatabase.Text.Trim());
+            Settings.Default.authorSkipPassword = txbAuthorSkipPass.Text.Trim();
+
+            if (switchOilMode.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isOilFeed = true;
+            else
+                Settings.Default.isOilFeed = false;
+
+            if (switchStopMode.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isStopBetweenStep = true;
+            else
+                Settings.Default.isStopBetweenStep = false;
+
+            if (switchOpenLit.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isSkipOpenLid = true;
+            else
+                Settings.Default.isSkipOpenLid = false;
+
+            if (switchHideReverse.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isHideReverse = true;
+            else
+                Settings.Default.isHideReverse = false;
+
+            if (switchTest.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isTesting = true;
+            else
+                Settings.Default.isTesting = false;
+
+            if (switchAlertPowder.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isAlertPowder = true;
+            else
+                Settings.Default.isAlertPowder = false;
+
+            if (switchShowHiddenInfo.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isShowHiddenInfo = true;
+            else
+                Settings.Default.isShowHiddenInfo = false;
+
+            if (switchSkipPassword.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isHaveSkipPassword = true;
+            else
+                Settings.Default.isHaveSkipPassword = false;
+
+            Settings.Default.Save();
             TemporaryVariables.InitSettingDT();
         }
 
@@ -174,7 +254,6 @@ namespace mixer_control_globalver.View.SideUI
                     caption = "Thông tin / 信息";
                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    btnSaveBaseSetting.ButtonText = "Lưu cài đặt";
                     btnSaveOffset.ButtonText = "Lưu offset";
 
                     txbStartNo.Text = String.Empty;
@@ -227,49 +306,6 @@ namespace mixer_control_globalver.View.SideUI
             }
         }
 
-        private void btnSaveBaseSetting_Click(object sender, EventArgs e)
-        {
-            message = "Lưu cài đặt thành công!\r\n保存设置成功 !";
-            caption = "Thông tin / 信息";
-
-            Settings.Default.plc_ip = txbPLCIpSetting.Text.Trim();
-            Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
-            Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
-            Settings.Default.spindle_diameter = Convert.ToDouble(txbMotorDiameter.Text.Trim());
-            Settings.Default.sensor_diameter = Convert.ToDouble(txbSensorDiameter.Text.Trim());
-            Settings.Default.transmission_ratio = Convert.ToDouble(txbTransmissionRatio.Text.Trim());
-            Settings.Default.oil_feeder_ip = txbOilFeederIP.Text.Trim();
-            Settings.Default.oil_feeder_db = Convert.ToInt32(txbOilFeederDatabase.Text.Trim());
-
-            if (switchOilMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isOilFeed = true;
-            else
-                Settings.Default.isOilFeed = false;
-
-            if (switchStopMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isStopBetweenStep = true;
-            else
-                Settings.Default.isStopBetweenStep = false;
-
-            if (switchOpenLit.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isSkipOpenLid = true;
-            else
-                Settings.Default.isSkipOpenLid = false;
-
-            if (switchHideReverse.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isHideReverse = true;
-            else
-                Settings.Default.isHideReverse = false;
-
-            if (switchTest.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isTesting = true;
-            else
-                Settings.Default.isTesting = false;
-            Settings.Default.Save();
-
-            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
         private void txbMotorMaxSpeed_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
@@ -305,6 +341,25 @@ namespace mixer_control_globalver.View.SideUI
             if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void btnReportFolder_Click(object sender, EventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.report_directory))
+            {
+                dialog.InitialDirectory = Properties.Settings.Default.report_directory;
+            }
+            else
+            {
+                dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory + "Mixer_Reports";
+            }
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                Properties.Settings.Default.report_directory = dialog.FileName;
+                Properties.Settings.Default.Save();
             }
         }
 

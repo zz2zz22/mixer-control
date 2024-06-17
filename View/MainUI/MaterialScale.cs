@@ -72,6 +72,7 @@ namespace mixer_control_globalver.View.MainUI
                                 string[] data = _buffer.ToString().Split('#');
                                 if (data[0] == lbFormulaName.Text.Trim() || lbFormulaName.Text.Trim().Contains(data[0]))
                                 {
+                                    TemporaryVariables.tempFormulaLOT = data[1];
                                     if (!String.IsNullOrEmpty(data[3]))
                                         totalMaterial = Convert.ToInt32(data[3]);
                                 }

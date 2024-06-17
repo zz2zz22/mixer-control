@@ -117,6 +117,9 @@ namespace mixer_control_globalver.View.MainUI
                 btnCheckProcess.ButtonText = "Check process step";
             }
 
+            Properties.Settings.Default.isEndReport = true;
+            Properties.Settings.Default.Save();
+
             if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
             {
                 string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
@@ -188,7 +191,7 @@ namespace mixer_control_globalver.View.MainUI
                                             && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString())
                                             && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
                                         {
-                                            int changeSpeed = 0, changeTime = 0;
+                                            int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
                                             double oilMass = 0;
                                             bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
 
@@ -210,6 +213,13 @@ namespace mixer_control_globalver.View.MainUI
                                             if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
                                                 oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
 
+                                            //Edit to read total powder bags
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()))
+                                                totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
+
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
+                                                remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+
                                             TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
                                             processDT.Rows[j][1].ToString(),
                                             processDT.Rows[j][2].ToString(),
@@ -222,7 +232,9 @@ namespace mixer_control_globalver.View.MainUI
                                             false,
                                             isOilFeed,
                                             oilMass,
-                                            processDT.Rows[j][10].ToString());
+                                            processDT.Rows[j][10].ToString(),
+                                            totalPowder,
+                                            remainPowder);
                                         }
                                     }
                                 }

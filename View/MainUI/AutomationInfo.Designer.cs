@@ -129,16 +129,17 @@
             // lbFormulaName
             // 
             this.lbFormulaName.AutoSize = true;
-            this.lbFormulaName.Location = new System.Drawing.Point(117, 21);
+            this.lbFormulaName.Location = new System.Drawing.Point(117, 11);
             this.lbFormulaName.Name = "lbFormulaName";
             this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
             this.lbFormulaName.TabIndex = 27;
             this.lbFormulaName.Text = "...";
+            this.lbFormulaName.Click += new System.EventHandler(this.lbFormulaName_Click);
             // 
             // lbShowF
             // 
             this.lbShowF.AutoSize = true;
-            this.lbShowF.Location = new System.Drawing.Point(12, 21);
+            this.lbShowF.Location = new System.Drawing.Point(12, 11);
             this.lbShowF.Name = "lbShowF";
             this.lbShowF.Size = new System.Drawing.Size(99, 19);
             this.lbShowF.TabIndex = 26;
@@ -232,11 +233,12 @@
             // lbProcessNo
             // 
             this.lbProcessNo.AutoSize = true;
-            this.lbProcessNo.Location = new System.Drawing.Point(12, 56);
+            this.lbProcessNo.Location = new System.Drawing.Point(12, 44);
             this.lbProcessNo.Name = "lbProcessNo";
             this.lbProcessNo.Size = new System.Drawing.Size(148, 19);
             this.lbProcessNo.TabIndex = 0;
             this.lbProcessNo.Text = "Bắt đầu bước số:\r\n";
+            this.lbProcessNo.Click += new System.EventHandler(this.lbProcessNo_Click);
             // 
             // btnReverseRoll
             // 

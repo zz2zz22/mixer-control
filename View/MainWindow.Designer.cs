@@ -169,7 +169,7 @@
             this.lbVersion.Name = "lbVersion";
             this.lbVersion.Size = new System.Drawing.Size(119, 19);
             this.lbVersion.TabIndex = 4;
-            this.lbVersion.Text = "Version 1.0.48";
+            this.lbVersion.Text = "Version 1.0.52";
             // 
             // cbxLanguageChoose
             // 
