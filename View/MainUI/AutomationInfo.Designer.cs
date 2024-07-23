@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelAutomationInfoMain = new System.Windows.Forms.Panel();
             this.panelAnnounce = new System.Windows.Forms.Panel();
             this.lbAnnounce = new System.Windows.Forms.Label();
@@ -54,6 +55,7 @@
             this.lb4 = new System.Windows.Forms.Label();
             this.lb3 = new System.Windows.Forms.Label();
             this.lb5 = new System.Windows.Forms.Label();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelAnnounce.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -447,5 +449,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label lbAnnounce;
         private System.Windows.Forms.Panel panelAnnounce;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }

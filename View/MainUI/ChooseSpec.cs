@@ -92,7 +92,6 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "Danh sách công thức:";
 
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu";
-                btnGetTemplate.ButtonText = "Tải mẫu";
                 btnImportTemplate.ButtonText = "Nhập công thức";
                 btnCheckProcess.ButtonText = "Xem quy trình";
             }
@@ -102,7 +101,6 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "产品型号列表:";
 
                 btnConfirmChoose.ButtonText = "开始材料确认。";
-                btnGetTemplate.ButtonText = "下载模板";
                 btnImportTemplate.ButtonText = "输入公式";
                 btnCheckProcess.ButtonText = "检查流程步骤";
             }
@@ -112,7 +110,6 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "Formula setting files:";
 
                 btnConfirmChoose.ButtonText = "Begin Material Confirmation";
-                btnGetTemplate.ButtonText = "Download template";
                 btnImportTemplate.ButtonText = "Import formula";
                 btnCheckProcess.ButtonText = "Check process step";
             }
@@ -161,6 +158,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void dtgvListSpecification_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            bool isSuccess = false;
             LoadingDialog loading = new LoadingDialog();
             Thread backgroundThreadSaveData = new Thread(
                     new ThreadStart(() =>
@@ -178,69 +176,103 @@ namespace mixer_control_globalver.View.MainUI
                                 TemporaryVariables.InitMaterialDT();
                                 TemporaryVariables.InitProcessDT();
                                 DataTable processDT = SubMethods.ImportExceltoDatatable(TemporaryVariables.tempFilePath);
-
-                                if (processDT.Rows.Count > 0)
+                                if (processDT != null)
                                 {
-                                    for (int j = 0; j < processDT.Rows.Count; j++)
+                                    if (processDT.Rows.Count > 0)
                                     {
-                                        if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][6].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString())
-                                            && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
+                                        for (int j = 0; j < processDT.Rows.Count; j++)
                                         {
-                                            int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
-                                            double oilMass = 0;
-                                            bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
+                                            if (!String.IsNullOrEmpty(processDT.Rows[j][0].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][1].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][2].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][5].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][6].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][7].ToString())
+                                                && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
+                                            {
+                                                int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
+                                                double oilMass = 0;
+                                                bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
 
-                                            if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
-                                                changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
+                                                if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
+                                                    changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
 
-                                            if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
-                                                changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
+                                                if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
+                                                    changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
 
-                                            if (processDT.Rows[j][5].ToString().ToLower() == "yes")
-                                                isVaccum = true;
+                                                if (processDT.Rows[j][5].ToString().ToLower() == "yes")
+                                                    isVaccum = true;
 
-                                            if (processDT.Rows[j][7].ToString().ToLower() == "yes")
-                                                isSkipAnnounce = true;
+                                                if (processDT.Rows[j][7].ToString().ToLower() == "yes")
+                                                    isSkipAnnounce = true;
 
-                                            if (processDT.Rows[j][8].ToString().ToLower() == "yes")
-                                                isOilFeed = true;
+                                                if (processDT.Rows[j][8].ToString().ToLower() == "yes")
+                                                    isOilFeed = true;
 
-                                            if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                                oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
+                                                if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                    oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
 
-                                            //Edit to read total powder bags
-                                            if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()))
-                                                totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
+                                                if(Settings.Default.isAlertPowder)
+                                                {
+                                                    //Edit to read total powder bags
+                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()))
+                                                        totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
 
-                                            if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
-                                                remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
+                                                        remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                }
+                                                else
+                                                {
+                                                    totalPowder = 0;
+                                                    remainPowder = 0;
+                                                }
 
-                                            TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
-                                            processDT.Rows[j][1].ToString(),
-                                            processDT.Rows[j][2].ToString(),
-                                            changeSpeed,
-                                            changeTime,
-                                            isVaccum,
-                                            processDT.Rows[j][6].ToString(),
-                                            isSkipAnnounce,
-                                            processDT.Rows[j][11].ToString(),
-                                            false,
-                                            isOilFeed,
-                                            oilMass,
-                                            processDT.Rows[j][10].ToString(),
-                                            totalPowder,
-                                            remainPowder);
+                                                TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
+                                                processDT.Rows[j][1].ToString(),
+                                                processDT.Rows[j][2].ToString(),
+                                                changeSpeed,
+                                                changeTime,
+                                                isVaccum,
+                                                processDT.Rows[j][6].ToString(),
+                                                isSkipAnnounce,
+                                                processDT.Rows[j][11].ToString(),
+                                                false,
+                                                isOilFeed,
+                                                oilMass,
+                                                processDT.Rows[j][10].ToString(),
+                                                totalPowder,
+                                                remainPowder);
+                                            }
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    string exMessage;
+                                    switch(Settings.Default.language)
+                                    {
+                                        case 0:
+                                            exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";
+                                            break;
+                                        case 1:
+                                            exMessage = "无法打开文件或与服务器的连接丢失，请检查文件或互联网连接！";
+                                            break;
+                                        case 2:
+                                            exMessage = "Unable to open file or lost connection to server, please check file or internet connection!";
+                                            break;
+                                        default:
+                                            exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";
+                                            break;
+                                    }
+                                    throw new Exception(exMessage);
+                                }
+                                isSuccess = true;
+                                loading.BeginInvoke(new Action(() => loading.Close()));
                             }
                             catch (Exception ex)
                             {
+                                isSuccess = false;
+                                loading.BeginInvoke(new Action(() => loading.Close()));
                                 if (Settings.Default.language == 0)
                                 {
                                     message = "Lỗi khi tải dữ liệu excel!" + "\r\n\r\n" + ex.Message;
@@ -261,15 +293,18 @@ namespace mixer_control_globalver.View.MainUI
                                 SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
                                 CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
-                            loading.BeginInvoke(new Action(() => loading.Close()));
                         }
 
                     }));
             backgroundThreadSaveData.Start();
             loading.ShowDialog();
             backgroundThreadSaveData.Join();
-
-            lbFormulaName.Text = TemporaryVariables.tempFileName;
+            if (isSuccess)
+                lbFormulaName.Text = TemporaryVariables.tempFileName;
+            else
+            {
+                lbFormulaName.Text = "";
+            }
         }
 
         private void btnRefreshFileList_Click(object sender, EventArgs e)
@@ -280,84 +315,6 @@ namespace mixer_control_globalver.View.MainUI
         private void btnConfirmChoose_Click(object sender, EventArgs e)
         {
             Program.main.openScaleTab();
-        }
-
-        private void saveExcelPassFormClosed(object sender, EventArgs e)
-        {
-            ((Form)sender).FormClosed -= saveExcelPassFormClosed;
-            if (isConfirmed)
-            {
-                isConfirmed = false;
-                try
-                {
-                    System.Windows.Forms.SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    string pathsave = "";
-                    if (Settings.Default.language == 0)
-                    {
-                        saveFileDialog.Title = "Lưu file Excel mẫu";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        saveFileDialog.Title = "保存 Excel 模板";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        saveFileDialog.Title = "Save Excel template";
-                    }
-                    saveFileDialog.DefaultExt = "Excel";
-                    saveFileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
-                    saveFileDialog.CheckPathExists = true;
-
-                    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        pathsave = saveFileDialog.FileName;
-                        saveFileDialog.RestoreDirectory = true;
-                        using (System.IO.FileStream fs = new System.IO.FileStream(pathsave, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
-                        {
-                            byte[] data = null; //Add resource
-                            data = Properties.Resources.data_template;
-                            fs.Write(data, 0, data.Length);
-                        }
-
-                        if (Settings.Default.language == 0)
-                        {
-                            message = "Lưu tệp Excel mẫu thành công !";
-                            caption = "Thông tin";
-                        }
-                        else if (Settings.Default.language == 1)
-                        {
-                            message = "EXCEL模板保存成功！";
-                            caption = "信息";
-                        }
-                        else if (Settings.Default.language == 2)
-                        {
-                            message = "Successfully save Excel template !";
-                            caption = "Information";
-                        }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (Settings.Default.language == 0)
-                    {
-                        message = "Lưu tệp Excel mẫu thất bại !" + "\r\n\r\n" + ex.Message;
-                        caption = "Lỗi";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        message = "EXCEL模板保存失败！" + "\r\n\r\n" + ex.Message;
-                        caption = "错误";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        message = "Failed to save Excel template !" + "\r\n\r\n" + ex.Message;
-                        caption = "Error";
-                    }
-                    SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
         }
 
         private void btnImportTemplate_Click(object sender, EventArgs e)
@@ -472,6 +429,64 @@ namespace mixer_control_globalver.View.MainUI
             }
         }
 
+        private void btnTestOilFeed_Click(object sender, EventArgs e)
+        {
+            if (!Settings.Default.isOilTested || Settings.Default.isTestOilMultiple)
+            {
+                if (Settings.Default.isOilFeed)
+                {
+                    OilFeederTest oilFeederTest = new OilFeederTest();
+                    oilFeederTest.ShowDialog();
+                }
+                else
+                {
+                    switch (Settings.Default.language)
+                    {
+                        case 0:
+                            message = "Máy không được kích hoạt chế độ cấp dầu!";
+                            caption = "Cảnh báo";
+                            break;
+                        case 1:
+                            message = "机器未激活供油模式！";
+                            caption = "警报";
+                            break;
+                        case 2:
+                            message = "The machine does not activate oil supply mode!";
+                            caption = "Alert";
+                            break;
+                        default:
+                            message = "Máy không được kích hoạt chế độ cấp dầu!";
+                            caption = "Cảnh báo";
+                            break;
+                    }
+                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                switch (Settings.Default.language)
+                {
+                    case 0:
+                        message = "Máy đã được test cấp dầu!";
+                        caption = "Cảnh báo";
+                        break;
+                    case 1:
+                        message = "本机已经过油泵测试！";
+                        caption = "警报";
+                        break;
+                    case 2:
+                        message = "The machine has been tested for oil pump!";
+                        caption = "Alert";
+                        break;
+                    default:
+                        message = "Máy đã được test cấp dầu!";
+                        caption = "Cảnh báo";
+                        break;
+                }
+                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void btnCheckProcess_Click(object sender, EventArgs e)
         {
             if (TemporaryVariables.processDT != null && TemporaryVariables.processDT.Rows.Count > 0)
@@ -498,13 +513,6 @@ namespace mixer_control_globalver.View.MainUI
                 }
                 CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void btnGetTemplate_Click(object sender, EventArgs e)
-        {
-            PasswordConfirm passwordConfirm = new PasswordConfirm();
-            passwordConfirm.FormClosed += saveExcelPassFormClosed;
-            passwordConfirm.ShowDialog();
         }
     }
 }

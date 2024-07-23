@@ -1,28 +1,42 @@
 ﻿using ExcelDataReader;
+using mixer_control_globalver.Controller.LogFile;
+using mixer_control_globalver.View.CustomControls;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.IO.Ports;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
 
 class SubMethods
 {
     public static DataTable ImportExceltoDatatable(string filePath)
     {
-        using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+        try
         {
-
-            IExcelDataReader excelDataReader = ExcelReaderFactory.CreateReader(stream);
-
-            var conf = new ExcelDataSetConfiguration()
+            using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
-                ConfigureDataTable = a => new ExcelDataTableConfiguration
+                IExcelDataReader excelDataReader = ExcelReaderFactory.CreateReader(stream);
+
+                var conf = new ExcelDataSetConfiguration()
                 {
-                    UseHeaderRow = true
-                }
-            };
+                    ConfigureDataTable = a => new ExcelDataTableConfiguration
+                    {
+                        UseHeaderRow = true
+                    }
+                };
 
-            DataSet dataSet = excelDataReader.AsDataSet(conf);
+                DataSet dataSet = excelDataReader.AsDataSet(conf);
 
-            return dataSet.Tables["process_info"];
+                return dataSet.Tables["process_info"];
+            }
+        }
+        catch (Exception ex)
+        {
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Excel export error", ex.Message);
+            return null;
         }
     }
     public static string ReturnCleanASCII(string s)
@@ -30,5 +44,108 @@ class SubMethods
         s = Regex.Replace(s, @"[\u0000-\u0008\u000A-\u001F\u0100-\uFFFF]", "");
         s = Regex.Replace(s, @"[^\t\r\n -~]", "");
         return s;
+    }
+
+    public static double ReadCommand(SerialPort serialPort, byte[] command)
+    {
+        serialPort.Write(command, 0, command.Length);
+        double realMass = 0;
+        // Tạo buffer để đọc dữ liệu phản hồi
+        byte[] buffer = new byte[256]; // Tùy chỉnh kích thước buffer nếu cần
+
+        // Đọc dữ liệu phản hồi từ máy bơm xăng
+        int bytesRead = serialPort.Read(buffer, 0, buffer.Length);
+        if (bytesRead >= 8 && buffer[1] == 1 && buffer[2] == 4) // Đảm bảo đã đọc đủ byte để xử lý
+        {
+            // Chuyển đổi các byte mong muốn thành số nguyên
+            int intMass = buffer[3] << 16 | buffer[4] << 8 | buffer[5];
+            realMass = Convert.ToDouble(intMass);
+        }
+        return realMass / 100;
+    }
+
+    public static void FuelSetting(SerialPort serialPort, double numberReal)
+    {
+        double actualNumber = numberReal * 100;
+        int number = Convert.ToInt32(actualNumber); // Số nguyên muốn chuyển đổi
+        string hexString = number.ToString("X6"); // Chuyển đổi số nguyên sang Hex
+
+        // Đảm bảo chiều dài của chuỗi hex là chẵn
+        if (hexString.Length % 2 != 0)
+        {
+            hexString = "0" + hexString;
+        }
+
+        // Tạo mảng byte để lưu trữ kết quả
+        byte[] byteArray = new byte[hexString.Length / 2];
+
+        // Tách chuỗi hex thành từng byte
+        for (int i = 0; i < byteArray.Length; i++)
+        {
+            byteArray[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+        }
+        List<byte> byteList = new List<byte>(byteArray);
+
+        // Thêm 3 byte vào phía trước mảng
+        byteList.InsertRange(0, new byte[] { 0x5A, 0x01, 0X05 });
+
+        // Tính toán byte checksum
+        byteArray = byteList.ToArray();
+        int sum = 0;
+        foreach (byte b in byteArray)
+        {
+            sum += b;
+        }
+
+        // Lấy byte cuối cùng của kết quả tổng
+        byte checksum = (byte)(sum & 0xFF);
+
+        // Thêm 2 byte vào phía sau mảng
+        byteList.AddRange(new byte[] { checksum, 0xA5 });
+
+        // Chuyển lại List<byte> thành mảng byte
+        byteArray = byteList.ToArray();
+
+        SendCommand(serialPort, byteArray); // Cài đặt lượng xăng định mức
+        string hexString2 = "";
+
+        foreach (byte b in byteArray)
+        {
+            hexString2 += "0x" + b.ToString("X2") + " ";
+        }
+    }
+
+    public static bool CheckConnectStatus(SerialPort serialPort, byte[] command)
+    {
+        try
+        {
+            if (serialPort.IsOpen)
+                return true;
+        }
+        catch (Exception ex)
+        {
+            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM: " + ex.Message, "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        return false;
+    }
+
+    public static void SendCommand(SerialPort serialPort, byte[] command)
+    {
+        try
+        {
+            // Gửi lệnh
+            serialPort.Write(command, 0, command.Length);
+            Thread.Sleep(100);
+            // Đọc phản hồi từ máy bơm xăng
+            byte[] buffer = new byte[command.Length];
+            //var a = serialPort.ReadExisting();
+            //serialPort.Read(buffer, 0, buffer.Length);
+            //Console.WriteLine("Phản hồi từ máy bơm xăng: " + BitConverter.ToString(buffer));
+        }
+        catch
+        {
+            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM", "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //Console.WriteLine("Lỗi: " + ex.Message);
+        }
     }
 }

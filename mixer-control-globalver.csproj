@@ -317,6 +317,17 @@
     <Compile Include="View\SideUI\MainSetting.Designer.cs">
       <DependentUpon>MainSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SideUI\OilFeederTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SideUI\OilFeederTest.Designer.cs">
+      <DependentUpon>OilFeederTest.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="View\SideUI\OilFeederTest.resx">
+      <DependentUpon>OilFeederTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Resources\pumping.png" />
+    <None Include="Resources\connection.png" />
     <Content Include="Resources\data-template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

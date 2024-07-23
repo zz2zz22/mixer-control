@@ -292,5 +292,149 @@ namespace mixer_control_globalver.Properties {
                 this["isHaveSkipPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string comPort {
+            get {
+                return ((string)(this["comPort"]));
+            }
+            set {
+                this["comPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9600")]
+        public string baudRate {
+            get {
+                return ((string)(this["baudRate"]));
+            }
+            set {
+                this["baudRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8")]
+        public string dataBits {
+            get {
+                return ((string)(this["dataBits"]));
+            }
+            set {
+                this["dataBits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("One")]
+        public string stopBits {
+            get {
+                return ((string)(this["stopBits"]));
+            }
+            set {
+                this["stopBits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public string parityBits {
+            get {
+                return ((string)(this["parityBits"]));
+            }
+            set {
+                this["parityBits"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool gasolinePumpMode {
+            get {
+                return ((bool)(this["gasolinePumpMode"]));
+            }
+            set {
+                this["gasolinePumpMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double toleranceMass {
+            get {
+                return ((double)(this["toleranceMass"]));
+            }
+            set {
+                this["toleranceMass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string timeOilTested {
+            get {
+                return ((string)(this["timeOilTested"]));
+            }
+            set {
+                this["timeOilTested"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isOilTested {
+            get {
+                return ((bool)(this["isOilTested"]));
+            }
+            set {
+                this["isOilTested"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isOpenLidMode {
+            get {
+                return ((bool)(this["isOpenLidMode"]));
+            }
+            set {
+                this["isOpenLidMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isSaveReport {
+            get {
+                return ((bool)(this["isSaveReport"]));
+            }
+            set {
+                this["isSaveReport"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isTestOilMultiple {
+            get {
+                return ((bool)(this["isTestOilMultiple"]));
+            }
+            set {
+                this["isTestOilMultiple"] = value;
+            }
+        }
     }
 }
