@@ -128,6 +128,11 @@ namespace mixer_control_globalver.Controller
             processDT.Columns.Add(processCol);
 
             processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Double");
+            processCol.ColumnName = "oil_weight";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
             processCol.DataType = Type.GetType("System.String");
             processCol.ColumnName = "oil_type";
             processDT.Columns.Add(processCol);

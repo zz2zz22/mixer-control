@@ -116,19 +116,25 @@ namespace mixer_control_globalver.View.MainUI
 
             Properties.Settings.Default.isEndReport = true;
             Properties.Settings.Default.Save();
-
-            if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
+            try
             {
-                string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
-                System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
-                if (dir.Exists == false)
-                    dir.Create();
+                if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
+                {
+                    string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
+                    System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
+                    if (dir.Exists == false)
+                        dir.Create();
 
-                Properties.Settings.Default.folder_directory = dir.FullName;
-                Properties.Settings.Default.Save();
+                    Properties.Settings.Default.folder_directory = dir.FullName;
+                    Properties.Settings.Default.Save();
+                }
+                LoadItemFilePath(Properties.Settings.Default.folder_directory);
+                TemporaryVariables.resetAllTempVariables();
             }
-            LoadItemFilePath(Properties.Settings.Default.folder_directory);
-            TemporaryVariables.resetAllTempVariables();
+            catch(Exception ex)
+            {
+                SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Error load file", ex.Message);
+            }
         }
 
         private void saveFileLocationPassFormClosed(object sender, EventArgs e)
@@ -191,7 +197,7 @@ namespace mixer_control_globalver.View.MainUI
                                                 && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
                                             {
                                                 int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
-                                                double oilMass = 0;
+                                                double oilMass = 0, oilWeight = 0;
                                                 bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
@@ -209,17 +215,26 @@ namespace mixer_control_globalver.View.MainUI
                                                 if (processDT.Rows[j][8].ToString().ToLower() == "yes")
                                                     isOilFeed = true;
 
-                                                if (!String.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                                    oilMass = Convert.ToDouble(processDT.Rows[j][9].ToString());
+                                                if (Settings.Default.isOilFeed && isOilFeed)
+                                                {
+                                                    if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                    {
+                                                        if (!double.TryParse(processDT.Rows[j][10].ToString(), out oilMass) && !double.TryParse(processDT.Rows[j][9].ToString(), out oilWeight))
+                                                        {
+                                                            throw new Exception("Cannot convert oil mass and oil weight data!");
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
+                                                    }
+                                                }
 
-                                                if(Settings.Default.isAlertPowder)
+                                                if (Settings.Default.isAlertPowder && !String.IsNullOrEmpty(processDT.Rows[j][12].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
                                                 {
                                                     //Edit to read total powder bags
-                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()))
-                                                        totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
-
-                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
-                                                        remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
+                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
                                                 }
                                                 else
                                                 {
@@ -235,11 +250,12 @@ namespace mixer_control_globalver.View.MainUI
                                                 isVaccum,
                                                 processDT.Rows[j][6].ToString(),
                                                 isSkipAnnounce,
-                                                processDT.Rows[j][11].ToString(),
+                                                processDT.Rows[j][12].ToString(),
                                                 false,
                                                 isOilFeed,
                                                 oilMass,
-                                                processDT.Rows[j][10].ToString(),
+                                                oilWeight,
+                                                processDT.Rows[j][11].ToString(),
                                                 totalPowder,
                                                 remainPowder);
                                             }
@@ -249,7 +265,7 @@ namespace mixer_control_globalver.View.MainUI
                                 else
                                 {
                                     string exMessage;
-                                    switch(Settings.Default.language)
+                                    switch (Settings.Default.language)
                                     {
                                         case 0:
                                             exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";

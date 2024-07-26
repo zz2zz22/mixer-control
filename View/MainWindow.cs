@@ -66,9 +66,9 @@ namespace mixer_control_globalver
                 }
                 TemporaryVariables.resetAllTempVariables();
 
-                //Lấy version hiện tại qua Assembly và thể hiện lên label
-                Version version = Assembly.GetExecutingAssembly().GetName().Version;
-                lbVersion.Text = $"{version}";
+                ////Lấy version hiện tại qua Assembly và thể hiện lên label
+                //Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                //lbVersion.Text = $"{version}";
 
                 this.Text = string.Empty;
                 this.ControlBox = false;

@@ -39,7 +39,7 @@ namespace mixer_control_globalver.View.MainUI
         bool isExitApplication = false;
         bool AutoManual, ContainerUpSensor, CloseLidSensor, isFirstStart, isSpeedChanged, AutoTrigger, ManualTrigger;
         string message = String.Empty, caption = String.Empty, oilType = String.Empty, stepDesc;
-        double oilMass, tempRT, maxTemp, speed, tempSpeed;
+        double oilMass, oilWeight, tempRT, maxTemp, speed, tempSpeed;
         int db, dbOil, currentRow, speed1, time1, speed2, time2, max_temp, rollMode = 1, processNumber, errorCode, totalPowder, remainPowder;
         bool isVaccum, isSkipAnnouce, isOilFeed, isOilFeeding;
 
@@ -1099,6 +1099,7 @@ namespace mixer_control_globalver.View.MainUI
                         {
                             isOilFeed = (bool)dt.Rows[i]["is_oilfeed"];
                             oilMass = (double)dt.Rows[i]["oil_mass"];
+                            oilWeight = (double)dt.Rows[i]["oil_weight"];
                             oilType = dt.Rows[i]["oil_type"].ToString();
                             if (Settings.Default.gasolinePumpMode)
                             {
@@ -1109,6 +1110,7 @@ namespace mixer_control_globalver.View.MainUI
                         {
                             isOilFeed = false;
                             oilMass = 0;
+                            oilWeight = 0;
                             oilType = "";
                         }
 
@@ -1214,7 +1216,7 @@ namespace mixer_control_globalver.View.MainUI
                     aTimer.Stop();
                     aTimer = null;
                 }
-                SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x02, 0x5D, 0xA5 }); // Lệnh dừng
+                //SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x02, 0x5D, 0xA5 }); // Lệnh dừng
 
                 lbCountDown.Text = "00:00:00";
                 isFirstStart = false;
@@ -1346,7 +1348,9 @@ namespace mixer_control_globalver.View.MainUI
                                             if (serialPort1.IsOpen)
                                             {
                                                 isOilFeeding = true;
+
                                                 SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
+
                                                 if (Settings.Default.language == 0)
                                                 {
                                                     announce = "Bắt đầu cấp dầu ...";
@@ -1405,7 +1409,7 @@ namespace mixer_control_globalver.View.MainUI
                                             {
                                                 if (!isOilFeeding)
                                                 {
-                                                    pLCOil.WriteRealtoPLC(Convert.ToSingle(oilMass), dbOil, Convert.ToInt32(ini.Read("OilMass", "start")), 2);
+                                                    pLCOil.WriteRealtoPLC(Convert.ToSingle(oilWeight), dbOil, Convert.ToInt32(ini.Read("OilMass", "start")), 2);
                                                     pLCOil.WriteDinttoPLC(dbOil, dbOil, Convert.ToInt32(ini.Read("MachineLocation", "start")), 2);
                                                     pLCOil.WriteStringtoPLC(oilType, dbOil, Convert.ToInt32(ini.Read("OilType", "start")), 254);
                                                     pLCOil.WriteBoolToPLC(true, dbOil, Convert.ToInt32(ini.Read("StartOil", "start")), Convert.ToInt32(ini.Read("StartOil", "bit")));
