@@ -219,10 +219,8 @@ namespace mixer_control_globalver.View.MainUI
                                                 {
                                                     if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
                                                     {
-                                                        if (!double.TryParse(processDT.Rows[j][10].ToString(), out oilMass) && !double.TryParse(processDT.Rows[j][9].ToString(), out oilWeight))
-                                                        {
-                                                            throw new Exception("Cannot convert oil mass and oil weight data!");
-                                                        }
+                                                        oilMass = double.Parse(processDT.Rows[j][10].ToString());
+                                                        oilWeight = double.Parse(processDT.Rows[j][9].ToString());
                                                     }
                                                     else
                                                     {
@@ -230,11 +228,11 @@ namespace mixer_control_globalver.View.MainUI
                                                     }
                                                 }
 
-                                                if (Settings.Default.isAlertPowder && !String.IsNullOrEmpty(processDT.Rows[j][12].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
+                                                if (Settings.Default.isAlertPowder && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
                                                 {
                                                     //Edit to read total powder bags
-                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
-                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
                                                 }
                                                 else
                                                 {

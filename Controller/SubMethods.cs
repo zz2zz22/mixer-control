@@ -9,6 +9,8 @@ using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Configuration;
+using mixer_control_globalver.Properties;
 
 class SubMethods
 {
@@ -66,7 +68,7 @@ class SubMethods
 
     public static void FuelSetting(SerialPort serialPort, double numberReal)
     {
-        double actualNumber = numberReal * 100;
+        double actualNumber = Math.Round(numberReal, 2) * 100;
         int number = Convert.ToInt32(actualNumber); // Số nguyên muốn chuyển đổi
         string hexString = number.ToString("X6"); // Chuyển đổi số nguyên sang Hex
 
@@ -146,6 +148,38 @@ class SubMethods
         {
             CTMessageBox.Show("Lỗi đọc/ ghi cổng COM", "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //Console.WriteLine("Lỗi: " + ex.Message);
+        }
+    }
+
+    public static void BackupUserSettings()
+    {
+        try
+        {
+            string userConfigPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+            string backupPath = userConfigPath + ".bak";
+            File.Copy(userConfigPath, backupPath, true);
+        }
+        catch (Exception ex)
+        {
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Create user.config backup error", ex.Message);
+        }
+    }
+
+    public static void RestoreUserSettings()
+    {
+        try
+        {
+            string userConfigPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+            string backupPath = userConfigPath + ".bak";
+            if (File.Exists(backupPath))
+            {
+                File.Copy(backupPath, userConfigPath, true);
+                Settings.Default.Reload(); // Reload settings to apply restored values
+            }
+        }
+        catch (Exception ex)
+        {
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Restore user.config error", ex.Message);
         }
     }
 }

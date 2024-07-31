@@ -10,6 +10,7 @@ using mixer_control_globalver.View.MainUI;
 using mixer_control_globalver.View.SideUI;
 using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -190,6 +191,22 @@ namespace mixer_control_globalver
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            try
+            {
+                var settingValue1 = Properties.Settings.Default.database_no;
+                var settingValue2 = Properties.Settings.Default.parityBits;
+                var settingValue3 = Properties.Settings.Default.isTesting;
+                var settingValue4 = Properties.Settings.Default.isSaveReport;
+                var settingValue5 = Properties.Settings.Default.language;
+
+                SubMethods.BackupUserSettings();
+            }
+            catch (ConfigurationErrorsException)
+            {
+                // Handle the error, e.g., delete the corrupted user.config file and inform the user
+                SubMethods.RestoreUserSettings();
+            }
+
             try
             {
                 // this timer calls bgWorker again and again after regular intervals

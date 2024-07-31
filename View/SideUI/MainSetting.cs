@@ -4,6 +4,7 @@ using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
 using System;
+using System.Configuration;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -63,6 +64,20 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
+            try
+            {
+                var settingValue1 = Properties.Settings.Default.database_no;
+                var settingValue2 = Properties.Settings.Default.parityBits;
+                var settingValue3 = Properties.Settings.Default.isTesting;
+                var settingValue4 = Properties.Settings.Default.isSaveReport;
+                var settingValue5 = Properties.Settings.Default.language;
+            }
+            catch (ConfigurationErrorsException)
+            {
+                // Handle the error, e.g., delete the corrupted user.config file and inform the user
+                SubMethods.RestoreUserSettings();
+            }
+
             if (!String.IsNullOrEmpty(Properties.Settings.Default.comPort))
             {
                 string[] ports = SerialPort.GetPortNames();
@@ -290,6 +305,8 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isTestOilMultiple = false;
 
             Settings.Default.Save();
+            SubMethods.BackupUserSettings();
+
             TemporaryVariables.InitSettingDT();
         }
 
