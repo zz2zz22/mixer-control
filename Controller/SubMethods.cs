@@ -48,23 +48,10 @@ class SubMethods
         return s;
     }
 
-    public static double ReadCommand(SerialPort serialPort, byte[] command)
-    {
-        serialPort.Write(command, 0, command.Length);
-        double realMass = 0;
-        // Tạo buffer để đọc dữ liệu phản hồi
-        byte[] buffer = new byte[256]; // Tùy chỉnh kích thước buffer nếu cần
-
-        // Đọc dữ liệu phản hồi từ máy bơm xăng
-        int bytesRead = serialPort.Read(buffer, 0, buffer.Length);
-        if (bytesRead >= 8 && buffer[1] == 1 && buffer[2] == 4) // Đảm bảo đã đọc đủ byte để xử lý
-        {
-            // Chuyển đổi các byte mong muốn thành số nguyên
-            int intMass = buffer[3] << 16 | buffer[4] << 8 | buffer[5];
-            realMass = Convert.ToDouble(intMass);
-        }
-        return realMass / 100;
-    }
+    //public static double ConvertString2Double (string value)
+    //{
+        
+    //}
 
     public static void FuelSetting(SerialPort serialPort, double numberReal)
     {
@@ -165,16 +152,16 @@ class SubMethods
         }
     }
 
-    public static void RestoreUserSettings()
+    public static void RestoreUserSettings(string userConfigPath)
     {
         try
         {
-            string userConfigPath = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
             string backupPath = userConfigPath + ".bak";
             if (File.Exists(backupPath))
             {
                 File.Copy(backupPath, userConfigPath, true);
-                Settings.Default.Reload(); // Reload settings to apply restored values
+                Application.Restart();
+                Environment.Exit(0);// Reload settings to apply restored values
             }
         }
         catch (Exception ex)

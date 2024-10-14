@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace mixer_control_globalver.View.MainUI
 {
@@ -217,27 +218,83 @@ namespace mixer_control_globalver.View.MainUI
 
                                                 if (Settings.Default.isOilFeed && isOilFeed)
                                                 {
-                                                    if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                    if(Settings.Default.gasolinePumpMode)
                                                     {
-                                                        oilMass = double.Parse(processDT.Rows[j][10].ToString());
-                                                        oilWeight = double.Parse(processDT.Rows[j][9].ToString());
+                                                        if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                        {
+                                                            oilMass = double.Parse(processDT.Rows[j][10].ToString(), CultureInfo.InvariantCulture);
+                                                            oilWeight = double.Parse(processDT.Rows[j][9].ToString(), CultureInfo.InvariantCulture);
+                                                        }
+                                                        else
+                                                        {
+                                                            throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
+                                                        if (!string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
+                                                        {
+                                                            oilMass = 0;
+                                                            oilWeight = double.Parse(processDT.Rows[j][9].ToString());
+                                                        }
+                                                        else
+                                                        {
+                                                            throw new Exception("Oil weight data is empty, please check the formula!");
+                                                        }
                                                     }
                                                 }
 
-                                                if (Settings.Default.isAlertPowder && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
+                                                if (Settings.Default.isAlertPowder)
                                                 {
-                                                    //Edit to read total powder bags
-                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
-                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
+                                                    if(Settings.Default.gasolinePumpMode)
+                                                    {
+                                                        if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
+                                                        {
+                                                            //Edit to read total powder bags
+                                                            totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                            remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
+                                                        }
+                                                        else
+                                                        {
+                                                            totalPowder = 0;
+                                                            remainPowder = 0;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
+                                                        {
+                                                            //Edit to read total powder bags
+                                                            totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
+                                                            remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                        }
+                                                        else
+                                                        {
+                                                            totalPowder = 0;
+                                                            remainPowder = 0;
+                                                        }
+                                                    }
+                                                }
+                                                
+
+                                                string stepDesc = String.Empty;
+                                                if(Settings.Default.gasolinePumpMode)
+                                                {
+                                                    stepDesc = processDT.Rows[j][12].ToString();
                                                 }
                                                 else
                                                 {
-                                                    totalPowder = 0;
-                                                    remainPowder = 0;
+                                                    stepDesc = processDT.Rows[j][11].ToString();
+                                                }
+                                                
+                                                string oilType = String.Empty;
+                                                if(Settings.Default.gasolinePumpMode)
+                                                {
+                                                    oilType = processDT.Rows[j][11].ToString();
+                                                }
+                                                else
+                                                {
+                                                    oilType = processDT.Rows[j][10].ToString();
                                                 }
 
                                                 TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
@@ -248,12 +305,12 @@ namespace mixer_control_globalver.View.MainUI
                                                 isVaccum,
                                                 processDT.Rows[j][6].ToString(),
                                                 isSkipAnnounce,
-                                                processDT.Rows[j][12].ToString(),
+                                                stepDesc,
                                                 false,
                                                 isOilFeed,
                                                 oilMass,
                                                 oilWeight,
-                                                processDT.Rows[j][11].ToString(),
+                                                oilType,
                                                 totalPowder,
                                                 remainPowder);
                                             }
@@ -308,11 +365,11 @@ namespace mixer_control_globalver.View.MainUI
                                 CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
-
                     }));
+            if(backgroundThreadSaveData.IsAlive)
+                backgroundThreadSaveData.Join();
             backgroundThreadSaveData.Start();
             loading.ShowDialog();
-            backgroundThreadSaveData.Join();
             if (isSuccess)
                 lbFormulaName.Text = TemporaryVariables.tempFileName;
             else

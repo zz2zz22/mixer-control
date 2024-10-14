@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace mixer_control_globalver.View.SideUI
 {
@@ -22,6 +23,8 @@ namespace mixer_control_globalver.View.SideUI
         public static int ConnectionPLC;
 
         int db = Settings.Default.database_no;
+        private int bytesRead;
+        private byte[] buffer;
         double testMass;
         string message = String.Empty, caption = String.Empty, actualMass;
 
@@ -76,44 +79,108 @@ namespace mixer_control_globalver.View.SideUI
 
         private void btnStartTesting_Click(object sender, EventArgs e)
         {
-            btnStartTesting.Enabled = false;
-            try
+            if (Settings.Default.language == 0)
             {
-                lbStatus.Text = "Executing...";
-                if (double.TryParse(txbTestMass.Text.Trim(), out testMass))
-                {
-
-                    lbStatus.Text = "Sending signal to PLC...";
-                    do
-                    {
-                        PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
-                        pLC.WriteBoolToPLC(true, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
-                    } while (ConnectionPLC != 0);
-
-                    Thread.Sleep(200);
-
-                    lbStatus.Text = "Transfer oil mass to pump machine...";
-                    SubMethods.FuelSetting(serialPort1, testMass);
-
-                    Thread.Sleep(200);
-
-                    SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
-
-                    LoadBackgroundWorker();
-                }
-                else
-                {
-                    throw new Exception("Can not regconise input mass!");
-                }
+                message = "Bắt đầu test cấp dầu ?";
+                caption = "Cảnh báo";
             }
-            catch (Exception ex)
+            else if (Settings.Default.language == 1)
             {
-                CTMessageBox.Show(ex.Message);
+                message = "开始油泵测试 ?";
+                caption = "提示";
+            }
+            else if (Settings.Default.language == 2)
+            {
+                message = "Start oil pump test ?";
+                caption = "Warning";
+            }
+            DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                rtb_log.Text = String.Empty;
+                btnStartTesting.Enabled = false;
+                try
+                {
+                    if (double.TryParse(txbTestMass.Text.Trim(), NumberStyles.Number, CultureInfo.InvariantCulture, out testMass))
+                    {
+                        //do
+                        //{
+                        //    PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                        //    pLC.WriteBoolToPLC(true, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
+                        //} while (ConnectionPLC != 0);
+
+                        Thread.Sleep(200);
+
+                        lbStatus.Text = "Transfer oil mass to pump machine...";
+                        SubMethods.FuelSetting(serialPort1, testMass);
+
+                        Thread.Sleep(200);
+                        do
+                        {
+                            if (serialPort1.IsOpen)
+                            {
+                                try
+                                {
+                                    //byte[] command = new byte[] { 0x5A, 0x01, 0x05, 0x60, 0xA5 }; //Lệnh đọc phản hồi truyền
+                                    //serialPort1.Write(command, 0, command.Length);
+                                    // Tạo buffer để đọc dữ liệu phản hồi
+                                    buffer = new byte[256]; // Tùy chỉnh kích thước buffer nếu cần
+                                                            // Đọc dữ liệu phản hồi từ máy bơm xăng
+                                    bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                    string test = String.Empty;
+                                    for (int i = 0; i < bytesRead; i++)
+                                    {
+                                        test += buffer[i].ToString() + " ";
+                                    }
+                                    rtb_log.Text = "\r\n\r\nRespond: " + test;
+                                    Thread.Sleep(200);
+                                }
+                                catch (TimeoutException ex)
+                                {
+                                    lbStatus.Text = "Không có dữ liệu phản hồi hoặc dữ liệu sai!\r\n" + ex.Message;
+                                    break;
+                                }
+                            }
+                        } while (buffer[0] != 90 && buffer[1] != 1 && buffer[2] != 5 && buffer[3] != 96 && buffer[4] != 165);
+
+                        if(buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
+                        {
+                            lbStatus.Text = "Đang truyền lệnh bắt đầu...";
+                            // Chuyển đổi các byte mong muốn thành số nguyên
+                            int settingMass = buffer[3] << 16 | buffer[4] << 8 | buffer[5];
+                            double setMass = Convert.ToDouble(settingMass) / 100;
+
+                            SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
+                            LoadBackgroundWorker();
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Can not regconise input mass!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CTMessageBox.Show(ex.Message);
+                }
             }
         }
 
         private void OilFeederTest_Load(object sender, EventArgs e)
         {
+            if (Settings.Default.language == 0)
+            {
+                message = "Nhập khối lượng dầu muốn test:";
+            }
+            else if (Settings.Default.language == 1)
+            {
+                message = "输入测试油量：";
+            }
+            else if (Settings.Default.language == 2)
+            {
+                message = "Input the test oil mass:";
+            }
+            label1.Text = message;
             try
             {
                 if (!String.IsNullOrEmpty(Properties.Settings.Default.comPort))
@@ -204,50 +271,71 @@ namespace mixer_control_globalver.View.SideUI
         {
             try
             {
-                actualMass = SubMethods.ReadCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x04, 0x5F, 0xA5 }).ToString();
+                byte[] command = new byte[] { 0x5A, 0x01, 0x04, 0x5F, 0xA5 };
+                serialPort1.Write(command, 0, command.Length);
+
+                buffer = new byte[504];
+
+                // Đọc dữ liệu phản hồi từ máy bơm xăng
+                bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                bgWorkerTestOil.ReportProgress(0);
             }
             catch (Exception ex)
             {
-                CloseSerialPort();
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Oil Testing error", ex.Message);
             }
-            bgWorkerTestOil.ReportProgress(0);
         }
 
         private void BW_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            lbStatus.Text = "Running...";
-            //lbStatus.Text = actualMass;
-
-            if (double.TryParse(actualMass, out double acMass))
+            string a = String.Empty;
+            bool isFinish = false;
+            rtb_log.Text += "\r\n\n";
+            for (int i = 0; i < bytesRead; i++)
             {
-                if ((testMass - acMass) < Settings.Default.toleranceMass)
-                {
-                    if (tmrCallBgWorker != null)
-                    {
-                        tmrCallBgWorker.Stop();
-                        tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
-                        bgWorkerTestOil.DoWork -= new DoWorkEventHandler(BW_DoWork);
-                        bgWorkerTestOil.ProgressChanged -= BW_ProgressChanged;
-                        bgWorkerTestOil.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
-                    }
-                    Settings.Default.timeOilTested = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                    Settings.Default.isOilTested = true;
-                    Settings.Default.Save();
-                    Thread.Sleep(500);
-                    do
-                    {
-                        PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
-                        pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
-                    } while (ConnectionPLC != 0);
-
-                    if (serialPort1.IsOpen)
-                        CloseSerialPort();
-
-                    CTMessageBox.Show("TEST SUCCESSFULLY", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
-                }
+                a += buffer[i].ToString() + " ";
             }
+            rtb_log.Text += a;
+
+            if (bytesRead == 8)
+            {
+                if (!String.IsNullOrEmpty(a) && a.Count(x => x == '0') == bytesRead)
+                {
+                    isFinish = true;
+                }
+                int intMass = buffer[3] << 16 | buffer[4] << 8 | buffer[5];
+                actualMass = (Convert.ToDouble(intMass) / 100).ToString();
+            }
+            //lbStatus.Text = "Running...";
+            lbStatus.Text = actualMass;
+
+            if (isFinish || (testMass - Convert.ToDouble(actualMass)) < Settings.Default.toleranceMass)
+            {
+                lbStatus.Text = testMass.ToString();
+                if (tmrCallBgWorker != null)
+                {
+                    tmrCallBgWorker.Stop();
+                    tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
+                    bgWorkerTestOil.DoWork -= new DoWorkEventHandler(BW_DoWork);
+                    bgWorkerTestOil.ProgressChanged -= BW_ProgressChanged;
+                    bgWorkerTestOil.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
+                }
+                if (serialPort1.IsOpen)
+                    CloseSerialPort();
+                Settings.Default.timeOilTested = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                Settings.Default.isOilTested = true;
+                Settings.Default.Save();
+                //Thread.Sleep(500);
+                //do
+                //{
+                //    PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                //    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
+                //} while (ConnectionPLC != 0);
+
+                CTMessageBox.Show("TEST SUCCESSFULLY", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+
         }
 
         private void BW_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
@@ -263,6 +351,14 @@ namespace mixer_control_globalver.View.SideUI
             {
                 e.Handled = true;
             }
+        }
+
+        private void rtb_log_TextChanged(object sender, EventArgs e)
+        {
+            // set the current caret position to the end
+            rtb_log.SelectionStart = rtb_log.Text.Length;
+            // scroll it automatically
+            rtb_log.ScrollToCaret();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

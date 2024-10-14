@@ -70,11 +70,27 @@ namespace mixer_control_globalver.View.MainUI
                             if (countSharp >= 3)
                             {
                                 string[] data = _buffer.ToString().Split('#');
-                                if (data[0] == lbFormulaName.Text.Trim() || lbFormulaName.Text.Trim().Contains(data[0]))
+                                if (data[0].ToUpper() == lbFormulaName.Text.Trim().ToUpper() || lbFormulaName.Text.Trim().ToUpper().Contains(data[0].ToUpper()))
                                 {
                                     TemporaryVariables.tempFormulaLOT = data[1];
                                     if (!String.IsNullOrEmpty(data[3]))
                                         totalMaterial = Convert.ToInt32(data[3]);
+                                    if (Settings.Default.language == 0)
+                                    {
+                                        message = "Đã nhập công thức!";
+                                        caption = "Thông tin";
+                                    }
+                                    else if (Settings.Default.language == 1)
+                                    {
+                                        message = "公式已输入！";
+                                        caption = "信息";
+                                    }
+                                    else if (Settings.Default.language == 2)
+                                    {
+                                        message = "Formula entered!";
+                                        caption = "Information";
+                                    }
+                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
                                 {

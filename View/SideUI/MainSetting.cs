@@ -9,6 +9,7 @@ using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace mixer_control_globalver.View.SideUI
 {
@@ -64,20 +65,6 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_Load(object sender, EventArgs e)
         {
-            try
-            {
-                var settingValue1 = Properties.Settings.Default.database_no;
-                var settingValue2 = Properties.Settings.Default.parityBits;
-                var settingValue3 = Properties.Settings.Default.isTesting;
-                var settingValue4 = Properties.Settings.Default.isSaveReport;
-                var settingValue5 = Properties.Settings.Default.language;
-            }
-            catch (ConfigurationErrorsException)
-            {
-                // Handle the error, e.g., delete the corrupted user.config file and inform the user
-                SubMethods.RestoreUserSettings();
-            }
-
             if (!String.IsNullOrEmpty(Properties.Settings.Default.comPort))
             {
                 string[] ports = SerialPort.GetPortNames();
@@ -236,13 +223,13 @@ namespace mixer_control_globalver.View.SideUI
             Settings.Default.plc_ip = txbPLCIpSetting.Text.Trim();
             Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
             Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
-            Settings.Default.spindle_diameter = Convert.ToDouble(txbMotorDiameter.Text.Trim());
-            Settings.Default.sensor_diameter = Convert.ToDouble(txbSensorDiameter.Text.Trim());
-            Settings.Default.transmission_ratio = Convert.ToDouble(txbTransmissionRatio.Text.Trim());
+            Settings.Default.spindle_diameter = double.Parse(txbMotorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
+            Settings.Default.sensor_diameter = double.Parse(txbSensorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
+            Settings.Default.transmission_ratio = double.Parse(txbTransmissionRatio.Text.Trim(), CultureInfo.InvariantCulture);
             Settings.Default.oil_feeder_ip = txbOilFeederIP.Text.Trim();
             Settings.Default.oil_feeder_db = Convert.ToInt32(txbOilFeederDatabase.Text.Trim());
             Settings.Default.authorSkipPassword = txbAuthorSkipPass.Text.Trim();
-            Settings.Default.toleranceMass = Convert.ToDouble(txbTolerance.Text);
+            Settings.Default.toleranceMass = double.Parse(txbTolerance.Text, CultureInfo.InvariantCulture);
 
             if (switchOilMode.SwitchState == XanderUI.XUISwitch.State.On)
                 Settings.Default.isOilFeed = true;
@@ -305,8 +292,6 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isTestOilMultiple = false;
 
             Settings.Default.Save();
-            SubMethods.BackupUserSettings();
-
             TemporaryVariables.InitSettingDT();
         }
 
@@ -525,6 +510,11 @@ namespace mixer_control_globalver.View.SideUI
             {
                 e.Handled = true;
             }
+        }
+
+        private void MainSetting_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SubMethods.BackupUserSettings();
         }
 
         private void txbTransmissionRatio_KeyPress(object sender, KeyPressEventArgs e)

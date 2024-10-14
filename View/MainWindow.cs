@@ -193,22 +193,6 @@ namespace mixer_control_globalver
         {
             try
             {
-                var settingValue1 = Properties.Settings.Default.database_no;
-                var settingValue2 = Properties.Settings.Default.parityBits;
-                var settingValue3 = Properties.Settings.Default.isTesting;
-                var settingValue4 = Properties.Settings.Default.isSaveReport;
-                var settingValue5 = Properties.Settings.Default.language;
-
-                SubMethods.BackupUserSettings();
-            }
-            catch (ConfigurationErrorsException)
-            {
-                // Handle the error, e.g., delete the corrupted user.config file and inform the user
-                SubMethods.RestoreUserSettings();
-            }
-
-            try
-            {
                 // this timer calls bgWorker again and again after regular intervals
                 tmrCallBgWorker = new System.Windows.Forms.Timer();//Timer for do task
                 tmrCallBgWorker.Tick += new EventHandler(timer_nextRun_Tick);

@@ -33,6 +33,8 @@
             this.btnClose = new XanderUI.XUIButton();
             this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
             this.panelTestOil = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.rtb_log = new System.Windows.Forms.RichTextBox();
             this.txbTestMass = new System.Windows.Forms.TextBox();
             this.panelStatus = new System.Windows.Forms.Panel();
             this.lbStatus = new System.Windows.Forms.Label();
@@ -54,7 +56,7 @@
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(556, 58);
+            this.panelHeader.Size = new System.Drawing.Size(556, 52);
             this.panelHeader.TabIndex = 26;
             // 
             // btnClose
@@ -87,7 +89,7 @@
             this.pbxCompanyLogo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.pbxCompanyLogo.Location = new System.Drawing.Point(0, 0);
             this.pbxCompanyLogo.Name = "pbxCompanyLogo";
-            this.pbxCompanyLogo.Size = new System.Drawing.Size(185, 56);
+            this.pbxCompanyLogo.Size = new System.Drawing.Size(185, 50);
             this.pbxCompanyLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxCompanyLogo.TabIndex = 0;
             this.pbxCompanyLogo.TabStop = false;
@@ -95,20 +97,45 @@
             // panelTestOil
             // 
             this.panelTestOil.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.panelTestOil.Controls.Add(this.label2);
+            this.panelTestOil.Controls.Add(this.rtb_log);
             this.panelTestOil.Controls.Add(this.txbTestMass);
             this.panelTestOil.Controls.Add(this.panelStatus);
             this.panelTestOil.Controls.Add(this.btnStartTesting);
             this.panelTestOil.Controls.Add(this.label1);
             this.panelTestOil.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelTestOil.Location = new System.Drawing.Point(0, 58);
+            this.panelTestOil.Location = new System.Drawing.Point(0, 52);
             this.panelTestOil.Name = "panelTestOil";
-            this.panelTestOil.Size = new System.Drawing.Size(556, 295);
+            this.panelTestOil.Size = new System.Drawing.Size(556, 362);
             this.panelTestOil.TabIndex = 27;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 170);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 23);
+            this.label2.TabIndex = 21;
+            this.label2.Text = "Log section:\r\n";
+            // 
+            // rtb_log
+            // 
+            this.rtb_log.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.rtb_log.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.rtb_log.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtb_log.Location = new System.Drawing.Point(0, 193);
+            this.rtb_log.Name = "rtb_log";
+            this.rtb_log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.rtb_log.Size = new System.Drawing.Size(556, 169);
+            this.rtb_log.TabIndex = 20;
+            this.rtb_log.Text = "";
+            this.rtb_log.TextChanged += new System.EventHandler(this.rtb_log_TextChanged);
             // 
             // txbTestMass
             // 
+            this.txbTestMass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.txbTestMass.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTestMass.Location = new System.Drawing.Point(178, 29);
+            this.txbTestMass.Location = new System.Drawing.Point(16, 40);
             this.txbTestMass.Name = "txbTestMass";
             this.txbTestMass.Size = new System.Drawing.Size(200, 47);
             this.txbTestMass.TabIndex = 19;
@@ -117,21 +144,22 @@
             // 
             // panelStatus
             // 
-            this.panelStatus.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelStatus.Controls.Add(this.lbStatus);
-            this.panelStatus.Location = new System.Drawing.Point(12, 183);
+            this.panelStatus.Location = new System.Drawing.Point(236, 40);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(532, 100);
+            this.panelStatus.Size = new System.Drawing.Size(308, 116);
             this.panelStatus.TabIndex = 18;
             // 
             // lbStatus
             // 
+            this.lbStatus.BackColor = System.Drawing.Color.Silver;
             this.lbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbStatus.Font = new System.Drawing.Font("Microsoft YaHei", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbStatus.ForeColor = System.Drawing.Color.Red;
             this.lbStatus.Location = new System.Drawing.Point(0, 0);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(528, 96);
+            this.lbStatus.Size = new System.Drawing.Size(306, 114);
             this.lbStatus.TabIndex = 0;
             this.lbStatus.Text = "...";
             this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -151,9 +179,9 @@
             this.btnStartTesting.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnStartTesting.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnStartTesting.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnStartTesting.Location = new System.Drawing.Point(156, 106);
+            this.btnStartTesting.Location = new System.Drawing.Point(16, 93);
             this.btnStartTesting.Name = "btnStartTesting";
-            this.btnStartTesting.Size = new System.Drawing.Size(244, 71);
+            this.btnStartTesting.Size = new System.Drawing.Size(200, 71);
             this.btnStartTesting.TabIndex = 17;
             this.btnStartTesting.TextColor = System.Drawing.Color.Black;
             this.btnStartTesting.Vertical_Alignment = System.Drawing.StringAlignment.Center;
@@ -162,7 +190,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Location = new System.Drawing.Point(12, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(326, 23);
             this.label1.TabIndex = 0;
@@ -171,7 +199,7 @@
             // OilFeederTest
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(556, 353);
+            this.ClientSize = new System.Drawing.Size(556, 414);
             this.Controls.Add(this.panelTestOil);
             this.Controls.Add(this.panelHeader);
             this.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -200,5 +228,7 @@
         private System.Windows.Forms.Label lbStatus;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.TextBox txbTestMass;
+        private System.Windows.Forms.RichTextBox rtb_log;
+        private System.Windows.Forms.Label label2;
     }
 }
