@@ -3,14 +3,13 @@ using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Configuration;
-using mixer_control_globalver.Properties;
 
 class SubMethods
 {
@@ -47,11 +46,6 @@ class SubMethods
         s = Regex.Replace(s, @"[^\t\r\n -~]", "");
         return s;
     }
-
-    //public static double ConvertString2Double (string value)
-    //{
-        
-    //}
 
     public static void FuelSetting(SerialPort serialPort, double numberReal)
     {
@@ -113,7 +107,8 @@ class SubMethods
         }
         catch (Exception ex)
         {
-            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM: " + ex.Message, "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            CTMessageBox.Show(ex.Message, "COM port connection failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "COM port connection failure", ex.Message);
         }
         return false;
     }
@@ -131,12 +126,14 @@ class SubMethods
             //serialPort.Read(buffer, 0, buffer.Length);
             //Console.WriteLine("Phản hồi từ máy bơm xăng: " + BitConverter.ToString(buffer));
         }
-        catch
+        catch (Exception ex)
         {
-            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM", "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //Console.WriteLine("Lỗi: " + ex.Message);
+            CTMessageBox.Show(ex.Message, "Send command error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Send command error", ex.Message);
         }
     }
+
+
 
     public static void BackupUserSettings()
     {

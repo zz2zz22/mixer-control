@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="mixer_control_globalver.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="website" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://www.tech-link.com.hk/en</Value>
-    </Setting>
     <Setting Name="folder_directory" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -47,9 +44,6 @@
     <Setting Name="isSkipOpenLid" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="isHideReverse" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="isTesting" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -85,9 +79,6 @@
     </Setting>
     <Setting Name="parityBits" Type="System.String" Scope="User">
       <Value Profile="(Default)">None</Value>
-    </Setting>
-    <Setting Name="gasolinePumpMode" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="toleranceMass" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>

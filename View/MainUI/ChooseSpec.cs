@@ -18,7 +18,7 @@ namespace mixer_control_globalver.View.MainUI
     public partial class ChooseSpec : Form
     {
         //Fields
-        string message = String.Empty, caption = String.Empty;
+        private string message = String.Empty, caption = String.Empty;
         public static bool isConfirmed;
 
         public ChooseSpec()
@@ -48,39 +48,13 @@ namespace mixer_control_globalver.View.MainUI
                 }
 
                 dtgvListSpecification.DataSource = dt;
-                if (Settings.Default.language == 0)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "产品型号名称";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "File name";
-                }
+                dtgvListSpecification.Columns["file_name"].HeaderText = "File name";
                 dtgvListSpecification.Columns["file_path"].Visible = false;
             }
             catch (Exception ex)
             {
-                if (Settings.Default.language == 0)
-                {
-                    message = "Không thể tải dữ liệu tệp!" + "\r\n\r\n" + ex.Message;
-                    caption = "Lỗi";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    message = "Load dirctory files failed!" + "\r\n\r\n" + ex.Message;
-                    caption = "Error";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "上传产品型号失败！" + "\r\n\r\n" + ex.Message;
-                    caption = "错误";
-                }
-                SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Error", "Load dirctory files failed!" + "\r\n\r\n" + ex.Message);
+                CTMessageBox.Show("Load dirctory files failed!" + "\r\n\r\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -93,7 +67,6 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "Danh sách công thức:";
 
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu";
-                btnImportTemplate.ButtonText = "Nhập công thức";
                 btnCheckProcess.ButtonText = "Xem quy trình";
             }
             else if (Settings.Default.language == 1)
@@ -102,7 +75,6 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "产品型号列表:";
 
                 btnConfirmChoose.ButtonText = "开始材料确认。";
-                btnImportTemplate.ButtonText = "输入公式";
                 btnCheckProcess.ButtonText = "检查流程步骤";
             }
             else if (Settings.Default.language == 2)
@@ -111,32 +83,21 @@ namespace mixer_control_globalver.View.MainUI
                 lb2.Text = "Formula setting files:";
 
                 btnConfirmChoose.ButtonText = "Begin Material Confirmation";
-                btnImportTemplate.ButtonText = "Import formula";
                 btnCheckProcess.ButtonText = "Check process step";
             }
 
             Properties.Settings.Default.isEndReport = true;
             Properties.Settings.Default.Save();
-            try
-            {
-                if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
-                {
-                    string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
-                    System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
-                    if (dir.Exists == false)
-                        dir.Create();
 
-                    Properties.Settings.Default.folder_directory = dir.FullName;
-                    Properties.Settings.Default.Save();
-                }
-                LoadItemFilePath(Properties.Settings.Default.folder_directory);
-
-                TemporaryVariables.resetAllTempVariables();
-            }
-            catch(Exception ex)
+            if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
             {
-                SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Error load file", ex.Message);
+                Properties.Settings.Default.folder_directory = "C:\\";
+                Properties.Settings.Default.Save();
             }
+
+            LoadItemFilePath(Properties.Settings.Default.folder_directory);
+
+            TemporaryVariables.resetAllTempVariables();
         }
 
         private void saveFileLocationPassFormClosed(object sender, EventArgs e)
@@ -153,7 +114,9 @@ namespace mixer_control_globalver.View.MainUI
                     Properties.Settings.Default.folder_directory = dialog.FileName;
                     Properties.Settings.Default.Save();
                 }
+
                 LoadItemFilePath(Properties.Settings.Default.folder_directory);
+
                 SubMethods.BackupUserSettings();
             }
         }
@@ -220,84 +183,35 @@ namespace mixer_control_globalver.View.MainUI
 
                                                 if (Settings.Default.isOilFeed && isOilFeed)
                                                 {
-                                                    if(Settings.Default.gasolinePumpMode)
+                                                    if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
                                                     {
-                                                        if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                                        {
-                                                            oilMass = double.Parse(processDT.Rows[j][10].ToString(), CultureInfo.InvariantCulture);
-                                                            oilWeight = double.Parse(processDT.Rows[j][9].ToString(), CultureInfo.InvariantCulture);
-                                                        }
-                                                        else
-                                                        {
-                                                            throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
-                                                        }
+                                                        oilMass = double.Parse(processDT.Rows[j][10].ToString(), CultureInfo.InvariantCulture);
+                                                        oilWeight = double.Parse(processDT.Rows[j][9].ToString(), CultureInfo.InvariantCulture);
                                                     }
                                                     else
                                                     {
-                                                        if (!string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                                        {
-                                                            oilMass = 0;
-                                                            oilWeight = double.Parse(processDT.Rows[j][9].ToString());
-                                                        }
-                                                        else
-                                                        {
-                                                            throw new Exception("Oil weight data is empty, please check the formula!");
-                                                        }
+                                                        throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
                                                     }
                                                 }
 
                                                 if (Settings.Default.isAlertPowder)
                                                 {
-                                                    if(Settings.Default.gasolinePumpMode)
+                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
                                                     {
-                                                        if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
-                                                        {
-                                                            //Edit to read total powder bags
-                                                            totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
-                                                            remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
-                                                        }
-                                                        else
-                                                        {
-                                                            totalPowder = 0;
-                                                            remainPowder = 0;
-                                                        }
+                                                        //Edit to read total powder bags
+                                                        totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                        remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
                                                     }
                                                     else
                                                     {
-                                                        if (!String.IsNullOrEmpty(processDT.Rows[j][12].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][13].ToString()))
-                                                        {
-                                                            //Edit to read total powder bags
-                                                            totalPowder = Convert.ToInt32(processDT.Rows[j][12].ToString());
-                                                            remainPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
-                                                        }
-                                                        else
-                                                        {
-                                                            totalPowder = 0;
-                                                            remainPowder = 0;
-                                                        }
+                                                        totalPowder = 0;
+                                                        remainPowder = 0;
                                                     }
                                                 }
-                                                
 
-                                                string stepDesc = String.Empty;
-                                                if(Settings.Default.gasolinePumpMode)
-                                                {
-                                                    stepDesc = processDT.Rows[j][12].ToString();
-                                                }
-                                                else
-                                                {
-                                                    stepDesc = processDT.Rows[j][11].ToString();
-                                                }
-                                                
-                                                string oilType = String.Empty;
-                                                if(Settings.Default.gasolinePumpMode)
-                                                {
-                                                    oilType = processDT.Rows[j][11].ToString();
-                                                }
-                                                else
-                                                {
-                                                    oilType = processDT.Rows[j][10].ToString();
-                                                }
+                                                string stepDesc = processDT.Rows[j][12].ToString();
+
+                                                string oilType = processDT.Rows[j][11].ToString();
 
                                                 TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
                                                 processDT.Rows[j][1].ToString(),
@@ -368,7 +282,7 @@ namespace mixer_control_globalver.View.MainUI
                             }
                         }
                     }));
-            if(backgroundThreadSaveData.IsAlive)
+            if (backgroundThreadSaveData.IsAlive)
                 backgroundThreadSaveData.Join();
             backgroundThreadSaveData.Start();
             loading.ShowDialog();
@@ -387,95 +301,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnConfirmChoose_Click(object sender, EventArgs e)
         {
-            Program.main.openScaleTab();
-        }
-
-        private void btnImportTemplate_Click(object sender, EventArgs e)
-        {
-            PasswordConfirm passwordConfirm = new PasswordConfirm();
-            passwordConfirm.FormClosed += importExcelPassFormClosed;
-            passwordConfirm.ShowDialog();
-        }
-
-        private void importExcelPassFormClosed(object sender, EventArgs e)
-        {
-            ((Form)sender).FormClosed -= importExcelPassFormClosed;
-            if (isConfirmed)
-            {
-                isConfirmed = false;
-                try
-                {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    if (Settings.Default.language == 0)
-                    {
-                        fileDialog.Title = "Nhập file công thức";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        fileDialog.Title = "导入公式文件";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        fileDialog.Title = "Import formula";
-                    }
-                    fileDialog.DefaultExt = "Excel";
-                    fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
-                    fileDialog.CheckPathExists = true;
-                    fileDialog.Multiselect = true;
-                    fileDialog.InitialDirectory = "C:\\";
-
-                    if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        foreach (string _file in fileDialog.FileNames)
-                        {
-                            FileInfo d = new FileInfo(_file);
-                            if (File.Exists(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name)))
-                            {
-                                File.Delete(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
-                            }
-                            File.Move(_file, Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
-                        }
-                        if (Settings.Default.language == 0)
-                        {
-                            message = "Thêm công thức thành công!";
-                            caption = "Thông tin";
-                        }
-                        else if (Settings.Default.language == 1)
-                        {
-                            message = "更多成功秘诀！";
-                            caption = "信息";
-                        }
-                        else if (Settings.Default.language == 2)
-                        {
-                            message = "Successfully import formula !";
-                            caption = "Information";
-                        }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadItemFilePath(Properties.Settings.Default.folder_directory);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (Settings.Default.language == 0)
-                    {
-                        message = "Thêm công thức thất bại !" + "\r\n\r\n" + ex.Message;
-                        caption = "Lỗi";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        message = "更多失败的食谱！" + "\r\n\r\n" + ex.Message;
-                        caption = "错误";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        message = "Failed to import formula!" + "\r\n\r\n" + ex.Message;
-                        caption = "Error";
-                    }
-                    LoadItemFilePath(Properties.Settings.Default.folder_directory);
-                    SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            Program.main.OpenScaleTab();
         }
 
         private void txbSearchFormula_TextChanged(object sender, EventArgs e)

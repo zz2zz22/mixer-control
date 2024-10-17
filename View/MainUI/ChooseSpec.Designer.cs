@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelChooseSpecMain = new System.Windows.Forms.Panel();
             this.btnTestOilFeed = new XanderUI.XUIButton();
             this.txbSearchFormula = new System.Windows.Forms.TextBox();
@@ -36,7 +36,6 @@
             this.lbFormulaName = new System.Windows.Forms.Label();
             this.lb1 = new System.Windows.Forms.Label();
             this.btnCheckProcess = new XanderUI.XUIButton();
-            this.btnImportTemplate = new XanderUI.XUIButton();
             this.btnConfirmChoose = new XanderUI.XUIButton();
             this.btnRefreshFileList = new XanderUI.XUIButton();
             this.lb2 = new System.Windows.Forms.Label();
@@ -56,7 +55,6 @@
             this.panelChooseSpecMain.Controls.Add(this.panel1);
             this.panelChooseSpecMain.Controls.Add(this.lb1);
             this.panelChooseSpecMain.Controls.Add(this.btnCheckProcess);
-            this.panelChooseSpecMain.Controls.Add(this.btnImportTemplate);
             this.panelChooseSpecMain.Controls.Add(this.btnConfirmChoose);
             this.panelChooseSpecMain.Controls.Add(this.btnRefreshFileList);
             this.panelChooseSpecMain.Controls.Add(this.lb2);
@@ -93,7 +91,7 @@
             // txbSearchFormula
             // 
             this.txbSearchFormula.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbSearchFormula.Location = new System.Drawing.Point(12, 119);
+            this.txbSearchFormula.Location = new System.Drawing.Point(12, 60);
             this.txbSearchFormula.Name = "txbSearchFormula";
             this.txbSearchFormula.Size = new System.Drawing.Size(373, 34);
             this.txbSearchFormula.TabIndex = 20;
@@ -102,7 +100,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.lbFormulaName);
-            this.panel1.Location = new System.Drawing.Point(391, 239);
+            this.panel1.Location = new System.Drawing.Point(395, 207);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(356, 89);
             this.panel1.TabIndex = 19;
@@ -121,7 +119,7 @@
             // 
             this.lb1.AutoSize = true;
             this.lb1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb1.Location = new System.Drawing.Point(387, 198);
+            this.lb1.Location = new System.Drawing.Point(391, 166);
             this.lb1.Name = "lb1";
             this.lb1.Size = new System.Drawing.Size(156, 38);
             this.lb1.TabIndex = 17;
@@ -142,36 +140,13 @@
             this.btnCheckProcess.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnCheckProcess.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnCheckProcess.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnCheckProcess.Location = new System.Drawing.Point(503, 358);
+            this.btnCheckProcess.Location = new System.Drawing.Point(503, 302);
             this.btnCheckProcess.Name = "btnCheckProcess";
             this.btnCheckProcess.Size = new System.Drawing.Size(244, 71);
             this.btnCheckProcess.TabIndex = 16;
             this.btnCheckProcess.TextColor = System.Drawing.Color.Black;
             this.btnCheckProcess.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnCheckProcess.Click += new System.EventHandler(this.btnCheckProcess_Click);
-            // 
-            // btnImportTemplate
-            // 
-            this.btnImportTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnImportTemplate.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.btnImportTemplate.ButtonImage = global::mixer_control_globalver.Properties.Resources.submit;
-            this.btnImportTemplate.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
-            this.btnImportTemplate.ButtonText = "Upload formula";
-            this.btnImportTemplate.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
-            this.btnImportTemplate.ClickTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnImportTemplate.CornerRadius = 10;
-            this.btnImportTemplate.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImportTemplate.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnImportTemplate.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.btnImportTemplate.HoverTextColor = System.Drawing.Color.DodgerBlue;
-            this.btnImportTemplate.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnImportTemplate.Location = new System.Drawing.Point(113, 9);
-            this.btnImportTemplate.Name = "btnImportTemplate";
-            this.btnImportTemplate.Size = new System.Drawing.Size(179, 59);
-            this.btnImportTemplate.TabIndex = 15;
-            this.btnImportTemplate.TextColor = System.Drawing.Color.Black;
-            this.btnImportTemplate.Vertical_Alignment = System.Drawing.StringAlignment.Center;
-            this.btnImportTemplate.Click += new System.EventHandler(this.btnImportTemplate_Click);
             // 
             // btnConfirmChoose
             // 
@@ -210,7 +185,7 @@
             this.btnRefreshFileList.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnRefreshFileList.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnRefreshFileList.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnRefreshFileList.Location = new System.Drawing.Point(397, 119);
+            this.btnRefreshFileList.Location = new System.Drawing.Point(397, 100);
             this.btnRefreshFileList.Name = "btnRefreshFileList";
             this.btnRefreshFileList.Size = new System.Drawing.Size(56, 51);
             this.btnRefreshFileList.TabIndex = 6;
@@ -222,7 +197,7 @@
             // 
             this.lb2.AutoSize = true;
             this.lb2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lb2.Location = new System.Drawing.Point(12, 73);
+            this.lb2.Location = new System.Drawing.Point(12, 9);
             this.lb2.Name = "lb2";
             this.lb2.Size = new System.Drawing.Size(172, 38);
             this.lb2.TabIndex = 5;
@@ -239,32 +214,32 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dtgvListSpecification.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dtgvListSpecification.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dtgvListSpecification.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtgvListSpecification.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dtgvListSpecification.ColumnHeadersHeight = 60;
             this.dtgvListSpecification.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dtgvListSpecification.EnableHeadersVisualStyles = false;
-            this.dtgvListSpecification.Location = new System.Drawing.Point(12, 159);
+            this.dtgvListSpecification.Location = new System.Drawing.Point(12, 100);
             this.dtgvListSpecification.MultiSelect = false;
             this.dtgvListSpecification.Name = "dtgvListSpecification";
             this.dtgvListSpecification.ReadOnly = true;
             this.dtgvListSpecification.RowHeadersVisible = false;
             this.dtgvListSpecification.RowHeadersWidth = 51;
             this.dtgvListSpecification.RowTemplate.Height = 40;
-            this.dtgvListSpecification.Size = new System.Drawing.Size(373, 437);
+            this.dtgvListSpecification.Size = new System.Drawing.Size(373, 496);
             this.dtgvListSpecification.TabIndex = 4;
             this.dtgvListSpecification.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgvListSpecification_CellClick);
             // 
             // picbtnChooseDirectory
             // 
             this.picbtnChooseDirectory.Image = global::mixer_control_globalver.Properties.Resources.folder;
-            this.picbtnChooseDirectory.Location = new System.Drawing.Point(12, 12);
+            this.picbtnChooseDirectory.Location = new System.Drawing.Point(190, 3);
             this.picbtnChooseDirectory.Name = "picbtnChooseDirectory";
             this.picbtnChooseDirectory.Size = new System.Drawing.Size(56, 51);
             this.picbtnChooseDirectory.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -303,7 +278,6 @@
         private System.Windows.Forms.Label lb2;
         private XanderUI.XUIButton btnRefreshFileList;
         private XanderUI.XUIButton btnConfirmChoose;
-        private XanderUI.XUIButton btnImportTemplate;
         private XanderUI.XUIButton btnCheckProcess;
         private System.Windows.Forms.Label lb1;
         private System.Windows.Forms.Panel panel1;

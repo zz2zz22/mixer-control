@@ -1,7 +1,7 @@
 ﻿using mixer_control_globalver.Controller;
-using mixer_control_globalver.Controller.IniFile;
+using mixer_control_globalver.Controller.Ini;
 using mixer_control_globalver.Controller.LogFile;
-using mixer_control_globalver.Model.PLC;
+using mixer_control_globalver.Controller.PLC;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
@@ -392,7 +392,7 @@ namespace mixer_control_globalver.View.MainUI
                             }
                             CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                             CloseSerialPort();
-                            Program.main.openScaleTab();
+                            Program.main.OpenScaleTab();
                         }
                     }
                     else
@@ -413,7 +413,7 @@ namespace mixer_control_globalver.View.MainUI
                             caption = "Warning";
                         }
                         CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        Program.main.openScaleTab();
+                        Program.main.OpenScaleTab();
                     }
                 }
 
@@ -613,7 +613,7 @@ namespace mixer_control_globalver.View.MainUI
                 }
                 else
                 {
-                    Program.main.openScaleTab();
+                    Program.main.OpenScaleTab();
                 }
             }
         }
@@ -905,7 +905,7 @@ namespace mixer_control_globalver.View.MainUI
                         }
                         CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         GC.Collect();
-                        Program.main.openSpecTab();
+                        Program.main.OpenSpecificationTab();
                     }
                 }
             } while (isFinishProcess == false);
@@ -1172,7 +1172,7 @@ namespace mixer_control_globalver.View.MainUI
                                         caption = "Error";
                                     }
                                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    Program.main.openScaleTab();
+                                    Program.main.OpenScaleTab();
                                 }
                             }
                         }
