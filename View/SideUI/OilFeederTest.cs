@@ -28,7 +28,7 @@ namespace mixer_control_globalver.View.SideUI
         double testMass;
         string message = String.Empty, caption = String.Empty, actualMass;
 
-        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
+        IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
 
         BackgroundWorker bgWorkerTestOil;
         System.Windows.Forms.Timer tmrCallBgWorker;

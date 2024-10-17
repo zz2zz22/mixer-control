@@ -50,7 +50,7 @@ namespace mixer_control_globalver.View.MainUI
 
         bool isAutomationON;
 
-        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
+        IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
 
         BackgroundWorker bgWorker;
         System.Windows.Forms.Timer tmrCallBgWorker;

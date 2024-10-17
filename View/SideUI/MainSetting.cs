@@ -17,7 +17,7 @@ namespace mixer_control_globalver.View.SideUI
     {
         bool isExitApplication = false;
         string message = String.Empty, caption = String.Empty;
-        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
+        IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainSetting()
         {
             InitializeComponent();
