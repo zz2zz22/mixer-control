@@ -1,16 +1,15 @@
-﻿using ExcelDataReader;
-using mixer_control_globalver.Controller.LogFile;
+﻿using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Configuration;
-using mixer_control_globalver.Properties;
+using ExcelDataReader;
 
 class SubMethods
 {
@@ -50,7 +49,7 @@ class SubMethods
 
     //public static double ConvertString2Double (string value)
     //{
-        
+
     //}
 
     public static void FuelSetting(SerialPort serialPort, double numberReal)

@@ -2,12 +2,6 @@
 using Sharp7;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace mixer_control_globalver.Model.PLC
 {
@@ -55,7 +49,7 @@ namespace mixer_control_globalver.Model.PLC
             {
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Diconnect PLC fail", ex.Message);
             }
-            
+
             return Result;
         }
         public bool Connect()
