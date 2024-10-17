@@ -1,21 +1,29 @@
 ﻿using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Properties;
+using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Media3D;
 
 namespace mixer_control_globalver.View.MainUI
 {
     public partial class MaterialScale : Form, IMessageFilter
     {
-        private int totalMaterial = 0;
-        private string message = String.Empty, caption = String.Empty;
+        int totalMaterial = 0;
+
+        string message = String.Empty, caption = String.Empty;
 
         private readonly StringBuilder _buffer = new StringBuilder();
         const int WM_CHAR = 0x0102;
@@ -67,7 +75,22 @@ namespace mixer_control_globalver.View.MainUI
                                     TemporaryVariables.tempFormulaLOT = data[1];
                                     if (!String.IsNullOrEmpty(data[3]))
                                         totalMaterial = Convert.ToInt32(data[3]);
-                                    CTMessageBox.Show("Formula entered!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    if (Settings.Default.language == 0)
+                                    {
+                                        message = "Đã nhập công thức!";
+                                        caption = "Thông tin";
+                                    }
+                                    else if (Settings.Default.language == 1)
+                                    {
+                                        message = "公式已输入！";
+                                        caption = "信息";
+                                    }
+                                    else if (Settings.Default.language == 2)
+                                    {
+                                        message = "Formula entered!";
+                                        caption = "Information";
+                                    }
+                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
                                 {
@@ -87,7 +110,7 @@ namespace mixer_control_globalver.View.MainUI
                                         caption = "Warning";
                                     }
                                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    Program.main.OpenSpecificationTab();
+                                    Program.main.openSpecTab();
                                 }
                             }
                             else if (countSemiColon >= 3)
@@ -117,7 +140,7 @@ namespace mixer_control_globalver.View.MainUI
                                     string[] data = result.Split(';');
                                     if (data.Length > 3)
                                     {
-                                        DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0] + "' and id = '" + data[1] + "'");
+                                        DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0] + "' and id = '" + data[1] +"'");
                                         if (foundAuthors.Length == 0)
                                         {
                                             TemporaryVariables.materialDT.Rows.Add(data[0], Convert.ToInt32(data[1]), Convert.ToDouble(data[2]), data[3]);
@@ -132,8 +155,23 @@ namespace mixer_control_globalver.View.MainUI
                         }
                         else
                         {
-                            CTMessageBox.Show("Can not read QR code!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Error", "Can not read QR code!");
+                            if (Settings.Default.language == 0)
+                            {
+                                message = "Không thể nhận dạng mã QR!";
+                                caption = "Lỗi";
+                            }
+                            else if (Settings.Default.language == 1)
+                            {
+                                message = "无法识别二维码！";
+                                caption = "错误";
+                            }
+                            else if (Settings.Default.language == 2)
+                            {
+                                message = "Can not read QR code!";
+                                caption = "Error";
+                            }
+                            SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
+                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 });
@@ -145,12 +183,12 @@ namespace mixer_control_globalver.View.MainUI
             if (TemporaryVariables.materialDT.Rows.Count > 0)
             {
                 flpMaterialList.Controls.Clear();
-                for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i++)
+                for (int i= 0; i < TemporaryVariables.materialDT.Rows.Count; i ++)
                 {
                     CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(TemporaryVariables.materialDT.Rows[i]["mat_name"].ToString(), TemporaryVariables.materialDT.Rows[i]["weight"].ToString(), TemporaryVariables.materialDT.Rows[i]["lot_no"].ToString());
                     flpMaterialList.Controls.Add(customMaterial);
                 }
-            }
+            }     
             totalMaterial = TemporaryVariables.materialDT.Rows.Count;
             if (Settings.Default.language == 0)
             {
@@ -180,10 +218,10 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            if (!Properties.Settings.Default.isTesting)
+            if(!Properties.Settings.Default.isTesting)
             {
                 if (TemporaryVariables.materialDT.Rows.Count == totalMaterial)
-                    Program.main.OpenAutomationTab();
+                    Program.main.openAutomationTab();
                 else
                 {
                     if (Settings.Default.language == 0)
@@ -206,7 +244,7 @@ namespace mixer_control_globalver.View.MainUI
             }
             else
             {
-                Program.main.OpenAutomationTab();
+                Program.main.openAutomationTab();
             }
         }
     }

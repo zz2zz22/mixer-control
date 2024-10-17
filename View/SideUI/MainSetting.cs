@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using mixer_control_globalver.Controller;
-using mixer_control_globalver.Controller.Ini;
+using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
 using System;
@@ -15,6 +15,7 @@ namespace mixer_control_globalver.View.SideUI
 {
     public partial class MainSetting : Form
     {
+        bool isExitApplication = false;
         string message = String.Empty, caption = String.Empty;
         IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainSetting()
@@ -32,8 +33,10 @@ namespace mixer_control_globalver.View.SideUI
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
         private void CloseSerialPort()
         {
+            isExitApplication = true;
             Thread.Sleep(serialPort1.ReadTimeout); //Wait for reading threads to finish
             serialPort1.Close();
+            isExitApplication = false;
         }
         private void LoadNotSettingValue()
         {

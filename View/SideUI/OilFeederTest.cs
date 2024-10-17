@@ -1,6 +1,6 @@
-﻿using mixer_control_globalver.Controller.Ini;
+﻿using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Controller.LogFile;
-using mixer_control_globalver.Controller.PLC;
+using mixer_control_globalver.Model.PLC;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
 using System;

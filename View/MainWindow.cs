@@ -1,6 +1,8 @@
-﻿using mixer_control_globalver.Controller;
+﻿using Microsoft.Win32;
+using mixer_control_globalver.Controller;
+using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Controller.LogFile;
-using mixer_control_globalver.Controller.PLC;
+using mixer_control_globalver.Model.PLC;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
@@ -8,10 +10,14 @@ using mixer_control_globalver.View.MainUI;
 using mixer_control_globalver.View.SideUI;
 using System;
 using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -22,17 +28,28 @@ namespace mixer_control_globalver
         ///
         /// FIELDS
         ///
-        private object lockObject = new object();
-        private string message = String.Empty, caption = String.Empty;
         private Form activeForm = null;
-        private BackgroundWorker statusCheckBackgroundWorker;
-        private System.Windows.Forms.Timer tmrCallBWStatusCheck;
-        private System.Threading.Timer tmrEnsureBWStatusCheckGetsCalled;
+
+        public static int ConnectionPLC, ConnectionOilPLC;
+        public static PLCConnector pLC;
+        public static PLCConnector pLCOil;
+
+        BackgroundWorker bgWorkerCheckOilTest;
+        System.Windows.Forms.Timer tmrCallBgWorker;
+        System.Threading.Timer tmrEnsureWorkerGetsCalled;
+        object lockObject = new object();
+
+        ChooseSpec specWindow = new ChooseSpec();
+
+        int db = Settings.Default.database_no;
+        int dbOil = Settings.Default.oil_feeder_db;
+        string message = String.Empty, caption = String.Empty;
+
+        IniFile ini = new IniFile(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
-
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
 
         ///
@@ -50,13 +67,16 @@ namespace mixer_control_globalver
                 }
                 TemporaryVariables.resetAllTempVariables();
 
+                ////Lấy version hiện tại qua Assembly và thể hiện lên label
+                //Version version = Assembly.GetExecutingAssembly().GetName().Version;
+                //lbVersion.Text = $"{version}";
+
                 this.Text = string.Empty;
                 this.ControlBox = false;
                 this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             }
             catch (Exception ex)
             {
-                CTMessageBox.Show("Application initial process error : " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Application initial process error", ex.Message);
             }
         }
@@ -64,7 +84,7 @@ namespace mixer_control_globalver
         ///
         /// METHODS
         ///
-        public void OpenChildForm(Form childForm)
+        public void openChildForm(Form childForm)
         {
             if (activeForm != null)
                 activeForm.Close();
@@ -77,15 +97,15 @@ namespace mixer_control_globalver
             childForm.BringToFront();
             childForm.Show();
         }
-        public void OpenSpecificationTab()
+        public void openSpecTab()
         {
             this.Invoke(new EventHandler(btnChooseSpecTab_Click));
         }
-        public void OpenScaleTab()
+        public void openScaleTab()
         {
             this.Invoke(new EventHandler(btnWeightTab_Click));
         }
-        public void OpenAutomationTab()
+        public void openAutomationTab()
         {
             this.Invoke(new EventHandler(btnAutomationTab_Click));
         }
@@ -101,10 +121,57 @@ namespace mixer_control_globalver
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = CTMessageBox.Show("Exit the application ?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            //Change language message
+            if (Settings.Default.language == 0)
+            {
+                message = "Thoát chương trình ?";
+                caption = "Cảnh báo";
+            }
+            else if (Settings.Default.language == 1)
+            {
+                message = "退出应用 ?";
+                caption = "提示";
+            }
+            else if (Settings.Default.language == 2)
+            {
+                message = "Exit the application ?";
+                caption = "Warning";
+            }
+            DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
-                PLCMethods.ResetPLCVariables();
+                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+                //Oil comment
+                if (ConnectionPLC == 0)
+                {
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ER", "start")), Convert.ToInt32(ini.Read("ER", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("LA", "start")), Convert.ToInt32(ini.Read("LA", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CU", "start")), Convert.ToInt32(ini.Read("CU", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CD", "start")), Convert.ToInt32(ini.Read("CD", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OL", "start")), Convert.ToInt32(ini.Read("OL", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CL", "start")), Convert.ToInt32(ini.Read("CL", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("TS", "start")), Convert.ToInt32(ini.Read("TS", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("CW", "start")), Convert.ToInt32(ini.Read("CW", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("RCW", "start")), Convert.ToInt32(ini.Read("RCW", "bit")));
+                    pLC.WriteRealtoPLC(0, db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("ONV", "start")), Convert.ToInt32(ini.Read("ONV", "bit")));
+                    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OFFV", "start")), Convert.ToInt32(ini.Read("OFFV", "bit")));
+                    pLC.WriteBoolToPLC(true, db, 24, 0); // Truyền reset variable
+                    pLC.Diconnect();
+                }
+                if (Settings.Default.isOilFeed)
+                {
+                    pLCOil = new PLCConnector(Settings.Default.oil_feeder_ip, 0, 0, out ConnectionOilPLC);
+                    //Reset 2 bit bắt đầu cấp dầu và dừng cấp dầu
+                    if (ConnectionOilPLC == 0)
+                    {
+                        pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StopOil", "start")), Convert.ToInt32(ini.Read("StopOil", "bit")));
+                        pLCOil.WriteBoolToPLC(false, dbOil, Convert.ToInt32(ini.Read("StartOil", "start")), Convert.ToInt32(ini.Read("StartOil", "bit")));
+                        pLCOil.Diconnect();
+                    }
+                }
+
                 Environment.Exit(0);
             }
         }
@@ -117,29 +184,33 @@ namespace mixer_control_globalver
                 this.WindowState = FormWindowState.Normal;
         }
 
+        private void pbxCompanyLogo_Click(object sender, EventArgs e)
+        {
+            Process.Start(Settings.Default.website);
+        }
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             try
             {
                 // this timer calls bgWorker again and again after regular intervals
-                tmrCallBWStatusCheck = new System.Windows.Forms.Timer();//Timer for do task
-                tmrCallBWStatusCheck.Tick += new EventHandler(timer_nextRun_Tick);
-                tmrCallBWStatusCheck.Interval = 1000; //3600000;
+                tmrCallBgWorker = new System.Windows.Forms.Timer();//Timer for do task
+                tmrCallBgWorker.Tick += new EventHandler(timer_nextRun_Tick);
+                tmrCallBgWorker.Interval = 1000; //3600000;
 
                 // this is our worker
-                statusCheckBackgroundWorker = new BackgroundWorker();
+                bgWorkerCheckOilTest = new BackgroundWorker();
 
                 // work happens in this method
-                statusCheckBackgroundWorker.DoWork += new DoWorkEventHandler(BW_DoWork);
-                statusCheckBackgroundWorker.ProgressChanged += BW_ProgressChanged;
-                statusCheckBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
-                statusCheckBackgroundWorker.WorkerReportsProgress = true;
+                bgWorkerCheckOilTest.DoWork += new DoWorkEventHandler(BW_DoWork);
+                bgWorkerCheckOilTest.ProgressChanged += BW_ProgressChanged;
+                bgWorkerCheckOilTest.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
+                bgWorkerCheckOilTest.WorkerReportsProgress = true;
 
-                tmrCallBWStatusCheck.Start();
+                tmrCallBgWorker.Start();
             }
             catch (Exception ex)
             {
-                CTMessageBox.Show("Main background worker initial error : " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Main background worker initial error", ex.Message);
             }
 
@@ -169,7 +240,8 @@ namespace mixer_control_globalver
                     btnAutomationTab.ButtonText = "Tự động hóa";
                     break;
             }
-            OpenSpecificationTab();
+            openSpecTab();
+            specWindow.Owner = this;
         }
 
 
@@ -180,9 +252,9 @@ namespace mixer_control_globalver
                 try
                 {
                     // if bgworker is not busy the call the worker
-                    if (!statusCheckBackgroundWorker.IsBusy)
+                    if (!bgWorkerCheckOilTest.IsBusy)
                     {
-                        statusCheckBackgroundWorker.RunWorkerAsync();
+                        bgWorkerCheckOilTest.RunWorkerAsync();
                     }
                 }
                 finally
@@ -193,7 +265,7 @@ namespace mixer_control_globalver
             else
             {
                 // as the bgworker is busy we will start a timer that will try to call the bgworker again after some time
-                tmrEnsureBWStatusCheckGetsCalled = new System.Threading.Timer(new TimerCallback(tmrEnsureWorkerGetsCalled_Callback), null, 0, 10);
+                tmrEnsureWorkerGetsCalled = new System.Threading.Timer(new TimerCallback(tmrEnsureWorkerGetsCalled_Callback), null, 0, 10);
             }
         }
 
@@ -214,12 +286,12 @@ namespace mixer_control_globalver
                     if (isRequired2Reset)
                     {
                         Settings.Default.isOilTested = false;
-                        statusCheckBackgroundWorker.ReportProgress(0);
+                        bgWorkerCheckOilTest.ReportProgress(0);
                     }
-                    else
+                    else 
                     {
                         Settings.Default.isOilTested = true;
-                        statusCheckBackgroundWorker.ReportProgress(0);
+                        bgWorkerCheckOilTest.ReportProgress(0);
                     }
                     Settings.Default.Save();
                 }
@@ -227,7 +299,7 @@ namespace mixer_control_globalver
                 {
                     Settings.Default.isOilTested = false;
                     Settings.Default.Save();
-                    statusCheckBackgroundWorker.ReportProgress(0);
+                    bgWorkerCheckOilTest.ReportProgress(0);
                 }
             }
             catch (Exception ex)
@@ -239,6 +311,7 @@ namespace mixer_control_globalver
         private void BW_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             string announceText = String.Empty;
+
             if (Settings.Default.isOilFeed)
             {
                 if (Settings.Default.isOilTested)
@@ -301,16 +374,16 @@ namespace mixer_control_globalver
             {
                 try
                 {
-                    if (!statusCheckBackgroundWorker.IsBusy)
+                    if (!bgWorkerCheckOilTest.IsBusy)
                     {
-                        statusCheckBackgroundWorker.RunWorkerAsync();
+                        bgWorkerCheckOilTest.RunWorkerAsync();
                     }
                 }
                 finally
                 {
                     Monitor.Exit(lockObject);
                 }
-                tmrEnsureBWStatusCheckGetsCalled = null;
+                tmrEnsureWorkerGetsCalled = null;
             }
         }
 
@@ -334,42 +407,66 @@ namespace mixer_control_globalver
                         switch (Settings.Default.language)
                         {
                             case 0:
-                                message = "Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?";
+                                message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác?";
                                 caption = "Cảnh báo";
                                 break;
                             case 1:
-                                message = "选择新公式将导致当前和以前的数据丢失并重置。继续 ？";
+                                message = "您所做的更改可能无法保存。请选择其他产品型号？";
                                 caption = "提示";
                                 break;
                             case 2:
-                                message = "Choosing a new formula will cause current and previous data to be lost and reset. Continue ?";
+                                message = "Current data will be lost! Do you want to continue to choose other formula?";
                                 caption = "Warning";
                                 break;
                             default:
-                                message = "Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?";
+                                message = "Các dữ liệu đã làm sẽ bị mất! Bạn có muốn tiếp tục chọn công thức khác?";
                                 caption = "Cảnh báo";
                                 break;
                         }
                         DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.OK)
                         {
-                            OpenChildForm(new ChooseSpec());
+                            openChildForm(new ChooseSpec());
+                            btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                            btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
                         }
                     }
                     else
-                        OpenChildForm(new ChooseSpec());
+                    {
+                        openChildForm(new ChooseSpec());
+                        btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                        btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                        btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    }
                 }
                 else
-                    OpenChildForm(new ChooseSpec());
+                {
+                    openChildForm(new ChooseSpec());
+                    btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                    btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                }
+
             }
             else
-                OpenChildForm(new ChooseSpec());
+            {
+                openChildForm(new ChooseSpec());
+                btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+            }
         }
 
         public void btnWeightTab_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.processDT != null)
-                OpenChildForm(new MaterialScale());
+            {
+                openChildForm(new MaterialScale());
+                btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 192);
+                btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+            }
             else
             {
                 if (Settings.Default.language == 0)
@@ -402,7 +499,7 @@ namespace mixer_control_globalver
                         bool notSettingEnough = false;
                         for (int i = 0; i < TemporaryVariables.settingDT.Rows.Count; i++)
                         {
-                            if (String.IsNullOrEmpty(PLCMethods.ini.Read(TemporaryVariables.settingDT.Rows[i]["value_member"].ToString(), "start")))
+                            if (String.IsNullOrEmpty(ini.Read(TemporaryVariables.settingDT.Rows[i]["value_member"].ToString(), "start")))
                             {
                                 notSettingEnough = true;
                             }
@@ -415,20 +512,38 @@ namespace mixer_control_globalver
                     || Settings.Default.transmission_ratio == 0
                     || notSettingEnough)
                         {
-                            CTMessageBox.Show("Please input all required setting first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            if (Settings.Default.language == 0)
+                            {
+                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
+                                caption = "Cảnh báo";
+                            }
+                            else if (Settings.Default.language == 1)
+                            {
+                                message = "请在设置部分设置全部信息!";
+                                caption = "提示";
+                            }
+                            else if (Settings.Default.language == 2)
+                            {
+                                message = "Please input all required setting first!";
+                                caption = "Warning";
+                            }
+                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             MainSetting mainSetting = new MainSetting();
                             mainSetting.ShowDialog();
                         }
                         else
                         {
-                            OpenChildForm(new AutomationInfo());
+                            openChildForm(new AutomationInfo());
+                            btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                            btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                         }
                     }
                     else
                     {
                         if (Settings.Default.language == 0)
                         {
-                            message = "Vui lòng xác nhận các nguyên liệu trước!";
+                            message = "Vui lòng xác các nguyên liệu trước!";
                             caption = "Cảnh báo";
                         }
                         else if (Settings.Default.language == 1)
@@ -447,7 +562,10 @@ namespace mixer_control_globalver
                 }
                 else
                 {
-                    OpenChildForm(new AutomationInfo());
+                    openChildForm(new AutomationInfo());
+                    btnChooseSpecTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnWeightTab.BackgroundColor = Color.FromArgb(255, 255, 128);
+                    btnAutomationTab.BackgroundColor = Color.FromArgb(255, 255, 192);
                 }
             }
             else
@@ -483,13 +601,13 @@ namespace mixer_control_globalver
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (tmrCallBWStatusCheck != null)
+            if (tmrCallBgWorker != null)
             {
-                tmrCallBWStatusCheck.Stop();
-                tmrCallBWStatusCheck.Tick -= new EventHandler(timer_nextRun_Tick);
-                statusCheckBackgroundWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
-                statusCheckBackgroundWorker.ProgressChanged -= BW_ProgressChanged;
-                statusCheckBackgroundWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
+                tmrCallBgWorker.Stop();
+                tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
+                bgWorkerCheckOilTest.DoWork -= new DoWorkEventHandler(BW_DoWork);
+                bgWorkerCheckOilTest.ProgressChanged -= BW_ProgressChanged;
+                bgWorkerCheckOilTest.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
             }
         }
 
@@ -508,7 +626,23 @@ namespace mixer_control_globalver
                 Settings.Default.language = cbxLanguageChoose.SelectedIndex;
                 Settings.Default.Save();
 
-                DialogResult dialogResult = CTMessageBox.Show("A restart process is required to apply new language. Do you want to close the program ?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                //Change language message
+                if (Settings.Default.language == 0)
+                {
+                    message = "Cần khởi động lại ứng dụng để áp dụng ngôn ngữ mới. Bạn có muốn thoát ?";
+                    caption = "Cảnh báo";
+                }
+                else if (Settings.Default.language == 1)
+                {
+                    message = "切换语言需要重新启动才能生效，点击确认重新启动 ?";
+                    caption = "提示";
+                }
+                else if (Settings.Default.language == 2)
+                {
+                    message = "A restart process is required to apply new language. Do you want to close the program ?";
+                    caption = "Warning";
+                }
+                DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
                     Environment.Exit(0);
