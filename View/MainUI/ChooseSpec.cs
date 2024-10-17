@@ -130,6 +130,7 @@ namespace mixer_control_globalver.View.MainUI
                     Properties.Settings.Default.Save();
                 }
                 LoadItemFilePath(Properties.Settings.Default.folder_directory);
+
                 TemporaryVariables.resetAllTempVariables();
             }
             catch(Exception ex)
@@ -153,6 +154,7 @@ namespace mixer_control_globalver.View.MainUI
                     Properties.Settings.Default.Save();
                 }
                 LoadItemFilePath(Properties.Settings.Default.folder_directory);
+                SubMethods.BackupUserSettings();
             }
         }
 

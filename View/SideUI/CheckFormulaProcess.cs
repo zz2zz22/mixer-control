@@ -52,6 +52,7 @@ namespace mixer_control_globalver.View.SideUI
             dtgvSpecProcessList.Columns["is_finished"].Visible = false;
             dtgvSpecProcessList.Columns["is_oilfeed"].Visible = false;
             dtgvSpecProcessList.Columns["oil_mass"].Visible = false;
+            dtgvSpecProcessList.Columns["oil_weight"].Visible = false;
             dtgvSpecProcessList.Columns["oil_type"].Visible = false;
             dtgvSpecProcessList.Columns["total_powder_bags"].Visible = false;
             dtgvSpecProcessList.Columns["remain_powder_bags"].Visible = false;
