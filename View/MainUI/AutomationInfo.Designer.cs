@@ -28,7 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelAutomationInfoMain = new System.Windows.Forms.Panel();
+            this.panelAnnounce = new System.Windows.Forms.Panel();
+            this.lbAnnounce = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.lbCountDown = new System.Windows.Forms.Label();
             this.lbFormulaName = new System.Windows.Forms.Label();
@@ -52,7 +55,9 @@
             this.lb4 = new System.Windows.Forms.Label();
             this.lb3 = new System.Windows.Forms.Label();
             this.lb5 = new System.Windows.Forms.Label();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.panelAutomationInfoMain.SuspendLayout();
+            this.panelAnnounce.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panelShowSpeed.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -62,6 +67,7 @@
             // 
             // panelAutomationInfoMain
             // 
+            this.panelAutomationInfoMain.Controls.Add(this.panelAnnounce);
             this.panelAutomationInfoMain.Controls.Add(this.panel3);
             this.panelAutomationInfoMain.Controls.Add(this.lbFormulaName);
             this.panelAutomationInfoMain.Controls.Add(this.lbShowF);
@@ -81,6 +87,25 @@
             this.panelAutomationInfoMain.Name = "panelAutomationInfoMain";
             this.panelAutomationInfoMain.Size = new System.Drawing.Size(759, 608);
             this.panelAutomationInfoMain.TabIndex = 1;
+            // 
+            // panelAnnounce
+            // 
+            this.panelAnnounce.Controls.Add(this.lbAnnounce);
+            this.panelAnnounce.Location = new System.Drawing.Point(343, 421);
+            this.panelAnnounce.Name = "panelAnnounce";
+            this.panelAnnounce.Size = new System.Drawing.Size(404, 64);
+            this.panelAnnounce.TabIndex = 30;
+            // 
+            // lbAnnounce
+            // 
+            this.lbAnnounce.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbAnnounce.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbAnnounce.ForeColor = System.Drawing.Color.Red;
+            this.lbAnnounce.Location = new System.Drawing.Point(0, 0);
+            this.lbAnnounce.Name = "lbAnnounce";
+            this.lbAnnounce.Size = new System.Drawing.Size(404, 64);
+            this.lbAnnounce.TabIndex = 29;
+            this.lbAnnounce.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel3
             // 
@@ -106,16 +131,17 @@
             // lbFormulaName
             // 
             this.lbFormulaName.AutoSize = true;
-            this.lbFormulaName.Location = new System.Drawing.Point(117, 21);
+            this.lbFormulaName.Location = new System.Drawing.Point(117, 11);
             this.lbFormulaName.Name = "lbFormulaName";
             this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
             this.lbFormulaName.TabIndex = 27;
             this.lbFormulaName.Text = "...";
+            this.lbFormulaName.Click += new System.EventHandler(this.lbFormulaName_Click);
             // 
             // lbShowF
             // 
             this.lbShowF.AutoSize = true;
-            this.lbShowF.Location = new System.Drawing.Point(12, 21);
+            this.lbShowF.Location = new System.Drawing.Point(12, 11);
             this.lbShowF.Name = "lbShowF";
             this.lbShowF.Size = new System.Drawing.Size(99, 19);
             this.lbShowF.TabIndex = 26;
@@ -198,9 +224,9 @@
             this.btnResetRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetRoll.BackColor = System.Drawing.Color.White;
             this.btnResetRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResetRoll.Location = new System.Drawing.Point(561, 541);
+            this.btnResetRoll.Location = new System.Drawing.Point(570, 550);
             this.btnResetRoll.Name = "btnResetRoll";
-            this.btnResetRoll.Size = new System.Drawing.Size(186, 55);
+            this.btnResetRoll.Size = new System.Drawing.Size(181, 55);
             this.btnResetRoll.TabIndex = 23;
             this.btnResetRoll.Text = "Ngừng Quay";
             this.btnResetRoll.UseVisualStyleBackColor = false;
@@ -209,20 +235,21 @@
             // lbProcessNo
             // 
             this.lbProcessNo.AutoSize = true;
-            this.lbProcessNo.Location = new System.Drawing.Point(12, 56);
+            this.lbProcessNo.Location = new System.Drawing.Point(12, 44);
             this.lbProcessNo.Name = "lbProcessNo";
             this.lbProcessNo.Size = new System.Drawing.Size(148, 19);
             this.lbProcessNo.TabIndex = 0;
             this.lbProcessNo.Text = "Bắt đầu bước số:\r\n";
+            this.lbProcessNo.Click += new System.EventHandler(this.lbProcessNo_Click);
             // 
             // btnReverseRoll
             // 
             this.btnReverseRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReverseRoll.BackColor = System.Drawing.Color.White;
             this.btnReverseRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReverseRoll.Location = new System.Drawing.Point(561, 461);
+            this.btnReverseRoll.Location = new System.Drawing.Point(369, 488);
             this.btnReverseRoll.Name = "btnReverseRoll";
-            this.btnReverseRoll.Size = new System.Drawing.Size(186, 55);
+            this.btnReverseRoll.Size = new System.Drawing.Size(181, 55);
             this.btnReverseRoll.TabIndex = 22;
             this.btnReverseRoll.Text = "Quay Ngược";
             this.btnReverseRoll.UseVisualStyleBackColor = false;
@@ -233,7 +260,7 @@
             this.btnNormalRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNormalRoll.BackColor = System.Drawing.Color.White;
             this.btnNormalRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNormalRoll.Location = new System.Drawing.Point(374, 461);
+            this.btnNormalRoll.Location = new System.Drawing.Point(570, 488);
             this.btnNormalRoll.Name = "btnNormalRoll";
             this.btnNormalRoll.Size = new System.Drawing.Size(181, 55);
             this.btnNormalRoll.TabIndex = 21;
@@ -382,6 +409,7 @@
             this.Load += new System.EventHandler(this.AutomationInfo_Load);
             this.panelAutomationInfoMain.ResumeLayout(false);
             this.panelAutomationInfoMain.PerformLayout();
+            this.panelAnnounce.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panelShowSpeed.ResumeLayout(false);
             this.panelShowSpeed.PerformLayout();
@@ -419,5 +447,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label lbAnnounce;
+        private System.Windows.Forms.Panel panelAnnounce;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }

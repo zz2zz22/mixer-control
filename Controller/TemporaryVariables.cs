@@ -17,6 +17,8 @@ namespace mixer_control_globalver.Controller
         public static String tempMatName { get; set; }
         public static String tempMatNo { get; set; }
         public static String tempFormulaName { get; set; }
+        public static String tempFormulaLOT { get; set; }
+        public static String tempReportPath { get; set; }
         #endregion
 
         #region Temporary Datatables
@@ -126,8 +128,23 @@ namespace mixer_control_globalver.Controller
             processDT.Columns.Add(processCol);
 
             processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Double");
+            processCol.ColumnName = "oil_weight";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
             processCol.DataType = Type.GetType("System.String");
             processCol.ColumnName = "oil_type";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Int32");
+            processCol.ColumnName = "total_powder_bags";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Int32");
+            processCol.ColumnName = "remain_powder_bags";
             processDT.Columns.Add(processCol);
         }
 
@@ -174,6 +191,8 @@ namespace mixer_control_globalver.Controller
             settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
             settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
             settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
+            //settingDT.Rows.Add("OTV", "Van test dầu - Oil test valve");
+            settingDT.Rows.Add("OLM", "Chế độ mở nắp - Open lid mode");
 
             //Máy dầu
             settingDT.Rows.Add("StartOil", "Bắt đầu cấp dầu - Start oil feeding");
@@ -181,6 +200,7 @@ namespace mixer_control_globalver.Controller
             settingDT.Rows.Add("MachineLocation", "Vị trí thiết bị - Machine Location");
             settingDT.Rows.Add("OilMass", "Khối lượng dầu - Mass of oil");
             settingDT.Rows.Add("OilType", "Loại dầu - OilType");
+            settingDT.Rows.Add("ErrorMsg", "Thông báo lỗi - Error Message");
         }
         #endregion
 
@@ -190,6 +210,7 @@ namespace mixer_control_globalver.Controller
             tempFileName = null;
             tempFilePath = null;
             tempFormulaName = null;
+            tempFormulaLOT = null;
             //reset datatables
             materialDT = null;
             processDT = null;

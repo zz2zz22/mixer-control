@@ -35,6 +35,7 @@
             this.btnClose = new XanderUI.XUIButton();
             this.pbxCompanyLogo = new System.Windows.Forms.PictureBox();
             this.panelSideMenu = new System.Windows.Forms.Panel();
+            this.lbOilTestStatus = new System.Windows.Forms.Label();
             this.lbVersion = new System.Windows.Forms.Label();
             this.cbxLanguageChoose = new System.Windows.Forms.ComboBox();
             this.panelBtnAutomation = new System.Windows.Forms.Panel();
@@ -81,7 +82,7 @@
             this.btnSetting.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnSetting.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnSetting.ImagePosition = XanderUI.XUIButton.imgPosition.Center;
-            this.btnSetting.Location = new System.Drawing.Point(698, 4);
+            this.btnSetting.Location = new System.Drawing.Point(739, 3);
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(56, 56);
             this.btnSetting.TabIndex = 6;
@@ -150,6 +151,7 @@
             // panelSideMenu
             // 
             this.panelSideMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.panelSideMenu.Controls.Add(this.lbOilTestStatus);
             this.panelSideMenu.Controls.Add(this.lbVersion);
             this.panelSideMenu.Controls.Add(this.cbxLanguageChoose);
             this.panelSideMenu.Controls.Add(this.panelBtnAutomation);
@@ -161,15 +163,26 @@
             this.panelSideMenu.Size = new System.Drawing.Size(247, 608);
             this.panelSideMenu.TabIndex = 1;
             // 
+            // lbOilTestStatus
+            // 
+            this.lbOilTestStatus.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lbOilTestStatus.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbOilTestStatus.Location = new System.Drawing.Point(0, 252);
+            this.lbOilTestStatus.Name = "lbOilTestStatus";
+            this.lbOilTestStatus.Size = new System.Drawing.Size(247, 234);
+            this.lbOilTestStatus.TabIndex = 5;
+            this.lbOilTestStatus.Text = "...";
+            this.lbOilTestStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // lbVersion
             // 
             this.lbVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbVersion.AutoSize = true;
             this.lbVersion.Location = new System.Drawing.Point(12, 580);
             this.lbVersion.Name = "lbVersion";
-            this.lbVersion.Size = new System.Drawing.Size(119, 19);
+            this.lbVersion.Size = new System.Drawing.Size(55, 19);
             this.lbVersion.TabIndex = 4;
-            this.lbVersion.Text = "Version 1.0.45";
+            this.lbVersion.Text = "1.0.55";
             // 
             // cbxLanguageChoose
             // 
@@ -309,7 +322,8 @@
             this.MinimumSize = new System.Drawing.Size(1024, 720);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Main for";
+            this.Text = "c ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.panelHeader.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).EndInit();
@@ -339,6 +353,7 @@
         private XanderUI.XUIButton btnSetting;
         private System.Windows.Forms.Label lbVersion;
         private System.Windows.Forms.ComboBox cbxLanguageChoose;
+        private System.Windows.Forms.Label lbOilTestStatus;
     }
 }
 

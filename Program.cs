@@ -3,7 +3,11 @@ using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,7 +25,24 @@ namespace mixer_control_globalver
         /// </summary>
         [STAThread]
         static void Main()
-        { 
+        {
+            try
+            {
+                Properties.Settings.Default.Reload();
+                string settingValue1 = Properties.Settings.Default.plc_ip;
+                var path = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+                if(String.IsNullOrEmpty(settingValue1))
+                {
+                    File.Delete(path);
+                    SubMethods.RestoreUserSettings(path);
+                }
+            }
+            catch (ConfigurationException ex)
+            { //(requires System.Configuration)
+                string filename = ((ConfigurationException)ex.InnerException).Filename;
+                File.Delete(filename);
+                SubMethods.RestoreUserSettings(filename);
+            }
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 try
@@ -38,23 +59,7 @@ namespace mixer_control_globalver
             }
             else
             {
-                if (Properties.Settings.Default.language == 0)
-                {
-                    message = "Phần mềm đang chạy.";
-                    caption = "Thông tin";
-                }
-                else if (Properties.Settings.Default.language == 1)
-                {
-                    message = "软件正在运行";
-                    caption = "信息";
-                }
-                else if (Properties.Settings.Default.language == 2)
-                {
-                    message = "Program is running.";
-                    caption = "Information";
-                }
-
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Application.Exit();
             }
         }
     }

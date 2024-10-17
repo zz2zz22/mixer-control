@@ -24,9 +24,14 @@ namespace mixer_control_globalver.View.CustomComponent
         }
         private void CheckPassword(string password)
         {
+            password = password.Trim().ToLower();
             if (password == "techlink@123")
             {
                 ChooseSpec.isConfirmed = true;
+                this.Close();
+            }else if(password == Settings.Default.authorSkipPassword.Trim().ToLower())
+            {
+                AutomationInfo.isAuthorSkip = true;
                 this.Close();
             }
             else

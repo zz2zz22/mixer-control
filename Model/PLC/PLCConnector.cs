@@ -224,5 +224,23 @@ namespace mixer_control_globalver.Model.PLC
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Write String to PLC fail", ex.Message);
             }
         }
+
+        public int ReadInt(int DbNumber, int Start)
+        {
+            int Result = -1;
+            try
+            {
+                byte[] buffer = new byte[2];
+
+                Client.ReadArea(S7Area.DB, DbNumber, Start, 2, S7WordLength.Byte, buffer);
+                int intValue = Sharp7.S7.GetWordAt(buffer, 0); // Use GetDIntAt to get an integer value
+                Result = intValue;
+            }
+            catch (Exception ex)
+            {
+                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Read integer to String fail", ex.Message);
+            }
+            return Result;
+        }
     }
 }
