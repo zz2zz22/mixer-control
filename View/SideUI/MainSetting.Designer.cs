@@ -70,28 +70,19 @@
             this.switchOpenLit = new XanderUI.XUISwitch();
             this.label9 = new System.Windows.Forms.Label();
             this.tabPageOilSupply = new System.Windows.Forms.TabPage();
-            this.switchGasolinePumpMode = new XanderUI.XUISwitch();
             this.label7 = new System.Windows.Forms.Label();
             this.switchOilMode = new XanderUI.XUISwitch();
             this.switchAlertPowder = new XanderUI.XUISwitch();
-            this.label23 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.tabPageSub = new System.Windows.Forms.TabPage();
             this.txbAuthorSkipPass = new System.Windows.Forms.TextBox();
             this.switchSkipPassword = new XanderUI.XUISwitch();
             this.label16 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.switchHideReverse = new XanderUI.XUISwitch();
             this.switchShowHiddenInfo = new XanderUI.XUISwitch();
             this.label13 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSaveOffset = new XanderUI.XUIButton();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txbOilFeederIP = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txbOilFeederDatabase = new System.Windows.Forms.TextBox();
             this.tabControlMainSetting = new System.Windows.Forms.TabControl();
             this.tabPageBasicSetting = new System.Windows.Forms.TabPage();
             this.tabPageSubSetting = new System.Windows.Forms.TabPage();
@@ -120,7 +111,6 @@
             this.tabPageOilSupply.SuspendLayout();
             this.tabPageSub.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.tabControlMainSetting.SuspendLayout();
             this.tabPageBasicSetting.SuspendLayout();
             this.tabPageSubSetting.SuspendLayout();
@@ -585,41 +575,24 @@
             // tabPageOilSupply
             // 
             this.tabPageOilSupply.BackColor = System.Drawing.Color.PeachPuff;
-            this.tabPageOilSupply.Controls.Add(this.switchGasolinePumpMode);
             this.tabPageOilSupply.Controls.Add(this.label7);
             this.tabPageOilSupply.Controls.Add(this.switchOilMode);
             this.tabPageOilSupply.Controls.Add(this.switchAlertPowder);
-            this.tabPageOilSupply.Controls.Add(this.label23);
             this.tabPageOilSupply.Controls.Add(this.label14);
-            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 25);
+            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 28);
             this.tabPageOilSupply.Name = "tabPageOilSupply";
-            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 482);
+            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 479);
             this.tabPageOilSupply.TabIndex = 2;
             this.tabPageOilSupply.Text = "Oil logic triggers";
-            // 
-            // switchGasolinePumpMode
-            // 
-            this.switchGasolinePumpMode.BackColor = System.Drawing.Color.Transparent;
-            this.switchGasolinePumpMode.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
-            this.switchGasolinePumpMode.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchGasolinePumpMode.Location = new System.Drawing.Point(296, 72);
-            this.switchGasolinePumpMode.Name = "switchGasolinePumpMode";
-            this.switchGasolinePumpMode.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
-            this.switchGasolinePumpMode.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
-            this.switchGasolinePumpMode.Size = new System.Drawing.Size(60, 30);
-            this.switchGasolinePumpMode.SwitchState = XanderUI.XUISwitch.State.On;
-            this.switchGasolinePumpMode.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
-            this.switchGasolinePumpMode.TabIndex = 25;
-            this.switchGasolinePumpMode.Text = "xuiSwitch1";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(12, 16);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(291, 38);
+            this.label7.Size = new System.Drawing.Size(227, 19);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Activate Oil supplying mode\r\n(Require the PLC oil supply system)";
+            this.label7.Text = "Activate Oil supplying mode";
             // 
             // switchOilMode
             // 
@@ -641,7 +614,7 @@
             this.switchAlertPowder.BackColor = System.Drawing.Color.Transparent;
             this.switchAlertPowder.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchAlertPowder.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchAlertPowder.Location = new System.Drawing.Point(269, 127);
+            this.switchAlertPowder.Location = new System.Drawing.Point(269, 75);
             this.switchAlertPowder.Name = "switchAlertPowder";
             this.switchAlertPowder.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchAlertPowder.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -651,19 +624,10 @@
             this.switchAlertPowder.TabIndex = 23;
             this.switchAlertPowder.Text = "xuiSwitch1";
             // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(12, 75);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(278, 19);
-            this.label23.TabIndex = 24;
-            this.label23.Text = "Use a gasoline pump to supply oil.";
-            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(12, 127);
+            this.label14.Location = new System.Drawing.Point(12, 75);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(251, 38);
             this.label14.TabIndex = 22;
@@ -675,20 +639,18 @@
             this.tabPageSub.Controls.Add(this.txbAuthorSkipPass);
             this.tabPageSub.Controls.Add(this.switchSkipPassword);
             this.tabPageSub.Controls.Add(this.label16);
-            this.tabPageSub.Controls.Add(this.label10);
             this.tabPageSub.Controls.Add(this.label15);
-            this.tabPageSub.Controls.Add(this.switchHideReverse);
-            this.tabPageSub.Location = new System.Drawing.Point(4, 25);
+            this.tabPageSub.Location = new System.Drawing.Point(4, 28);
             this.tabPageSub.Name = "tabPageSub";
             this.tabPageSub.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSub.Size = new System.Drawing.Size(521, 482);
+            this.tabPageSub.Size = new System.Drawing.Size(521, 479);
             this.tabPageSub.TabIndex = 1;
             this.tabPageSub.Text = "Sub triggers";
             // 
             // txbAuthorSkipPass
             // 
             this.txbAuthorSkipPass.Font = new System.Drawing.Font("Arial", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbAuthorSkipPass.Location = new System.Drawing.Point(167, 127);
+            this.txbAuthorSkipPass.Location = new System.Drawing.Point(167, 71);
             this.txbAuthorSkipPass.Name = "txbAuthorSkipPass";
             this.txbAuthorSkipPass.Size = new System.Drawing.Size(258, 28);
             this.txbAuthorSkipPass.TabIndex = 20;
@@ -699,7 +661,7 @@
             this.switchSkipPassword.BackColor = System.Drawing.Color.Transparent;
             this.switchSkipPassword.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchSkipPassword.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchSkipPassword.Location = new System.Drawing.Point(344, 72);
+            this.switchSkipPassword.Location = new System.Drawing.Point(344, 16);
             this.switchSkipPassword.Name = "switchSkipPassword";
             this.switchSkipPassword.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchSkipPassword.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -713,44 +675,20 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(6, 132);
+            this.label16.Location = new System.Drawing.Point(6, 76);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(155, 19);
             this.label16.TabIndex = 19;
             this.label16.Text = "Skip step password:";
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 15);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(195, 19);
-            this.label10.TabIndex = 22;
-            this.label10.Text = "Hide the reverse button";
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 72);
+            this.label15.Location = new System.Drawing.Point(6, 16);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(332, 38);
             this.label15.TabIndex = 24;
             this.label15.Text = "Lock the skip step button\r\n(Require input password when skip step)";
-            // 
-            // switchHideReverse
-            // 
-            this.switchHideReverse.BackColor = System.Drawing.Color.Transparent;
-            this.switchHideReverse.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
-            this.switchHideReverse.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchHideReverse.Location = new System.Drawing.Point(207, 15);
-            this.switchHideReverse.Name = "switchHideReverse";
-            this.switchHideReverse.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
-            this.switchHideReverse.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
-            this.switchHideReverse.Size = new System.Drawing.Size(60, 30);
-            this.switchHideReverse.SwitchState = XanderUI.XUISwitch.State.On;
-            this.switchHideReverse.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
-            this.switchHideReverse.TabIndex = 23;
-            this.switchHideReverse.Text = "xuiSwitch1";
             // 
             // switchShowHiddenInfo
             // 
@@ -816,56 +754,6 @@
             this.btnSaveOffset.Vertical_Alignment = System.Drawing.StringAlignment.Center;
             this.btnSaveOffset.Click += new System.EventHandler(this.btnSaveOffset_Click);
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.txbOilFeederIP);
-            this.groupBox3.Controls.Add(this.label6);
-            this.groupBox3.Controls.Add(this.txbOilFeederDatabase);
-            this.groupBox3.Location = new System.Drawing.Point(6, 150);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(421, 173);
-            this.groupBox3.TabIndex = 24;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Oil supplier setting (Do NOT change)";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(-2, 42);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(153, 19);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "Oil supplier PLC IP:";
-            // 
-            // txbOilFeederIP
-            // 
-            this.txbOilFeederIP.Location = new System.Drawing.Point(157, 39);
-            this.txbOilFeederIP.Name = "txbOilFeederIP";
-            this.txbOilFeederIP.Size = new System.Drawing.Size(253, 27);
-            this.txbOilFeederIP.TabIndex = 13;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(68, 80);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(83, 19);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "Database:";
-            // 
-            // txbOilFeederDatabase
-            // 
-            this.txbOilFeederDatabase.Location = new System.Drawing.Point(157, 77);
-            this.txbOilFeederDatabase.Name = "txbOilFeederDatabase";
-            this.txbOilFeederDatabase.Size = new System.Drawing.Size(110, 27);
-            this.txbOilFeederDatabase.TabIndex = 14;
-            // 
             // tabControlMainSetting
             // 
             this.tabControlMainSetting.Controls.Add(this.tabPageBasicSetting);
@@ -893,11 +781,10 @@
             this.tabPageSubSetting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.tabPageSubSetting.Controls.Add(this.groupBox5);
             this.tabPageSubSetting.Controls.Add(this.groupBox2);
-            this.tabPageSubSetting.Controls.Add(this.groupBox3);
-            this.tabPageSubSetting.Location = new System.Drawing.Point(4, 25);
+            this.tabPageSubSetting.Location = new System.Drawing.Point(4, 28);
             this.tabPageSubSetting.Name = "tabPageSubSetting";
             this.tabPageSubSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSubSetting.Size = new System.Drawing.Size(969, 555);
+            this.tabPageSubSetting.Size = new System.Drawing.Size(969, 552);
             this.tabPageSubSetting.TabIndex = 1;
             this.tabPageSubSetting.Text = "Other Settings";
             // 
@@ -921,16 +808,16 @@
             this.groupBox5.Controls.Add(this.label19);
             this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Controls.Add(this.label17);
-            this.groupBox5.Location = new System.Drawing.Point(433, 150);
+            this.groupBox5.Location = new System.Drawing.Point(8, 150);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(533, 173);
+            this.groupBox5.Size = new System.Drawing.Size(958, 181);
             this.groupBox5.TabIndex = 25;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Gasoline pump setting (Do NOT change)";
             // 
             // txbTolerance
             // 
-            this.txbTolerance.Location = new System.Drawing.Point(135, 141);
+            this.txbTolerance.Location = new System.Drawing.Point(671, 25);
             this.txbTolerance.Name = "txbTolerance";
             this.txbTolerance.Size = new System.Drawing.Size(86, 27);
             this.txbTolerance.TabIndex = 32;
@@ -941,7 +828,7 @@
             // 
             this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(6, 144);
+            this.label24.Location = new System.Drawing.Point(542, 28);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(123, 19);
             this.label24.TabIndex = 31;
@@ -1133,8 +1020,6 @@
             this.tabPageSub.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.tabControlMainSetting.ResumeLayout(false);
             this.tabPageBasicSetting.ResumeLayout(false);
             this.tabPageSubSetting.ResumeLayout(false);
@@ -1170,19 +1055,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txbOilFeederIP;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txbOilFeederDatabase;
         private System.Windows.Forms.Label label7;
         private XanderUI.XUISwitch switchOilMode;
         private XanderUI.XUISwitch switchStopMode;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private XanderUI.XUISwitch switchOpenLit;
-        private XanderUI.XUISwitch switchHideReverse;
-        private System.Windows.Forms.Label label10;
         private XanderUI.XUISwitch switchTest;
         private System.Windows.Forms.Label label11;
         private XanderUI.XUIButton btnReportFolder;
@@ -1215,8 +1093,6 @@
         private System.Windows.Forms.Label label22;
         private XanderUI.XUIButton btnTestConnect;
         private System.IO.Ports.SerialPort serialPort1;
-        private XanderUI.XUISwitch switchGasolinePumpMode;
-        private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.TextBox txbTolerance;
         private XanderUI.XUISwitch switchOpenLidMode;

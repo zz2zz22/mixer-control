@@ -120,11 +120,6 @@ namespace mixer_control_globalver
                 this.WindowState = FormWindowState.Normal;
         }
 
-        private void pbxCompanyLogo_Click(object sender, EventArgs e)
-        {
-            Process.Start(Settings.Default.website);
-        }
-
         private void MainWindow_Load(object sender, EventArgs e)
         {
             try

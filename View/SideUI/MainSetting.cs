@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Globalization;
+using mixer_control_globalver.Controller.LogFile;
 
 namespace mixer_control_globalver.View.SideUI
 {
@@ -90,8 +91,6 @@ namespace mixer_control_globalver.View.SideUI
             txbMotorDiameter.Text = Settings.Default.spindle_diameter.ToString();
             txbSensorDiameter.Text = Settings.Default.sensor_diameter.ToString();
             txbTransmissionRatio.Text = Settings.Default.transmission_ratio.ToString();
-            txbOilFeederIP.Text = Settings.Default.oil_feeder_ip;
-            txbOilFeederDatabase.Text = Settings.Default.oil_feeder_db.ToString();
             txbAuthorSkipPass.Text = Settings.Default.authorSkipPassword;
             txbTolerance.Text = Settings.Default.toleranceMass.ToString();
 
@@ -120,15 +119,6 @@ namespace mixer_control_globalver.View.SideUI
             else
             {
                 switchOpenLit.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
-
-            if (Settings.Default.isHideReverse)
-            {
-                switchHideReverse.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchHideReverse.SwitchState = XanderUI.XUISwitch.State.Off;
             }
 
             if (Settings.Default.isTesting)
@@ -165,15 +155,6 @@ namespace mixer_control_globalver.View.SideUI
             else
             {
                 switchSkipPassword.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
-
-            if (Settings.Default.gasolinePumpMode)
-            {
-                switchGasolinePumpMode.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchGasolinePumpMode.SwitchState = XanderUI.XUISwitch.State.Off;
             }
 
             if (Settings.Default.isOpenLidMode)
@@ -226,8 +207,6 @@ namespace mixer_control_globalver.View.SideUI
             Settings.Default.spindle_diameter = double.Parse(txbMotorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
             Settings.Default.sensor_diameter = double.Parse(txbSensorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
             Settings.Default.transmission_ratio = double.Parse(txbTransmissionRatio.Text.Trim(), CultureInfo.InvariantCulture);
-            Settings.Default.oil_feeder_ip = txbOilFeederIP.Text.Trim();
-            Settings.Default.oil_feeder_db = Convert.ToInt32(txbOilFeederDatabase.Text.Trim());
             Settings.Default.authorSkipPassword = txbAuthorSkipPass.Text.Trim();
             Settings.Default.toleranceMass = double.Parse(txbTolerance.Text, CultureInfo.InvariantCulture);
 
@@ -245,11 +224,6 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isSkipOpenLid = true;
             else
                 Settings.Default.isSkipOpenLid = false;
-
-            if (switchHideReverse.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isHideReverse = true;
-            else
-                Settings.Default.isHideReverse = false;
 
             if (switchTest.SwitchState == XanderUI.XUISwitch.State.On)
                 Settings.Default.isTesting = true;
@@ -270,11 +244,6 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isHaveSkipPassword = true;
             else
                 Settings.Default.isHaveSkipPassword = false;
-
-            if (switchGasolinePumpMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.gasolinePumpMode = true;
-            else
-                Settings.Default.gasolinePumpMode = false;
 
             if (switchOpenLidMode.SwitchState == XanderUI.XUISwitch.State.On)
                 Settings.Default.isOpenLidMode = true;
@@ -467,11 +436,11 @@ namespace mixer_control_globalver.View.SideUI
                         serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), cbParityBits.Text);
                         serialPort1.ReadTimeout = 1000;
                         serialPort1.Open();
-                        bool isConnected = SubMethods.CheckConnectStatus(serialPort1, new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 }); // Đọc trạng thái máy
+                        bool isConnected = SubMethods.CheckConnectStatus(serialPort1); // Đọc trạng thái máy
                         CloseSerialPort();
                         if (isConnected)
                         {
-                            DialogResult dialogResult = CTMessageBox.Show("Kết nối thành công, bạn có muốn lưu cài đặt không ?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                            DialogResult dialogResult = CTMessageBox.Show("Connection successful, save setting ?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                             if (dialogResult == DialogResult.Yes)
                             {
                                 Settings.Default.comPort = cbComPort.Text;
@@ -484,17 +453,18 @@ namespace mixer_control_globalver.View.SideUI
                         }
                         else
                         {
-                            CTMessageBox.Show("Kết nối không thành công!", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                            CTMessageBox.Show("Connection to serialport fail : Port can not open.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         }
                     }
                     else
                     {
-                        CTMessageBox.Show("Vui lòng chọn cổng kết nối!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CTMessageBox.Show("Please choose a COM port first.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception err)
                 {
-                    CTMessageBox.Show(err.Message, "Lỗi 弊", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    CTMessageBox.Show(err.Message, "Serialport connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport connection error", err.Message);
                 }
             }
         }

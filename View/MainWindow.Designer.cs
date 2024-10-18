@@ -146,7 +146,6 @@
             this.pbxCompanyLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxCompanyLogo.TabIndex = 0;
             this.pbxCompanyLogo.TabStop = false;
-            this.pbxCompanyLogo.Click += new System.EventHandler(this.pbxCompanyLogo_Click);
             // 
             // panelSideMenu
             // 
@@ -180,9 +179,9 @@
             this.lbVersion.AutoSize = true;
             this.lbVersion.Location = new System.Drawing.Point(12, 580);
             this.lbVersion.Name = "lbVersion";
-            this.lbVersion.Size = new System.Drawing.Size(55, 19);
+            this.lbVersion.Size = new System.Drawing.Size(145, 19);
             this.lbVersion.TabIndex = 4;
-            this.lbVersion.Text = "1.0.55";
+            this.lbVersion.Text = "test new function";
             // 
             // cbxLanguageChoose
             // 

@@ -103,7 +103,7 @@ class SubMethods
         }
     }
 
-    public static bool CheckConnectStatus(SerialPort serialPort, byte[] command)
+    public static bool CheckConnectStatus(SerialPort serialPort)
     {
         try
         {
@@ -112,7 +112,8 @@ class SubMethods
         }
         catch (Exception ex)
         {
-            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM: " + ex.Message, "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            CTMessageBox.Show("Serialport check connection error : " + ex.Message, "Serialport Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport Error", "Serialport check connection error : " + ex.Message);
         }
         return false;
     }
@@ -123,17 +124,16 @@ class SubMethods
         {
             // Gửi lệnh
             serialPort.Write(command, 0, command.Length);
-            Thread.Sleep(100);
-            // Đọc phản hồi từ máy bơm xăng
-            byte[] buffer = new byte[command.Length];
+            //Thread.Sleep(100);
+            //byte[] buffer = new byte[command.Length];
             //var a = serialPort.ReadExisting();
             //serialPort.Read(buffer, 0, buffer.Length);
             //Console.WriteLine("Phản hồi từ máy bơm xăng: " + BitConverter.ToString(buffer));
         }
         catch
         {
-            CTMessageBox.Show("Lỗi đọc/ ghi cổng COM", "Thông báo lỗi!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //Console.WriteLine("Lỗi: " + ex.Message);
+            CTMessageBox.Show("Failed to send command to serial port : " + command.ToString(), "Serialport Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport Error", "Failed to send command to serial port : " + command.ToString());
         }
     }
 

@@ -23,15 +23,6 @@ namespace mixer_control_globalver.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://www.tech-link.com.hk/en")]
-        public string website {
-            get {
-                return ((string)(this["website"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -128,39 +119,6 @@ namespace mixer_control_globalver.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string master_pw {
-            get {
-                return ((string)(this["master_pw"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string oil_feeder_ip {
-            get {
-                return ((string)(this["oil_feeder_ip"]));
-            }
-            set {
-                this["oil_feeder_ip"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int oil_feeder_db {
-            get {
-                return ((int)(this["oil_feeder_db"]));
-            }
-            set {
-                this["oil_feeder_db"] = value;
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -194,18 +152,6 @@ namespace mixer_control_globalver.Properties {
             }
             set {
                 this["isSkipOpenLid"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool isHideReverse {
-            get {
-                return ((bool)(this["isHideReverse"]));
-            }
-            set {
-                this["isHideReverse"] = value;
             }
         }
         
@@ -350,18 +296,6 @@ namespace mixer_control_globalver.Properties {
             }
             set {
                 this["parityBits"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool gasolinePumpMode {
-            get {
-                return ((bool)(this["gasolinePumpMode"]));
-            }
-            set {
-                this["gasolinePumpMode"] = value;
             }
         }
         

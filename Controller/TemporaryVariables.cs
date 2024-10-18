@@ -191,16 +191,7 @@ namespace mixer_control_globalver.Controller
             settingDT.Rows.Add("SD", "Đường kính trục xoay động cơ - Spindle Diameter");
             settingDT.Rows.Add("TRMS", "Tỉ lệ truyền - Transmission Ratio");
             settingDT.Rows.Add("MS", "Tốc độ tối đa của động cơ - Motor Maximum Speed");
-            //settingDT.Rows.Add("OTV", "Van test dầu - Oil test valve");
             settingDT.Rows.Add("OLM", "Chế độ mở nắp - Open lid mode");
-
-            //Máy dầu
-            settingDT.Rows.Add("StartOil", "Bắt đầu cấp dầu - Start oil feeding");
-            settingDT.Rows.Add("StopOil", "Dừng cấp dầu - Stop oil feeding");
-            settingDT.Rows.Add("MachineLocation", "Vị trí thiết bị - Machine Location");
-            settingDT.Rows.Add("OilMass", "Khối lượng dầu - Mass of oil");
-            settingDT.Rows.Add("OilType", "Loại dầu - OilType");
-            settingDT.Rows.Add("ErrorMsg", "Thông báo lỗi - Error Message");
         }
         #endregion
 
