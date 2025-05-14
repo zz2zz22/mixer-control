@@ -215,32 +215,27 @@ namespace mixer_control_globalver.View.MainUI
                                                 if (processDT.Rows[j][8].ToString().ToLower() == "yes")
                                                     isOilFeed = true;
 
-                                                if (Settings.Default.isOilFeed && isOilFeed)
+                                                if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
                                                 {
-                                                    if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
-                                                    {
-                                                        oilMass = double.Parse(processDT.Rows[j][10].ToString(), CultureInfo.InvariantCulture);
-                                                        oilWeight = double.Parse(processDT.Rows[j][9].ToString(), CultureInfo.InvariantCulture);
-                                                    }
-                                                    else
-                                                    {
-                                                        throw new Exception("Oil mass or oil weight data is empty, please check the formula!");
-                                                    }
+                                                    oilMass = Convert.ToDouble(processDT.Rows[j][10].ToString());
+                                                    oilWeight = Convert.ToDouble(processDT.Rows[j][9].ToString());
+                                                }
+                                                else
+                                                {
+                                                    oilMass = 0;
+                                                    oilWeight = 0;
                                                 }
 
-                                                if (Settings.Default.isAlertPowder)
+                                                if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
                                                 {
-                                                    if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
-                                                    {
-                                                        //Edit to read total powder bags
-                                                        totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
-                                                        remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
-                                                    }
-                                                    else
-                                                    {
-                                                        totalPowder = 0;
-                                                        remainPowder = 0;
-                                                    }
+                                                    //Edit to read total powder bags
+                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
+                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
+                                                }
+                                                else
+                                                {
+                                                    totalPowder = 0;
+                                                    remainPowder = 0;
                                                 }
 
                                                 string stepDesc = processDT.Rows[j][12].ToString();

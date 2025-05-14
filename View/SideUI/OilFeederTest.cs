@@ -363,11 +363,11 @@ namespace mixer_control_globalver.View.SideUI
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            do
-            {
-                PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
-                pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
-            } while (ConnectionPLC != 0);
+            //do
+            //{
+            //    PLCConnector pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out ConnectionPLC);
+            //    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
+            //} while (ConnectionPLC != 0);
             if (serialPort1.IsOpen)
                 CloseSerialPort();
             this.Close();

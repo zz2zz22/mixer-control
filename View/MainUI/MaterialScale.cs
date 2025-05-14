@@ -136,16 +136,17 @@ namespace mixer_control_globalver.View.MainUI
                                 }
                                 else
                                 {
-                                    string result = _buffer.ToString().Substring(_buffer.ToString().IndexOf("s") + 1, _buffer.ToString().LastIndexOf("e") - _buffer.ToString().IndexOf("s") - 1);
+                                    string caseSensitive = _buffer.ToString().ToLower().Trim();
+                                    string result = SubMethods.TrimSpecialCharacters(caseSensitive);
                                     string[] data = result.Split(';');
                                     if (data.Length > 3)
                                     {
-                                        DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0] + "' and id = '" + data[1] +"'");
+                                        DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0].ToUpper() + "' and id = '" + data[1] + "'");
                                         if (foundAuthors.Length == 0)
                                         {
-                                            TemporaryVariables.materialDT.Rows.Add(data[0], Convert.ToInt32(data[1]), Convert.ToDouble(data[2]), data[3]);
-                                            CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(data[0], data[2], data[3]);
-                                            lbJustConfirm.Text = data[0];
+                                            TemporaryVariables.materialDT.Rows.Add(data[0].ToUpper(), Convert.ToInt32(data[1]), Convert.ToDouble(data[2]), data[3]);
+                                            CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(data[0].ToUpper(), data[2], data[3]);
+                                            lbJustConfirm.Text = data[0].ToUpper();
                                             lbConfirmAmount.Text = TemporaryVariables.materialDT.Rows.Count.ToString() + "/" + totalMaterial;
                                             flpMaterialList.Controls.Add(customMaterial);
                                         }

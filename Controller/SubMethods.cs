@@ -1,4 +1,5 @@
-﻿using mixer_control_globalver.Controller.LogFile;
+﻿using ExcelDataReader;
+using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
@@ -6,10 +7,10 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.IO.Ports;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using ExcelDataReader;
 
 class SubMethods
 {
@@ -116,6 +117,52 @@ class SubMethods
             SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport Error", "Serialport check connection error : " + ex.Message);
         }
         return false;
+    }
+
+    public static string TrimSpecialCharacters(string input)
+    {
+        // Check if the string is not null or empty
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        // Remove 's' from the beginning if present
+        if (input.StartsWith("s"))
+            input = input.Substring(1);
+
+        // We'll look for an 'e' at the end of the string
+        // First, find the last occurrence of 'e'
+        int lastEPosition = input.LastIndexOf('e');
+
+        // Check if this 'e' is at the end or near the end (followed by other characters)
+        if (lastEPosition >= 0)
+        {
+            // Only trim if this 'e' is at a position where it could be the ending 'e'
+            // We can assume an 'e' is the ending one if it's not followed by any of the 
+            // expected characters in our data format (letters, numbers, dash, semicolon)
+            bool isEndingE = true;
+
+            // If it's not the very last character, check what follows it
+            if (lastEPosition < input.Length - 1)
+            {
+                // Get a small sample of what comes after 'e' (up to 3 chars)
+                string afterE = input.Substring(lastEPosition + 1,
+                    Math.Min(3, input.Length - lastEPosition - 1));
+
+                // If what follows looks like it could be part of our normal pattern, 
+                // then this is probably not our ending 'e'
+                if (afterE.All(c => char.IsLetterOrDigit(c) || c == '-' || c == ';'))
+                {
+                    isEndingE = false;
+                }
+            }
+
+            if (isEndingE)
+            {
+                input = input.Substring(0, lastEPosition);
+            }
+        }
+
+        return input;
     }
 
     public static void SendCommand(SerialPort serialPort, byte[] command)
