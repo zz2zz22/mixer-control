@@ -206,6 +206,7 @@
             this.Name = "OilFeederTest";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "OilFeederTest";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OilFeederTest_FormClosing);
             this.Load += new System.EventHandler(this.OilFeederTest_Load);
             this.panelHeader.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).EndInit();

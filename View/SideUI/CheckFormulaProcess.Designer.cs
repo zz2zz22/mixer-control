@@ -131,6 +131,7 @@
             this.Name = "CheckFormulaProcess";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CheckFormulaProcess";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CheckFormulaProcess_FormClosed);
             this.Load += new System.EventHandler(this.CheckFormulaProcess_Load);
             this.panelHeader.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).EndInit();

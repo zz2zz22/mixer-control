@@ -77,6 +77,18 @@ namespace mixer_control_globalver.View.SideUI
                 string[] ports = SerialPort.GetPortNames();
                 cbComPort.Items.AddRange(ports);
             }
+
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.diameterComPort))
+            {
+                string[] ports = SerialPort.GetPortNames();
+                cbDiameterComPort.Items.AddRange(ports);
+                cbDiameterComPort.Text = Settings.Default.diameterComPort;
+            }
+            else
+            {
+                string[] ports = SerialPort.GetPortNames();
+                cbDiameterComPort.Items.AddRange(ports);
+            }
             cbBaudRate.Text = Settings.Default.baudRate;
             cbDataBits.Text = Settings.Default.dataBits;
             cbStopBits.Text = Settings.Default.stopBits;
@@ -184,11 +196,32 @@ namespace mixer_control_globalver.View.SideUI
                 switchTestOilMultiple.SwitchState = XanderUI.XUISwitch.State.Off;
             }
 
+            if (Settings.Default.isOilMeasurement)
+            {
+                switchOilDiaMeasurement.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchOilDiaMeasurement.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
+            if (Settings.Default.isCheckPowderSupply)
+            {
+                switchPowderBagCheck.SwitchState = XanderUI.XUISwitch.State.On;
+            }
+            else
+            {
+                switchPowderBagCheck.SwitchState = XanderUI.XUISwitch.State.Off;
+            }
+
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
             cbxPLCValueSetting.DisplayMember = "display_member";
 
             cbxPLCValueSetting.SelectedIndex = -1;
+            cbxLEDColor.SelectedIndex = Settings.Default.led_color - 1;
+            cbxLEDStyle.SelectedIndex = Settings.Default.led_style;
+            txbLEDIP.Text = Settings.Default.led_ip;
 
             LoadNotSettingValue();
         }
@@ -259,6 +292,21 @@ namespace mixer_control_globalver.View.SideUI
                 Settings.Default.isTestOilMultiple = true;
             else
                 Settings.Default.isTestOilMultiple = false;
+
+            if (switchOilDiaMeasurement.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isOilMeasurement = true;
+            else
+                Settings.Default.isOilMeasurement = false;
+
+            if (switchPowderBagCheck.SwitchState == XanderUI.XUISwitch.State.On)
+                Settings.Default.isCheckPowderSupply = true;
+            else
+                Settings.Default.isCheckPowderSupply = false;
+
+            Settings.Default.led_ip = txbLEDIP.Text.Trim();
+            Settings.Default.led_color = cbxLEDColor.SelectedIndex + 1;
+            Settings.Default.led_style = cbxLEDStyle.SelectedIndex;
+            Settings.Default.diameterComPort = cbDiameterComPort.Text;
 
             Settings.Default.Save();
             TemporaryVariables.InitSettingDT();

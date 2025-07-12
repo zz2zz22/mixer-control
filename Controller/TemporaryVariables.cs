@@ -146,6 +146,16 @@ namespace mixer_control_globalver.Controller
             processCol.DataType = Type.GetType("System.Int32");
             processCol.ColumnName = "remain_powder_bags";
             processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.String");
+            processCol.ColumnName = "powder_before";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.String");
+            processCol.ColumnName = "powder_after";
+            processDT.Columns.Add(processCol);
         }
 
         public static void InitSettingDT()

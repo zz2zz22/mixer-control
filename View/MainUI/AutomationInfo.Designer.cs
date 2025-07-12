@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelAutomationInfoMain = new System.Windows.Forms.Panel();
+            this.panelAnnounceNextStep = new System.Windows.Forms.Panel();
+            this.labelAnnounceNS = new System.Windows.Forms.Label();
             this.panelAnnounce = new System.Windows.Forms.Panel();
             this.lbAnnounce = new System.Windows.Forms.Label();
             this.panelCountdown = new System.Windows.Forms.Panel();
@@ -55,16 +57,15 @@
             this.lb4 = new System.Windows.Forms.Label();
             this.lb3 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.panelAnnounceNextStep = new System.Windows.Forms.Panel();
-            this.labelAnnounceNS = new System.Windows.Forms.Label();
+            this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.panelAutomationInfoMain.SuspendLayout();
+            this.panelAnnounceNextStep.SuspendLayout();
             this.panelAnnounce.SuspendLayout();
             this.panelCountdown.SuspendLayout();
             this.panelShowSpeed.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panelShowTemperature.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panelAnnounceNextStep.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelAutomationInfoMain
@@ -89,6 +90,25 @@
             this.panelAutomationInfoMain.Name = "panelAutomationInfoMain";
             this.panelAutomationInfoMain.Size = new System.Drawing.Size(759, 608);
             this.panelAutomationInfoMain.TabIndex = 1;
+            // 
+            // panelAnnounceNextStep
+            // 
+            this.panelAnnounceNextStep.Controls.Add(this.labelAnnounceNS);
+            this.panelAnnounceNextStep.Location = new System.Drawing.Point(339, 400);
+            this.panelAnnounceNextStep.Name = "panelAnnounceNextStep";
+            this.panelAnnounceNextStep.Size = new System.Drawing.Size(408, 82);
+            this.panelAnnounceNextStep.TabIndex = 31;
+            // 
+            // labelAnnounceNS
+            // 
+            this.labelAnnounceNS.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelAnnounceNS.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAnnounceNS.ForeColor = System.Drawing.Color.DarkOliveGreen;
+            this.labelAnnounceNS.Location = new System.Drawing.Point(0, 0);
+            this.labelAnnounceNS.Name = "labelAnnounceNS";
+            this.labelAnnounceNS.Size = new System.Drawing.Size(408, 82);
+            this.labelAnnounceNS.TabIndex = 30;
+            this.labelAnnounceNS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelAnnounce
             // 
@@ -385,24 +405,9 @@
             this.lb3.TabIndex = 1;
             this.lb3.Text = "Nhiệt độ:";
             // 
-            // panelAnnounceNextStep
+            // serialPort2
             // 
-            this.panelAnnounceNextStep.Controls.Add(this.labelAnnounceNS);
-            this.panelAnnounceNextStep.Location = new System.Drawing.Point(339, 400);
-            this.panelAnnounceNextStep.Name = "panelAnnounceNextStep";
-            this.panelAnnounceNextStep.Size = new System.Drawing.Size(408, 82);
-            this.panelAnnounceNextStep.TabIndex = 31;
-            // 
-            // labelAnnounceNS
-            // 
-            this.labelAnnounceNS.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelAnnounceNS.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAnnounceNS.ForeColor = System.Drawing.Color.DarkOliveGreen;
-            this.labelAnnounceNS.Location = new System.Drawing.Point(0, 0);
-            this.labelAnnounceNS.Name = "labelAnnounceNS";
-            this.labelAnnounceNS.Size = new System.Drawing.Size(408, 82);
-            this.labelAnnounceNS.TabIndex = 30;
-            this.labelAnnounceNS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.serialPort2.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort2_DataReceived);
             // 
             // AutomationInfo
             // 
@@ -421,6 +426,7 @@
             this.Load += new System.EventHandler(this.AutomationInfo_Load);
             this.panelAutomationInfoMain.ResumeLayout(false);
             this.panelAutomationInfoMain.PerformLayout();
+            this.panelAnnounceNextStep.ResumeLayout(false);
             this.panelAnnounce.ResumeLayout(false);
             this.panelCountdown.ResumeLayout(false);
             this.panelShowSpeed.ResumeLayout(false);
@@ -429,7 +435,6 @@
             this.panelShowTemperature.ResumeLayout(false);
             this.panelShowTemperature.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panelAnnounceNextStep.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -464,5 +469,6 @@
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Panel panelAnnounceNextStep;
         private System.Windows.Forms.Label labelAnnounceNS;
+        private System.IO.Ports.SerialPort serialPort2;
     }
 }

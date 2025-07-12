@@ -339,6 +339,7 @@
     <Compile Include="Controller\Device\FinalProductLabel.cs" />
     <Compile Include="Controller\Device\PrintingLabel.cs" />
     <Compile Include="Controller\Device\QRGenerate.cs" />
+    <Compile Include="Controller\Device\QYLED_DLL.cs" />
     <Compile Include="Controller\IniFile\IniFileGenerator.cs" />
     <Compile Include="Controller\LogFile\ClearMemmory.cs" />
     <Compile Include="Controller\LogFile\EventBroker.cs" />
@@ -423,11 +424,23 @@
     <Compile Include="View\SideUI\OilFeederTest.Designer.cs">
       <DependentUpon>OilFeederTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\SideUI\PowderCheckUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SideUI\PowderCheckUI.Designer.cs">
+      <DependentUpon>PowderCheckUI.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="View\SideUI\OilFeederTest.resx">
       <DependentUpon>OilFeederTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\SideUI\PowderCheckUI.resx">
+      <DependentUpon>PowderCheckUI.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Resources\pumping.png" />
     <None Include="Resources\connection.png" />
+    <Content Include="QYLED.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\data-template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

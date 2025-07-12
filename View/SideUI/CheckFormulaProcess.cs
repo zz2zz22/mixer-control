@@ -83,5 +83,10 @@ namespace mixer_control_globalver.View.SideUI
             }
             dtgvSpecProcessList.Columns["process_no"].Width = 120;
         }
+
+        private void CheckFormulaProcess_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Dispose();
+        }
     }
 }

@@ -361,6 +361,11 @@ namespace mixer_control_globalver.View.SideUI
             rtb_log.ScrollToCaret();
         }
 
+        private void OilFeederTest_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.Dispose();
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             //do

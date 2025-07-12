@@ -199,6 +199,7 @@ namespace mixer_control_globalver.View.MainUI
                                                 int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
                                                 double oilMass = 0, oilWeight = 0;
                                                 bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
+                                                string powderBefore, powderAfter;
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
                                                     changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
@@ -241,6 +242,17 @@ namespace mixer_control_globalver.View.MainUI
                                                 string stepDesc = processDT.Rows[j][12].ToString();
                                                 string oilType = processDT.Rows[j][11].ToString();
 
+                                                if (Settings.Default.isCheckPowderSupply)
+                                                {
+                                                    powderBefore = processDT.Rows[j][15].ToString();
+                                                    powderAfter = processDT.Rows[j][16].ToString();
+                                                }
+                                                else
+                                                {
+                                                    powderBefore = String.Empty;
+                                                    powderAfter = String.Empty;
+                                                }
+
                                                 TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
                                                 processDT.Rows[j][1].ToString(),
                                                 processDT.Rows[j][2].ToString(),
@@ -256,7 +268,9 @@ namespace mixer_control_globalver.View.MainUI
                                                 oilWeight,
                                                 oilType,
                                                 totalPowder,
-                                                remainPowder);
+                                                remainPowder,
+                                                powderBefore,
+                                                powderAfter);
                                             }
                                         }
                                     }

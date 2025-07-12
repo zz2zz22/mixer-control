@@ -102,6 +102,19 @@
             this.label18 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.label5 = new System.Windows.Forms.Label();
+            this.switchOilDiaMeasurement = new XanderUI.XUISwitch();
+            this.label6 = new System.Windows.Forms.Label();
+            this.switchPowderBagCheck = new XanderUI.XUISwitch();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.txbLEDIP = new System.Windows.Forms.TextBox();
+            this.cbxLEDColor = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.cbxLEDStyle = new System.Windows.Forms.ComboBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.cbDiameterComPort = new System.Windows.Forms.ComboBox();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -115,6 +128,7 @@
             this.tabPageBasicSetting.SuspendLayout();
             this.tabPageSubSetting.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -436,6 +450,10 @@
             // tabPageLogic
             // 
             this.tabPageLogic.BackColor = System.Drawing.Color.PeachPuff;
+            this.tabPageLogic.Controls.Add(this.switchPowderBagCheck);
+            this.tabPageLogic.Controls.Add(this.label6);
+            this.tabPageLogic.Controls.Add(this.switchOilDiaMeasurement);
+            this.tabPageLogic.Controls.Add(this.label5);
             this.tabPageLogic.Controls.Add(this.switchSaveReport);
             this.tabPageLogic.Controls.Add(this.label26);
             this.tabPageLogic.Controls.Add(this.switchOpenLidMode);
@@ -579,9 +597,9 @@
             this.tabPageOilSupply.Controls.Add(this.switchOilMode);
             this.tabPageOilSupply.Controls.Add(this.switchAlertPowder);
             this.tabPageOilSupply.Controls.Add(this.label14);
-            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 28);
+            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 25);
             this.tabPageOilSupply.Name = "tabPageOilSupply";
-            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 479);
+            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 482);
             this.tabPageOilSupply.TabIndex = 2;
             this.tabPageOilSupply.Text = "Oil logic triggers";
             // 
@@ -640,10 +658,10 @@
             this.tabPageSub.Controls.Add(this.switchSkipPassword);
             this.tabPageSub.Controls.Add(this.label16);
             this.tabPageSub.Controls.Add(this.label15);
-            this.tabPageSub.Location = new System.Drawing.Point(4, 28);
+            this.tabPageSub.Location = new System.Drawing.Point(4, 25);
             this.tabPageSub.Name = "tabPageSub";
             this.tabPageSub.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSub.Size = new System.Drawing.Size(521, 479);
+            this.tabPageSub.Size = new System.Drawing.Size(521, 482);
             this.tabPageSub.TabIndex = 1;
             this.tabPageSub.Text = "Sub triggers";
             // 
@@ -724,7 +742,6 @@
             this.groupBox2.Controls.Add(this.txbStartNo);
             this.groupBox2.Controls.Add(this.lb5);
             this.groupBox2.Controls.Add(this.txbBitNo);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(963, 141);
@@ -779,6 +796,7 @@
             // tabPageSubSetting
             // 
             this.tabPageSubSetting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.tabPageSubSetting.Controls.Add(this.groupBox3);
             this.tabPageSubSetting.Controls.Add(this.groupBox5);
             this.tabPageSubSetting.Controls.Add(this.groupBox2);
             this.tabPageSubSetting.Location = new System.Drawing.Point(4, 28);
@@ -794,6 +812,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.groupBox5.Controls.Add(this.cbDiameterComPort);
+            this.groupBox5.Controls.Add(this.label29);
             this.groupBox5.Controls.Add(this.txbTolerance);
             this.groupBox5.Controls.Add(this.label24);
             this.groupBox5.Controls.Add(this.btnTestConnect);
@@ -987,6 +1007,167 @@
             this.label17.Size = new System.Drawing.Size(0, 19);
             this.label17.TabIndex = 19;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(7, 185);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(355, 38);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "Oil Diameter Measurement\r\n(Check oil diameter if equal or below 5/1000)";
+            // 
+            // switchOilDiaMeasurement
+            // 
+            this.switchOilDiaMeasurement.BackColor = System.Drawing.Color.Transparent;
+            this.switchOilDiaMeasurement.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchOilDiaMeasurement.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchOilDiaMeasurement.Location = new System.Drawing.Point(368, 188);
+            this.switchOilDiaMeasurement.Name = "switchOilDiaMeasurement";
+            this.switchOilDiaMeasurement.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchOilDiaMeasurement.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchOilDiaMeasurement.Size = new System.Drawing.Size(60, 30);
+            this.switchOilDiaMeasurement.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchOilDiaMeasurement.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchOilDiaMeasurement.TabIndex = 31;
+            this.switchOilDiaMeasurement.Text = "xuiSwitch1";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 236);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(227, 38);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "Powder bag counter\r\n(Scan for each powder bag)";
+            // 
+            // switchPowderBagCheck
+            // 
+            this.switchPowderBagCheck.BackColor = System.Drawing.Color.Transparent;
+            this.switchPowderBagCheck.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchPowderBagCheck.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchPowderBagCheck.Location = new System.Drawing.Point(240, 244);
+            this.switchPowderBagCheck.Name = "switchPowderBagCheck";
+            this.switchPowderBagCheck.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchPowderBagCheck.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchPowderBagCheck.Size = new System.Drawing.Size(60, 30);
+            this.switchPowderBagCheck.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchPowderBagCheck.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchPowderBagCheck.TabIndex = 33;
+            this.switchPowderBagCheck.Text = "xuiSwitch1";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.groupBox3.Controls.Add(this.label28);
+            this.groupBox3.Controls.Add(this.cbxLEDStyle);
+            this.groupBox3.Controls.Add(this.label10);
+            this.groupBox3.Controls.Add(this.cbxLEDColor);
+            this.groupBox3.Controls.Add(this.txbLEDIP);
+            this.groupBox3.Controls.Add(this.label23);
+            this.groupBox3.Location = new System.Drawing.Point(6, 337);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(960, 105);
+            this.groupBox3.TabIndex = 26;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "LED setting";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(6, 31);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(30, 19);
+            this.label23.TabIndex = 19;
+            this.label23.Text = "IP:";
+            // 
+            // txbLEDIP
+            // 
+            this.txbLEDIP.Location = new System.Drawing.Point(39, 28);
+            this.txbLEDIP.Name = "txbLEDIP";
+            this.txbLEDIP.Size = new System.Drawing.Size(265, 27);
+            this.txbLEDIP.TabIndex = 20;
+            // 
+            // cbxLEDColor
+            // 
+            this.cbxLEDColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxLEDColor.FormattingEnabled = true;
+            this.cbxLEDColor.Items.AddRange(new object[] {
+            "Red",
+            "Green",
+            "Yellow",
+            "Blue",
+            "Purple",
+            "Cyan",
+            "White"});
+            this.cbxLEDColor.Location = new System.Drawing.Point(70, 61);
+            this.cbxLEDColor.Name = "cbxLEDColor";
+            this.cbxLEDColor.Size = new System.Drawing.Size(147, 27);
+            this.cbxLEDColor.TabIndex = 21;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 64);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 19);
+            this.label10.TabIndex = 22;
+            this.label10.Text = "Color:";
+            // 
+            // cbxLEDStyle
+            // 
+            this.cbxLEDStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxLEDStyle.FormattingEnabled = true;
+            this.cbxLEDStyle.Items.AddRange(new object[] {
+            "Adaptive",
+            "Move from right to left",
+            "Move from left to right",
+            "Move from bottom to top",
+            "Move from top to bottom",
+            "Expand from right to left",
+            "Expand from left to right",
+            "Expand from bottom to top",
+            "Expand from top to bottom",
+            "Show immediately",
+            "Expand from the middle to both sides",
+            "Expand from both sides to the middle",
+            "Expand from the middle to top and bottom",
+            "Expand from top to bottom to the middle",
+            "Flashing",
+            "Right blinds",
+            "Lower blinds"});
+            this.cbxLEDStyle.Location = new System.Drawing.Point(365, 61);
+            this.cbxLEDStyle.Name = "cbxLEDStyle";
+            this.cbxLEDStyle.Size = new System.Drawing.Size(227, 27);
+            this.cbxLEDStyle.TabIndex = 23;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(285, 64);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(74, 19);
+            this.label28.TabIndex = 24;
+            this.label28.Text = "D.Mode:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(545, 144);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(137, 19);
+            this.label29.TabIndex = 33;
+            this.label29.Text = "Diameter Sensor:";
+            // 
+            // cbDiameterComPort
+            // 
+            this.cbDiameterComPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbDiameterComPort.FormattingEnabled = true;
+            this.cbDiameterComPort.Location = new System.Drawing.Point(688, 141);
+            this.cbDiameterComPort.Name = "cbDiameterComPort";
+            this.cbDiameterComPort.Size = new System.Drawing.Size(147, 27);
+            this.cbDiameterComPort.TabIndex = 34;
+            // 
             // MainSetting
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1025,6 +1206,8 @@
             this.tabPageSubSetting.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1102,5 +1285,18 @@
         private System.Windows.Forms.Label label26;
         private XanderUI.XUISwitch switchTestOilMultiple;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label5;
+        private XanderUI.XUISwitch switchOilDiaMeasurement;
+        private XanderUI.XUISwitch switchPowderBagCheck;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox cbxLEDColor;
+        private System.Windows.Forms.TextBox txbLEDIP;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.ComboBox cbxLEDStyle;
+        private System.Windows.Forms.ComboBox cbDiameterComPort;
+        private System.Windows.Forms.Label label29;
     }
 }
