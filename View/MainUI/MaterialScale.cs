@@ -75,17 +75,17 @@ namespace mixer_control_globalver.View.MainUI
                                     TemporaryVariables.tempFormulaLOT = data[1];
                                     if (!String.IsNullOrEmpty(data[3]))
                                         totalMaterial = Convert.ToInt32(data[3]);
-                                    if (Settings.Default.language == 0)
+                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                                     {
                                         message = "Đã nhập công thức!";
                                         caption = "Thông tin";
                                     }
-                                    else if (Settings.Default.language == 1)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                                     {
                                         message = "公式已输入！";
                                         caption = "信息";
                                     }
-                                    else if (Settings.Default.language == 2)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                                     {
                                         message = "Formula entered!";
                                         caption = "Information";
@@ -94,17 +94,17 @@ namespace mixer_control_globalver.View.MainUI
                                 }
                                 else
                                 {
-                                    if (Settings.Default.language == 0)
+                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                                     {
                                         message = "Công thức không trùng khớp!";
                                         caption = "Cảnh báo";
                                     }
-                                    else if (Settings.Default.language == 1)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                                     {
                                         message = "公式不符！";
                                         caption = "警报";
                                     }
-                                    else if (Settings.Default.language == 2)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                                     {
                                         message = "Formula is not match!";
                                         caption = "Warning";
@@ -117,17 +117,17 @@ namespace mixer_control_globalver.View.MainUI
                             {
                                 if (totalMaterial == 0)
                                 {
-                                    if (Settings.Default.language == 0)
+                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                                     {
                                         message = "Vui lòng quét mã vạch của công thức trước!";
                                         caption = "Cảnh báo";
                                     }
-                                    else if (Settings.Default.language == 1)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                                     {
                                         message = "请先扫描菜谱条形码！";
                                         caption = "警报";
                                     }
-                                    else if (Settings.Default.language == 2)
+                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                                     {
                                         message = "Please scan the formula barcode first!";
                                         caption = "Warning";
@@ -156,17 +156,17 @@ namespace mixer_control_globalver.View.MainUI
                         }
                         else
                         {
-                            if (Settings.Default.language == 0)
+                            if (SettingsManager.GetSetting(s => s.Language) == 0)
                             {
                                 message = "Không thể nhận dạng mã QR!";
                                 caption = "Lỗi";
                             }
-                            else if (Settings.Default.language == 1)
+                            else if (SettingsManager.GetSetting(s => s.Language) == 1)
                             {
                                 message = "无法识别二维码！";
                                 caption = "错误";
                             }
-                            else if (Settings.Default.language == 2)
+                            else if (SettingsManager.GetSetting(s => s.Language) == 2)
                             {
                                 message = "Can not read QR code!";
                                 caption = "Error";
@@ -191,7 +191,7 @@ namespace mixer_control_globalver.View.MainUI
                 }
             }     
             totalMaterial = TemporaryVariables.materialDT.Rows.Count;
-            if (Settings.Default.language == 0)
+            if (SettingsManager.GetSetting(s => s.Language) == 0)
             {
                 lb1.Text = "Danh sách nguyên vật liệu đã xác nhận:";
                 lb2.Text = "Số nguyên vật liệu đã xác nhận:";
@@ -199,7 +199,7 @@ namespace mixer_control_globalver.View.MainUI
                 lb4.Text = "Nguyên vật liệu vừa xác nhận:";
                 btnProceedAutomation.ButtonText = "Tiến hành chạy tự động";
             }
-            else if (Settings.Default.language == 1)
+            else if (SettingsManager.GetSetting(s => s.Language) == 1)
             {
                 lb1.Text = "确认材料清单：";
                 lb2.Text = "确认材料数量：";
@@ -207,7 +207,7 @@ namespace mixer_control_globalver.View.MainUI
                 lb4.Text = "最新确认材料：";
                 btnProceedAutomation.ButtonText = "开始运行";
             }
-            else if (Settings.Default.language == 2)
+            else if (SettingsManager.GetSetting(s => s.Language) == 2)
             {
                 lb1.Text = "Confirmed materials list:";
                 lb2.Text = "Confirmed materials amount:";
@@ -219,23 +219,23 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            if(!Properties.Settings.Default.isTesting)
+            if(!SettingsManager.GetSetting(s => s.DeveloperMode))
             {
                 if (TemporaryVariables.materialDT.Rows.Count == totalMaterial)
                     Program.main.openAutomationTab();
                 else
                 {
-                    if (Settings.Default.language == 0)
+                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                     {
                         message = "Chưa quét đủ số lượng nguyên vật liệu. Vui lòng kiểm tra lại.";
                         caption = "Cảnh báo";
                     }
-                    else if (Settings.Default.language == 1)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                     {
                         message = "没有扫描足够的材料。请再检查一次。";
                         caption = "警报";
                     }
-                    else if (Settings.Default.language == 2)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                     {
                         message = "Not scanning enough materials. Please check again.";
                         caption = "Warning";

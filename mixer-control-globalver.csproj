@@ -346,10 +346,12 @@
     <Compile Include="Controller\LogFile\SystemLog.cs" />
     <Compile Include="Controller\PLC\PLCMethods.cs" />
     <Compile Include="Controller\Reports.cs" />
+    <Compile Include="Controller\SettingsManager.cs" />
     <Compile Include="Controller\SubMethods.cs" />
     <Compile Include="Controller\TemporaryVariables.cs" />
     <Compile Include="Controller\ToolSupport.cs" />
     <Compile Include="Controller\PLC\PLCConnector.cs" />
+    <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -543,9 +545,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
       <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>

@@ -21,11 +21,11 @@ namespace mixer_control_globalver.Controller.PLC
 
         private static bool PLCConnect()
         {
-            databaseNo = Settings.Default.database_no;
+            databaseNo = SettingsManager.GetSetting(s => s.DatabaseNumber);
             int connectionPLC;
             try
             {
-                pLC = new PLCConnector(Settings.Default.plc_ip, 0, 0, out connectionPLC);
+                pLC = new PLCConnector(SettingsManager.GetSetting(s => s.PlcIp), 0, 0, out connectionPLC);
                 if (connectionPLC != 0)
                     throw new Exception("Connection to PLC failed, error code : " + connectionPLC);
                 else

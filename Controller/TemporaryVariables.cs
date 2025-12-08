@@ -156,6 +156,27 @@ namespace mixer_control_globalver.Controller
             processCol.DataType = Type.GetType("System.String");
             processCol.ColumnName = "powder_after";
             processDT.Columns.Add(processCol);
+
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Boolean");
+            processCol.ColumnName = "is_oilfeed_2";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Double");
+            processCol.ColumnName = "oil_mass_2";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.Double");
+            processCol.ColumnName = "oil_weight_2";
+            processDT.Columns.Add(processCol);
+
+            processCol = new DataColumn();
+            processCol.DataType = Type.GetType("System.String");
+            processCol.ColumnName = "oil_type_2";
+            processDT.Columns.Add(processCol);
         }
 
         public static void InitSettingDT()

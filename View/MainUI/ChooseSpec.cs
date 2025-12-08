@@ -48,15 +48,15 @@ namespace mixer_control_globalver.View.MainUI
                 }
 
                 dtgvListSpecification.DataSource = dt;
-                if (Settings.Default.language == 0)
+                if (SettingsManager.GetSetting(s => s.Language) == 0)
                 {
                     dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp";
                 }
-                else if (Settings.Default.language == 1)
+                else if (SettingsManager.GetSetting(s => s.Language) == 1)
                 {
                     dtgvListSpecification.Columns["file_name"].HeaderText = "产品型号名称";
                 }
-                else if (Settings.Default.language == 2)
+                else if (SettingsManager.GetSetting(s => s.Language) == 2)
                 {
                     dtgvListSpecification.Columns["file_name"].HeaderText = "File name";
                 }
@@ -64,17 +64,17 @@ namespace mixer_control_globalver.View.MainUI
             }
             catch (Exception ex)
             {
-                if (Settings.Default.language == 0)
+                if (SettingsManager.GetSetting(s => s.Language) == 0)
                 {
                     message = "Không thể tải dữ liệu tệp!" + "\r\n\r\n" + ex.Message;
                     caption = "Lỗi";
                 }
-                else if (Settings.Default.language == 1)
+                else if (SettingsManager.GetSetting(s => s.Language) == 1)
                 {
                     message = "Load dirctory files failed!" + "\r\n\r\n" + ex.Message;
                     caption = "Error";
                 }
-                else if (Settings.Default.language == 2)
+                else if (SettingsManager.GetSetting(s => s.Language) == 2)
                 {
                     message = "上传产品型号失败！" + "\r\n\r\n" + ex.Message;
                     caption = "错误";
@@ -87,7 +87,7 @@ namespace mixer_control_globalver.View.MainUI
         #endregion
         private void ChooseSpec_Load(object sender, EventArgs e)
         {
-            if (Settings.Default.language == 0)
+            if (SettingsManager.GetSetting(s => s.Language) == 0)
             {
                 lb1.Text = "Công thức đã chọn:";
                 lb2.Text = "Danh sách công thức:";
@@ -95,7 +95,7 @@ namespace mixer_control_globalver.View.MainUI
                 btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu";
                 btnCheckProcess.ButtonText = "Xem quy trình";
             }
-            else if (Settings.Default.language == 1)
+            else if (SettingsManager.GetSetting(s => s.Language) == 1)
             {
                 lb1.Text = "选定的配方:";
                 lb2.Text = "产品型号列表:";
@@ -103,7 +103,7 @@ namespace mixer_control_globalver.View.MainUI
                 btnConfirmChoose.ButtonText = "开始材料确认。";
                 btnCheckProcess.ButtonText = "检查流程步骤";
             }
-            else if (Settings.Default.language == 2)
+            else if (SettingsManager.GetSetting(s => s.Language) == 2)
             {
                 lb1.Text = "Selected Formula:";
                 lb2.Text = "Formula setting files:";
@@ -112,21 +112,19 @@ namespace mixer_control_globalver.View.MainUI
                 btnCheckProcess.ButtonText = "Check process step";
             }
 
-            Properties.Settings.Default.isEndReport = true;
-            Properties.Settings.Default.Save();
+            SettingsManager.UpdateSettings(s => s.EndReportEnabled = true);
             try
             {
-                if (String.IsNullOrEmpty(Properties.Settings.Default.folder_directory))
+                if (String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.FormulaDirectory)))
                 {
                     string dirPath = AppDomain.CurrentDomain.BaseDirectory + "\\InputData";
                     System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(dirPath);
                     if (dir.Exists == false)
                         dir.Create();
 
-                    Properties.Settings.Default.folder_directory = dir.FullName;
-                    Properties.Settings.Default.Save();
+                    SettingsManager.UpdateSettings(s => s.FormulaDirectory = dir.FullName);
                 }
-                LoadItemFilePath(Properties.Settings.Default.folder_directory);
+                LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
 
                 TemporaryVariables.resetAllTempVariables();
             }
@@ -134,6 +132,7 @@ namespace mixer_control_globalver.View.MainUI
             {
                 SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Error load file", ex.Message);
             }
+            SettingsManager.SaveSettings();
         }
 
         private void saveFileLocationPassFormClosed(object sender, EventArgs e)
@@ -143,15 +142,14 @@ namespace mixer_control_globalver.View.MainUI
             {
                 isConfirmed = false;
                 CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-                dialog.InitialDirectory = Properties.Settings.Default.folder_directory;
+                dialog.InitialDirectory = SettingsManager.GetSetting(s => s.FormulaDirectory);
                 dialog.IsFolderPicker = true;
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    Properties.Settings.Default.folder_directory = dialog.FileName;
-                    Properties.Settings.Default.Save();
+                    SettingsManager.UpdateSettings(s => s.FormulaDirectory = dialog.FileName);
+                    SettingsManager.SaveSettings();
                 }
-                LoadItemFilePath(Properties.Settings.Default.folder_directory);
-                SubMethods.BackupUserSettings();
+                LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
             }
         }
 
@@ -197,8 +195,8 @@ namespace mixer_control_globalver.View.MainUI
                                                 && !String.IsNullOrEmpty(processDT.Rows[j][8].ToString()))
                                             {
                                                 int changeSpeed = 0, changeTime = 0, totalPowder = 0, remainPowder = 0;
-                                                double oilMass = 0, oilWeight = 0;
-                                                bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false;
+                                                double oilMass = 0, oilWeight = 0, oilMass2 = 0, oilWeight2 = 0;
+                                                bool isVaccum = false, isSkipAnnounce = false, isOilFeed = false, isOilFeed2 = false;
                                                 string powderBefore, powderAfter;
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
@@ -227,6 +225,20 @@ namespace mixer_control_globalver.View.MainUI
                                                     oilWeight = 0;
                                                 }
 
+                                                if (processDT.Rows[j][17].ToString().ToLower() == "yes")
+                                                    isOilFeed2 = true;
+
+                                                if (!string.IsNullOrEmpty(processDT.Rows[j][18].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][19].ToString()))
+                                                {
+                                                    oilMass2 = Convert.ToDouble(processDT.Rows[j][19].ToString());
+                                                    oilWeight2 = Convert.ToDouble(processDT.Rows[j][18].ToString());
+                                                }
+                                                else
+                                                {
+                                                    oilMass2 = 0;
+                                                    oilWeight2 = 0;
+                                                }
+
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
                                                 {
                                                     //Edit to read total powder bags
@@ -241,8 +253,9 @@ namespace mixer_control_globalver.View.MainUI
 
                                                 string stepDesc = processDT.Rows[j][12].ToString();
                                                 string oilType = processDT.Rows[j][11].ToString();
+                                                string oilType2 = processDT.Rows[j][20].ToString();
 
-                                                if (Settings.Default.isCheckPowderSupply)
+                                                if (SettingsManager.GetSetting(s => s.CheckPowderEnabled))
                                                 {
                                                     powderBefore = processDT.Rows[j][15].ToString();
                                                     powderAfter = processDT.Rows[j][16].ToString();
@@ -270,7 +283,11 @@ namespace mixer_control_globalver.View.MainUI
                                                 totalPowder,
                                                 remainPowder,
                                                 powderBefore,
-                                                powderAfter);
+                                                powderAfter,
+                                                isOilFeed2,
+                                                oilMass2,
+                                                oilWeight2,
+                                                oilType2);
                                             }
                                         }
                                     }
@@ -278,7 +295,7 @@ namespace mixer_control_globalver.View.MainUI
                                 else
                                 {
                                     string exMessage;
-                                    switch (Settings.Default.language)
+                                    switch (SettingsManager.GetSetting(s => s.Language))
                                     {
                                         case 0:
                                             exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";
@@ -302,17 +319,17 @@ namespace mixer_control_globalver.View.MainUI
                             {
                                 isSuccess = false;
                                 loading.BeginInvoke(new Action(() => loading.Close()));
-                                if (Settings.Default.language == 0)
+                                if (SettingsManager.GetSetting(s => s.Language) == 0)
                                 {
                                     message = "Lỗi khi tải dữ liệu excel!" + "\r\n\r\n" + ex.Message;
                                     caption = "Lỗi";
                                 }
-                                else if (Settings.Default.language == 1)
+                                else if (SettingsManager.GetSetting(s => s.Language) == 1)
                                 {
                                     message = "下载EXCEL失败!" + "\r\n\r\n" + ex.Message;
                                     caption = "错误";
                                 }
-                                else if (Settings.Default.language == 2)
+                                else if (SettingsManager.GetSetting(s => s.Language) == 2)
                                 {
                                     message = "Load Excel data failed!" + "\r\n\r\n" + ex.Message;
                                     caption = "Error";
@@ -338,7 +355,7 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnRefreshFileList_Click(object sender, EventArgs e)
         {
-            LoadItemFilePath(Properties.Settings.Default.folder_directory);
+            LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
         }
 
         private void btnConfirmChoose_Click(object sender, EventArgs e)
@@ -362,15 +379,15 @@ namespace mixer_control_globalver.View.MainUI
                 try
                 {
                     OpenFileDialog fileDialog = new OpenFileDialog();
-                    if (Settings.Default.language == 0)
+                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                     {
                         fileDialog.Title = "Nhập file công thức";
                     }
-                    else if (Settings.Default.language == 1)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                     {
                         fileDialog.Title = "导入公式文件";
                     }
-                    else if (Settings.Default.language == 2)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                     {
                         fileDialog.Title = "Import formula";
                     }
@@ -385,49 +402,49 @@ namespace mixer_control_globalver.View.MainUI
                         foreach (string _file in fileDialog.FileNames)
                         {
                             FileInfo d = new FileInfo(_file);
-                            if (File.Exists(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name)))
+                            if (File.Exists(Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name)))
                             {
-                                File.Delete(Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
+                                File.Delete(Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name));
                             }
-                            File.Move(_file, Path.Combine(Properties.Settings.Default.folder_directory + "\\" + d.Name));
+                            File.Move(_file, Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name));
                         }
-                        if (Settings.Default.language == 0)
+                        if (SettingsManager.GetSetting(s => s.Language) == 0)
                         {
                             message = "Thêm công thức thành công!";
                             caption = "Thông tin";
                         }
-                        else if (Settings.Default.language == 1)
+                        else if (SettingsManager.GetSetting(s => s.Language) == 1)
                         {
                             message = "更多成功秘诀！";
                             caption = "信息";
                         }
-                        else if (Settings.Default.language == 2)
+                        else if (SettingsManager.GetSetting(s => s.Language) == 2)
                         {
                             message = "Successfully import formula !";
                             caption = "Information";
                         }
                         CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadItemFilePath(Properties.Settings.Default.folder_directory);
+                        LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (Settings.Default.language == 0)
+                    if (SettingsManager.GetSetting(s => s.Language) == 0)
                     {
                         message = "Thêm công thức thất bại !" + "\r\n\r\n" + ex.Message;
                         caption = "Lỗi";
                     }
-                    else if (Settings.Default.language == 1)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
                     {
                         message = "更多失败的食谱！" + "\r\n\r\n" + ex.Message;
                         caption = "错误";
                     }
-                    else if (Settings.Default.language == 2)
+                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
                     {
                         message = "Failed to import formula!" + "\r\n\r\n" + ex.Message;
                         caption = "Error";
                     }
-                    LoadItemFilePath(Properties.Settings.Default.folder_directory);
+                    LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
                     SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
                     CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -460,16 +477,16 @@ namespace mixer_control_globalver.View.MainUI
 
         private void btnTestOilFeed_Click(object sender, EventArgs e)
         {
-            if (!Settings.Default.isOilTested || Settings.Default.isTestOilMultiple)
+            if (!SettingsManager.GetSetting(s => s.OIlTested) || SettingsManager.GetSetting(s => s.MultipleOilTestEnabled))
             {
-                if (Settings.Default.isOilFeed)
+                if (SettingsManager.GetSetting(s => s.OilSupplyEnabled))
                 {
                     OilFeederTest oilFeederTest = new OilFeederTest();
                     oilFeederTest.ShowDialog();
                 }
                 else
                 {
-                    switch (Settings.Default.language)
+                    switch (SettingsManager.GetSetting(s => s.Language))
                     {
                         case 0:
                             message = "Máy không được kích hoạt chế độ cấp dầu!";
@@ -493,7 +510,7 @@ namespace mixer_control_globalver.View.MainUI
             }
             else
             {
-                switch (Settings.Default.language)
+                switch (SettingsManager.GetSetting(s => s.Language))
                 {
                     case 0:
                         message = "Máy đã được test cấp dầu!";
@@ -525,17 +542,17 @@ namespace mixer_control_globalver.View.MainUI
             }
             else
             {
-                if (Settings.Default.language == 0)
+                if (SettingsManager.GetSetting(s => s.Language) == 0)
                 {
                     message = "Chưa chọn công thức hoặc công thức không có dữ liệu !";
                     caption = "Lỗi";
                 }
-                else if (Settings.Default.language == 1)
+                else if (SettingsManager.GetSetting(s => s.Language) == 1)
                 {
                     message = "未选择公式或公式没有数据！";
                     caption = "错误";
                 }
-                else if (Settings.Default.language == 2)
+                else if (SettingsManager.GetSetting(s => s.Language) == 2)
                 {
                     message = "No formula has been selected or the formula has no data!";
                     caption = "Error";

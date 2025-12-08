@@ -83,14 +83,14 @@ namespace mixer_control_globalver.View.SideUI
         //Methods
         private void SendLEDData(string data)
         {
-            ip = Settings.Default.led_ip;
+            ip = SettingsManager.GetSetting(s => s.LedScreenIp);
             ledcolour = -1;
             width = 128;
             higth = 64;
-            colour = Settings.Default.led_color;
+            colour = SettingsManager.GetSetting(s => s.LedScreenColor);
             font = 1;
             size = 1;
-            style = Settings.Default.led_style;
+            style = SettingsManager.GetSetting(s => s.LedScreenStyle);
             ledSpeed = 1;
             stoptime = 1;
             updatestyle = 1;
@@ -194,15 +194,11 @@ namespace mixer_control_globalver.View.SideUI
             this.Dispose();
         }
 
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void PowderCheckUI_Load(object sender, EventArgs e)
         {
             showDataInit();
         }
+
 
         private void showDataInit()
         {
@@ -240,10 +236,11 @@ namespace mixer_control_globalver.View.SideUI
                         }
                     }
 
-                    finalData = baseCode.Select(item => item.Split('#'))
-    .GroupBy(parts => parts[0])
-    .Select(g => $"{g.Key}#{g.Sum(x => int.Parse(x[1]))}")
-    .ToList(); 
+                    if (baseCode.Count > 1)
+                        finalData = baseCode.Select(item => item.Split('#'))
+        .GroupBy(parts => parts[0])
+        .Select(g => $"{g.Key}#{g.Sum(x => int.Parse(x[1]))}")
+        .ToList();
 
                     if (finalData.Count > 0)
                     {
@@ -256,7 +253,7 @@ namespace mixer_control_globalver.View.SideUI
                                 listMaterial += ", " + finalData[k].Split('#')[0] + "(" + finalData[k].Split('#')[1] + " bao)";
                         }
                         totalMaterialType = finalData.Count;
-                        lbAlert.Text = "Bước này có " + totalMaterialType + " loại bột : " + listMaterial;
+                        lbAlert.Text = "Bước này cần cấp " + totalMaterialType + " loại bột (此步骤需要投入" + totalMaterialType + "袋面粉):" + listMaterial;
                     }
                     else
                     {
@@ -294,7 +291,7 @@ namespace mixer_control_globalver.View.SideUI
                     {
                         if (finalData.Count == 0)
                         {
-                            finalData.Append(baseCode[i]).ToArray();
+                            finalData.Add(baseCode[i]);
                         }
                         else
                         {
@@ -315,7 +312,7 @@ namespace mixer_control_globalver.View.SideUI
                                 }
                                 else
                                 {
-                                    finalData.Append(baseCode[i]).ToArray();
+                                    finalData.Add(baseCode[i]);
                                 }
                             }
                         }
@@ -331,7 +328,10 @@ namespace mixer_control_globalver.View.SideUI
                                 listMaterial += ", " + finalData[k].Split('#')[0] + "(" + finalData[k].Split('#')[1] + " bao)";
                         }
                         totalMaterialType = finalData.Count;
-                        lbAlert.Text = "Trước khi cấp dầu có " + totalMaterialType + " loại bột : " + listMaterial;
+                        if (type == 1)
+                            lbAlert.Text = "Trước khi cấp dầu cần cấp " + totalMaterialType + " loại bột (加油之前需要先投入" + totalMaterialType + "袋面粉): " + listMaterial;
+                        else
+                            lbAlert.Text = "Sau khi cấp dầu cần cấp " + totalMaterialType + " loại bột (加油之后需要再投入" + totalMaterialType + "袋面粉): " + listMaterial;
                     }
                     else
                     {
@@ -342,6 +342,11 @@ namespace mixer_control_globalver.View.SideUI
 
             currentScan = 0;
             currentMaterialNo = 0;
+            if (finalData.Count == 0)
+            {
+                this.Close();
+                return;
+            }
             string[] trueData = finalData[currentMaterialNo].Split('#');
             string loadMaterialCode = trueData[0];
             string loadMaterialQuantity = trueData[1];

@@ -29,45 +29,21 @@ namespace mixer_control_globalver.View.CustomComponent
             {
                 ChooseSpec.isConfirmed = true;
                 this.Close();
-            }else if(password == Settings.Default.authorSkipPassword.Trim().ToLower())
+            }
+            else if (password == SettingsManager.GetSetting(s => s.SkipStepPassword).Trim().ToLower())
             {
                 AutomationInfo.isAuthorSkip = true;
                 this.Close();
             }
             else
             {
-                if (Settings.Default.language == 0)
-                {
-                    message = "Sai mật khẩu!\r\nWrong password";
-                    caption = "Thông tin / Information";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    message = "Sai mật khẩu!\r\n密码错误！";
-                    caption = "Lỗi / 错误";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "Wrong password";
-                    caption = "Information";
-                }
-                else if (Settings.Default.language == 3)
-                {
-                    message = "Sai mật khẩu!";
-                    caption = "Thông tin";
-                }
-                else if (Settings.Default.language == 4)
-                {
-                    message = "密码错误！";
-                    caption = "错误";
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
         }
 
         private void txbPassword_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 CheckPassword(txbPassword.Text.Trim());
             }
@@ -80,21 +56,8 @@ namespace mixer_control_globalver.View.CustomComponent
 
         private void PasswordConfirm_Load(object sender, EventArgs e)
         {
-            if (Settings.Default.language == 0)
-            {
-                lbAnnounce.Text = "Nhập mật khẩu\r\nEnter password";
-                btnConfirm.ButtonText = "Xác nhận\r\nConfirm";
-            }
-            else if (Settings.Default.language == 1)
-            {
-                lbAnnounce.Text = "Nhập mật khẩu\r\n输入密码";
-                btnConfirm.ButtonText = "Xác nhận\r\n确认";
-            }
-            else if (Settings.Default.language == 2)
-            {
-                lbAnnounce.Text = "Enter password";
-                btnConfirm.ButtonText = "Confirm";
-            }
+            lbAnnounce.Text = "Enter password";
+            btnConfirm.ButtonText = "Confirm";
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)

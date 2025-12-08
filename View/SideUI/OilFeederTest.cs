@@ -20,9 +20,6 @@ namespace mixer_control_globalver.View.SideUI
 {
     public partial class OilFeederTest : Form
     {
-        public static int ConnectionPLC;
-
-        int db = Settings.Default.database_no;
         private int bytesRead;
         private byte[] buffer;
         double testMass;
@@ -79,17 +76,17 @@ namespace mixer_control_globalver.View.SideUI
 
         private void btnStartTesting_Click(object sender, EventArgs e)
         {
-            if (Settings.Default.language == 0)
+            if (SettingsManager.GetSetting(s => s.Language) == 0)
             {
                 message = "Bắt đầu test cấp dầu ?";
                 caption = "Cảnh báo";
             }
-            else if (Settings.Default.language == 1)
+            else if (SettingsManager.GetSetting(s => s.Language) == 1)
             {
                 message = "开始油泵测试 ?";
                 caption = "提示";
             }
-            else if (Settings.Default.language == 2)
+            else if (SettingsManager.GetSetting(s => s.Language) == 2)
             {
                 message = "Start oil pump test ?";
                 caption = "Warning";
@@ -168,71 +165,41 @@ namespace mixer_control_globalver.View.SideUI
 
         private void OilFeederTest_Load(object sender, EventArgs e)
         {
-            if (Settings.Default.language == 0)
+            if (SettingsManager.GetSetting(s => s.Language) == 0)
             {
                 message = "Nhập khối lượng dầu muốn test:";
             }
-            else if (Settings.Default.language == 1)
+            else if (SettingsManager.GetSetting(s => s.Language) == 1)
             {
                 message = "输入测试油量：";
             }
-            else if (Settings.Default.language == 2)
+            else if (SettingsManager.GetSetting(s => s.Language) == 2)
             {
                 message = "Input the test oil mass:";
             }
             label1.Text = message;
             try
             {
-                if (!String.IsNullOrEmpty(Properties.Settings.Default.comPort))
+                if (!String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.OilSupplyComPort)))
                 {
-                    serialPort1.PortName = Properties.Settings.Default.comPort;
-                    serialPort1.BaudRate = Convert.ToInt32(Properties.Settings.Default.baudRate);
-                    serialPort1.DataBits = Convert.ToInt32(Properties.Settings.Default.dataBits);
-                    serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), Properties.Settings.Default.stopBits);
-                    serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), Properties.Settings.Default.parityBits);
+                    serialPort1.PortName = SettingsManager.GetSetting(s => s.OilSupplyComPort);
+                    serialPort1.BaudRate = Convert.ToInt32(SettingsManager.GetSetting(s => s.OilSupplyBaudRate));
+                    serialPort1.DataBits = Convert.ToInt32(SettingsManager.GetSetting(s => s.OilSupplyDataBits));
+                    serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), SettingsManager.GetSetting(s => s.OilSupplyStopBits));
+                    serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), SettingsManager.GetSetting(s => s.OilSupplyParity));
                     serialPort1.ReadTimeout = 1000;
                     serialPort1.Open();
                     //bool isConnected = SubMethods.CheckConnectStatus(serialPort1, new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 }); // Đọc trạng thái máy
                     if (!serialPort1.IsOpen)
                     {
-                        if (Settings.Default.language == 0)
-                        {
-                            message = "Kết nối với máy bơm không thành công, vui lòng kiểm tra!";
-                            caption = "Cảnh báo";
-                        }
-                        else if (Settings.Default.language == 1)
-                        {
-                            message = "泵连接失败，请检查！";
-                            caption = "提示";
-                        }
-                        else if (Settings.Default.language == 2)
-                        {
-                            message = "Connection to the pump failed, please check!";
-                            caption = "Warning";
-                        }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        CTMessageBox.Show("Connection to the pump failed, please check!", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         CloseSerialPort();
                         this.Close();
                     }
                 }
                 else
                 {
-                    if (Settings.Default.language == 0)
-                    {
-                        message = "Chưa cài đặt cổng kết nối với máy bơm!";
-                        caption = "Cảnh báo";
-                    }
-                    else if (Settings.Default.language == 1)
-                    {
-                        message = "泵连接口未安装！";
-                        caption = "提示";
-                    }
-                    else if (Settings.Default.language == 2)
-                    {
-                        message = "The pump connection port is not installed!";
-                        caption = "Warning";
-                    }
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CTMessageBox.Show("The pump connection port is not installed!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     this.Close();
                 }
             }
@@ -309,7 +276,7 @@ namespace mixer_control_globalver.View.SideUI
             //lbStatus.Text = "Running...";
             lbStatus.Text = actualMass;
 
-            if (isFinish || (testMass - Convert.ToDouble(actualMass)) < Settings.Default.toleranceMass)
+            if (isFinish || (testMass - Convert.ToDouble(actualMass)) < SettingsManager.GetSetting(s => s.OilToleranceMass))
             {
                 lbStatus.Text = testMass.ToString();
                 if (tmrCallBgWorker != null)
@@ -322,9 +289,12 @@ namespace mixer_control_globalver.View.SideUI
                 }
                 if (serialPort1.IsOpen)
                     CloseSerialPort();
-                Settings.Default.timeOilTested = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                Settings.Default.isOilTested = true;
-                Settings.Default.Save();
+                SettingsManager.UpdateSettings(s =>
+                {
+                    s.OIlTested = true;
+                    s.OIlTestedTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                });
+                SettingsManager.SaveSettings();
                 //Thread.Sleep(500);
                 //do
                 //{

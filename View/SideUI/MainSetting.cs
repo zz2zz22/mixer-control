@@ -11,13 +11,13 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Globalization;
 using mixer_control_globalver.Controller.LogFile;
+using System.Threading.Tasks;
 
 namespace mixer_control_globalver.View.SideUI
 {
     public partial class MainSetting : Form
     {
         bool isExitApplication = false;
-        string message = String.Empty, caption = String.Empty;
         IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainSetting()
         {
@@ -32,11 +32,11 @@ namespace mixer_control_globalver.View.SideUI
         private extern static void ReleaseCapture();
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hWnd, int wMsg, int wParam, int lParam);
-        private void CloseSerialPort()
+        private void CloseSerialPort(SerialPort serialPort)
         {
             isExitApplication = true;
-            Thread.Sleep(serialPort1.ReadTimeout); //Wait for reading threads to finish
-            serialPort1.Close();
+            Thread.Sleep(serialPort.ReadTimeout); //Wait for reading threads to finish
+            serialPort.Close();
             isExitApplication = false;
         }
         private void LoadNotSettingValue()
@@ -63,167 +63,97 @@ namespace mixer_control_globalver.View.SideUI
             else
                 lbSettingAnnounce.Text = String.Empty;
         }
-
-        private void MainSetting_Load(object sender, EventArgs e)
+        private void ControlDataLoad()
         {
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.comPort))
-            {
-                string[] ports = SerialPort.GetPortNames();
-                cbComPort.Items.AddRange(ports);
-                cbComPort.Text = Settings.Default.comPort;
-            }
-            else
-            {
-                string[] ports = SerialPort.GetPortNames();
-                cbComPort.Items.AddRange(ports);
-            }
+            string[] ports = SerialPort.GetPortNames();
+            cbComPort.Items.AddRange(ports);
+            cbComPort.Text = SettingsManager.GetSetting(s => s.OilSupplyComPort);
 
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.diameterComPort))
-            {
-                string[] ports = SerialPort.GetPortNames();
-                cbDiameterComPort.Items.AddRange(ports);
-                cbDiameterComPort.Text = Settings.Default.diameterComPort;
-            }
-            else
-            {
-                string[] ports = SerialPort.GetPortNames();
-                cbDiameterComPort.Items.AddRange(ports);
-            }
-            cbBaudRate.Text = Settings.Default.baudRate;
-            cbDataBits.Text = Settings.Default.dataBits;
-            cbStopBits.Text = Settings.Default.stopBits;
-            cbParityBits.Text = Settings.Default.parityBits;
+            cbPump2ComPort.Items.AddRange(ports);
+            cbPump2ComPort.Text = SettingsManager.GetSetting(s => s.SecondaryOilSupplyComPort);
 
-            btnSaveOffset.ButtonText = "Lưu cài đặt offset";
+            cbDiameterComPort.Items.AddRange(ports);
+            cbDiameterComPort.Text = SettingsManager.GetSetting(s => s.FlowMeterComPort);
+
+            cbBaudRate.Text = SettingsManager.GetSetting(s => s.OilSupplyBaudRate);
+            cbDataBits.Text = SettingsManager.GetSetting(s => s.OilSupplyDataBits);
+            cbStopBits.Text = SettingsManager.GetSetting(s => s.OilSupplyStopBits);
+            cbParityBits.Text = SettingsManager.GetSetting(s => s.OilSupplyParity);
+
+            btnSaveOffset.ButtonText = "Save Offset Setting";
 
             lbSettingAnnounce.Text = String.Empty;
-            txbPLCIpSetting.Text = Settings.Default.plc_ip;
-            txbDatabaseNo.Text = Settings.Default.database_no.ToString();
-            txbMotorMaxSpeed.Text = Settings.Default.max_speed.ToString();
-            txbMotorDiameter.Text = Settings.Default.spindle_diameter.ToString();
-            txbSensorDiameter.Text = Settings.Default.sensor_diameter.ToString();
-            txbTransmissionRatio.Text = Settings.Default.transmission_ratio.ToString();
-            txbAuthorSkipPass.Text = Settings.Default.authorSkipPassword;
-            txbTolerance.Text = Settings.Default.toleranceMass.ToString();
+            txbPLCIpSetting.Text = SettingsManager.GetSetting(s => s.PlcIp);
+            txbDatabaseNo.Text = SettingsManager.GetSetting(s => s.DatabaseNumber).ToString();
+            txbMotorMaxSpeed.Text = SettingsManager.GetSetting(s => s.MaxSpeed).ToString();
+            txbMotorDiameter.Text = SettingsManager.GetSetting(s => s.SpindleDiameter).ToString();
+            txbSensorDiameter.Text = SettingsManager.GetSetting(s => s.SensorDiameter).ToString();
+            txbTransmissionRatio.Text = SettingsManager.GetSetting(s => s.TransmissionRatio).ToString();
+            txbAuthorSkipPass.Text = SettingsManager.GetSetting(s => s.SkipStepPassword);
+            txbTolerance.Text = SettingsManager.GetSetting(s => s.OilToleranceMass).ToString();
 
-            if(Settings.Default.isOilFeed)
-            {
-                switchOilMode.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchOilMode.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchOilMode.SwitchState = SettingsManager.GetSetting(s => s.OilSupplyEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isStopBetweenStep)
-            {
-                switchStopMode.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchStopMode.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchStopMode.SwitchState = SettingsManager.GetSetting(s => s.StopMachineBetweenRuns) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isSkipOpenLid)
-            {
-                switchOpenLit.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchOpenLit.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchOpenLit.SwitchState = SettingsManager.GetSetting(s => s.OpenMixerLidAfterRun) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isTesting)
-            {
-                switchTest.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchTest.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchTest.SwitchState = SettingsManager.GetSetting(s => s.DeveloperMode) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isAlertPowder)
-            {
-                switchAlertPowder.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchAlertPowder.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchAlertPowder.SwitchState = SettingsManager.GetSetting(s => s.ShowPowderAlert) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isShowHiddenInfo)
-            {
-                switchShowHiddenInfo.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchShowHiddenInfo.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchShowHiddenInfo.SwitchState = SettingsManager.GetSetting(s => s.ShowHiddenInfo) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isHaveSkipPassword)
-            {
-                switchSkipPassword.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchSkipPassword.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchSkipPassword.SwitchState = SettingsManager.GetSetting(s => s.SkipPasswordEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isOpenLidMode)
-            {
-                switchOpenLidMode.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchOpenLidMode.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchOpenLidMode.SwitchState = SettingsManager.GetSetting(s => s.AlwaysOpenMixerLid) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isSaveReport)
-            {
-                switchSaveReport.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchSaveReport.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchSaveReport.SwitchState = SettingsManager.GetSetting(s => s.SaveReportEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isTestOilMultiple)
-            {
-                switchTestOilMultiple.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchTestOilMultiple.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchTestOilMultiple.SwitchState = SettingsManager.GetSetting(s => s.MultipleOilTestEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isOilMeasurement)
-            {
-                switchOilDiaMeasurement.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchOilDiaMeasurement.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchOilDiaMeasurement.SwitchState = SettingsManager.GetSetting(s => s.FlowMeterEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
-            if (Settings.Default.isCheckPowderSupply)
-            {
-                switchPowderBagCheck.SwitchState = XanderUI.XUISwitch.State.On;
-            }
-            else
-            {
-                switchPowderBagCheck.SwitchState = XanderUI.XUISwitch.State.Off;
-            }
+            switchPowderBagCheck.SwitchState = SettingsManager.GetSetting(s => s.CheckPowderEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
 
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
             cbxPLCValueSetting.DisplayMember = "display_member";
 
             cbxPLCValueSetting.SelectedIndex = -1;
-            cbxLEDColor.SelectedIndex = Settings.Default.led_color - 1;
-            cbxLEDStyle.SelectedIndex = Settings.Default.led_style;
-            txbLEDIP.Text = Settings.Default.led_ip;
+            cbxLEDColor.SelectedIndex = SettingsManager.GetSetting(s => s.LedScreenColor) - 1;
+            cbxLEDStyle.SelectedIndex = SettingsManager.GetSetting(s => s.LedScreenStyle);
+            txbLEDIP.Text = SettingsManager.GetSetting(s => s.LedScreenIp);
 
             LoadNotSettingValue();
+        }
+        private void MainSetting_Load(object sender, EventArgs e)
+        {
+            ControlDataLoad();
         }
 
         private void panelHeader_MouseDown(object sender, MouseEventArgs e)
@@ -234,81 +164,40 @@ namespace mixer_control_globalver.View.SideUI
 
         private void MainSetting_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.plc_ip = txbPLCIpSetting.Text.Trim();
-            Settings.Default.database_no = Convert.ToInt32(txbDatabaseNo.Text.Trim());
-            Settings.Default.max_speed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
-            Settings.Default.spindle_diameter = double.Parse(txbMotorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
-            Settings.Default.sensor_diameter = double.Parse(txbSensorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
-            Settings.Default.transmission_ratio = double.Parse(txbTransmissionRatio.Text.Trim(), CultureInfo.InvariantCulture);
-            Settings.Default.authorSkipPassword = txbAuthorSkipPass.Text.Trim();
-            Settings.Default.toleranceMass = double.Parse(txbTolerance.Text, CultureInfo.InvariantCulture);
-
-            if (switchOilMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isOilFeed = true;
-            else
-                Settings.Default.isOilFeed = false;
-
-            if (switchStopMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isStopBetweenStep = true;
-            else
-                Settings.Default.isStopBetweenStep = false;
-
-            if (switchOpenLit.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isSkipOpenLid = true;
-            else
-                Settings.Default.isSkipOpenLid = false;
-
-            if (switchTest.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isTesting = true;
-            else
-                Settings.Default.isTesting = false;
-
-            if (switchAlertPowder.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isAlertPowder = true;
-            else
-                Settings.Default.isAlertPowder = false;
-
-            if (switchShowHiddenInfo.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isShowHiddenInfo = true;
-            else
-                Settings.Default.isShowHiddenInfo = false;
-
-            if (switchSkipPassword.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isHaveSkipPassword = true;
-            else
-                Settings.Default.isHaveSkipPassword = false;
-
-            if (switchOpenLidMode.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isOpenLidMode = true;
-            else
-                Settings.Default.isOpenLidMode = false;
-
-            if (switchSaveReport.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isSaveReport = true;
-            else
-                Settings.Default.isSaveReport = false;
-            
-            if (switchTestOilMultiple.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isTestOilMultiple = true;
-            else
-                Settings.Default.isTestOilMultiple = false;
-
-            if (switchOilDiaMeasurement.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isOilMeasurement = true;
-            else
-                Settings.Default.isOilMeasurement = false;
-
-            if (switchPowderBagCheck.SwitchState == XanderUI.XUISwitch.State.On)
-                Settings.Default.isCheckPowderSupply = true;
-            else
-                Settings.Default.isCheckPowderSupply = false;
-
-            Settings.Default.led_ip = txbLEDIP.Text.Trim();
-            Settings.Default.led_color = cbxLEDColor.SelectedIndex + 1;
-            Settings.Default.led_style = cbxLEDStyle.SelectedIndex;
-            Settings.Default.diameterComPort = cbDiameterComPort.Text;
-
-            Settings.Default.Save();
+            SettingsManager.UpdateSettings(s =>
+            {
+                s.PlcIp = txbPLCIpSetting.Text.Trim();
+                s.DatabaseNumber = Convert.ToInt32(txbDatabaseNo.Text.Trim());
+                s.MaxSpeed = Convert.ToInt32(txbMotorMaxSpeed.Text.Trim());
+                s.SensorDiameter = double.Parse(txbSensorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
+                s.SpindleDiameter = double.Parse(txbMotorDiameter.Text.Trim(), CultureInfo.InvariantCulture);
+                s.TransmissionRatio = double.Parse(txbTransmissionRatio.Text.Trim(), CultureInfo.InvariantCulture);
+                s.OilToleranceMass = double.Parse(txbTolerance.Text, CultureInfo.InvariantCulture);
+                s.OilSupplyEnabled = switchOilMode.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.StopMachineBetweenRuns = switchStopMode.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.OpenMixerLidAfterRun = switchOpenLit.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.DeveloperMode = switchTest.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.ShowPowderAlert = switchAlertPowder.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.ShowHiddenInfo = switchShowHiddenInfo.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.SkipPasswordEnabled = switchSkipPassword.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.AlwaysOpenMixerLid = switchOpenLidMode.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.SaveReportEnabled = switchSaveReport.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.MultipleOilTestEnabled = switchTestOilMultiple.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.FlowMeterEnabled = switchOilDiaMeasurement.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.CheckPowderEnabled = switchPowderBagCheck.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.LedScreenIp = txbLEDIP.Text.Trim();
+                s.LedScreenColor = cbxLEDColor.SelectedIndex + 1;
+                s.LedScreenStyle = cbxLEDStyle.SelectedIndex;
+                s.OilSupplyComPort = cbComPort.Text;
+                s.SecondaryOilSupplyComPort = cbPump2ComPort.Text;
+                s.FlowMeterComPort = cbDiameterComPort.Text;
+                s.OilSupplyBaudRate = cbBaudRate.Text;
+                s.OilSupplyDataBits = cbDataBits.Text;
+                s.OilSupplyStopBits = cbStopBits.Text;
+                s.OilSupplyParity = cbParityBits.Text;
+            });
+           
+            SettingsManager.SaveSettings();
             TemporaryVariables.InitSettingDT();
         }
 
@@ -351,10 +240,6 @@ namespace mixer_control_globalver.View.SideUI
                 {
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "start", txbStartNo.Text);
                     ini.Write(cbxPLCValueSetting.SelectedValue.ToString(), "bit", txbBitNo.Text);
-
-                    message = "Lưu địa chỉ offset thành công!\r\n保存Offset地址成功!";
-                    caption = "Thông tin / 信息";
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     btnSaveOffset.ButtonText = "Lưu offset";
 
@@ -449,9 +334,9 @@ namespace mixer_control_globalver.View.SideUI
         private void btnReportFolder_Click(object sender, EventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.report_directory))
+            if (!String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.ReportDirectory)))
             {
-                dialog.InitialDirectory = Properties.Settings.Default.report_directory;
+                dialog.InitialDirectory = SettingsManager.GetSetting(s => s.ReportDirectory);
             }
             else
             {
@@ -460,16 +345,16 @@ namespace mixer_control_globalver.View.SideUI
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                Properties.Settings.Default.report_directory = dialog.FileName;
-                Properties.Settings.Default.Save();
+                SettingsManager.UpdateSettings(s => s.ReportDirectory = dialog.FileName);
             }
+            SettingsManager.SaveSettings();
         }
 
         private void btnTestConnect_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                CloseSerialPort();
+                CloseSerialPort(serialPort1);
             }
             else
             {
@@ -485,21 +370,8 @@ namespace mixer_control_globalver.View.SideUI
                         serialPort1.ReadTimeout = 1000;
                         serialPort1.Open();
                         bool isConnected = SubMethods.CheckConnectStatus(serialPort1); // Đọc trạng thái máy
-                        CloseSerialPort();
-                        if (isConnected)
-                        {
-                            DialogResult dialogResult = CTMessageBox.Show("Connection successful, save setting ?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                            if (dialogResult == DialogResult.Yes)
-                            {
-                                Settings.Default.comPort = cbComPort.Text;
-                                Settings.Default.baudRate = cbBaudRate.Text;
-                                Settings.Default.dataBits = cbDataBits.Text;
-                                Settings.Default.stopBits = cbStopBits.Text;
-                                Settings.Default.parityBits = cbParityBits.Text;
-                                Settings.Default.Save();
-                            }
-                        }
-                        else
+                        CloseSerialPort(serialPort1);
+                        if (!isConnected)
                         {
                             CTMessageBox.Show("Connection to serialport fail : Port can not open.", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                         }
@@ -533,6 +405,141 @@ namespace mixer_control_globalver.View.SideUI
         private void MainSetting_FormClosed(object sender, FormClosedEventArgs e)
         {
             SubMethods.BackupUserSettings();
+        }
+
+        private void btnTestPort2_Click(object sender, EventArgs e)
+        {
+            if (serialPort2.IsOpen)
+            {
+                CloseSerialPort(serialPort2);
+            }
+            else
+            {
+                try
+                {
+                    if (!String.IsNullOrEmpty(cbPump2ComPort.Text))
+                    {
+                        serialPort2.PortName = cbPump2ComPort.Text;
+                        serialPort2.BaudRate = Convert.ToInt32(cbBaudRate.Text);
+                        serialPort2.DataBits = Convert.ToInt32(cbDataBits.Text);
+                        serialPort2.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.Text);
+                        serialPort2.Parity = (Parity)Enum.Parse(typeof(Parity), cbParityBits.Text);
+                        serialPort2.ReadTimeout = 1000;
+                        serialPort2.Open();
+                        bool isConnected = SubMethods.CheckConnectStatus(serialPort2); // Đọc trạng thái máy
+                        CloseSerialPort(serialPort2);
+                        if (!isConnected)
+                        {
+                            CTMessageBox.Show("Connection to serialport fail : Port can not open.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else
+                    {
+                        CTMessageBox.Show("Please choose a COM port first.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception err)
+                {
+                    CTMessageBox.Show(err.Message, "Serialport connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport connection error", err.Message);
+                }
+            }
+        }
+
+        private void btnTestFRConnect_Click(object sender, EventArgs e)
+        {
+            if (serialPort3.IsOpen)
+            {
+                CloseSerialPort(serialPort3);
+            }
+            else
+            {
+                try
+                {
+                    if (!String.IsNullOrEmpty(cbFRComPort.Text))
+                    {
+                        serialPort3.PortName = cbFRComPort.Text;
+                        serialPort3.BaudRate = Convert.ToInt32(cbBaudRate.Text);
+                        serialPort3.DataBits = Convert.ToInt32(cbDataBits.Text);
+                        serialPort3.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.Text);
+                        serialPort3.Parity = (Parity)Enum.Parse(typeof(Parity), cbParityBits.Text);
+                        serialPort3.ReadTimeout = 1000;
+                        serialPort3.Open();
+                        bool isConnected = SubMethods.CheckConnectStatus(serialPort2); // Đọc trạng thái máy
+                        CloseSerialPort(serialPort3);
+                        if (!isConnected)
+                        {
+                            CTMessageBox.Show("Connection to serialport fail : Port can not open.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else
+                    {
+                        CTMessageBox.Show("Please choose a COM port first.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch (Exception err)
+                {
+                    CTMessageBox.Show(err.Message, "Serialport connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport connection error", err.Message);
+                }
+            }
+        }
+
+        private void btnTransferUserSettings_Click(object sender, EventArgs e)
+        {
+            var task1 = Task.Run(() =>
+            {
+                SettingsManager.UpdateSettings(s =>
+                {
+                    s.Language = Settings.Default.language;
+                    s.FormulaDirectory = Settings.Default.folder_directory;
+                    s.SaveReportEnabled = Settings.Default.isSaveReport;
+                    s.ReportDirectory = Settings.Default.report_directory;
+                    s.EndReportEnabled = Settings.Default.isEndReport;
+                    s.OilToleranceMass = Settings.Default.toleranceMass;
+                    s.OilSupplyEnabled = Settings.Default.isOilFeed;
+                    s.ShowHiddenInfo = Settings.Default.isShowHiddenInfo;
+                    s.DeveloperMode = Settings.Default.isTesting;
+                    s.MultipleOilTestEnabled = Settings.Default.isTestOilMultiple;
+                    s.StopMachineBetweenRuns = Settings.Default.isStopBetweenStep;
+                    s.OpenMixerLidAfterRun = Settings.Default.isSkipOpenLid;
+                    s.AlwaysOpenMixerLid = Settings.Default.isOpenLidMode;
+                    s.ShowPowderAlert = Settings.Default.isAlertPowder;
+                    s.SkipPasswordEnabled = Settings.Default.isHaveSkipPassword;
+                    s.SkipStepPassword = Settings.Default.authorSkipPassword;
+                    s.OIlTested = Settings.Default.isOilTested;
+                    s.OIlTestedTime = Settings.Default.timeOilTested;
+                    s.CheckPowderEnabled = Settings.Default.isCheckPowderSupply;
+                    s.FlowMeterEnabled = Settings.Default.isOilMeasurement;
+
+                    s.PlcIp = Settings.Default.plc_ip;
+                    s.DatabaseNumber = Settings.Default.database_no;
+                    s.MaxSpeed = Settings.Default.max_speed;
+                    s.SpindleDiameter = Settings.Default.spindle_diameter;
+                    s.SensorDiameter = Settings.Default.sensor_diameter;
+                    s.TransmissionRatio = Settings.Default.transmission_ratio;
+
+                    s.OilSupplyComPort = Settings.Default.comPort;
+                    s.SecondaryOilSupplyComPort = Settings.Default.comPortP2;
+                    s.OilSupplyBaudRate = Settings.Default.baudRate;
+                    s.OilSupplyDataBits = Settings.Default.dataBits;
+                    s.OilSupplyStopBits = Settings.Default.stopBits;
+                    s.OilSupplyParity = Settings.Default.parityBits;
+
+                    s.LedScreenIp = Settings.Default.led_ip;
+                    s.LedScreenColor = Settings.Default.led_color;
+                    s.LedScreenStyle = Settings.Default.led_style;
+
+                    s.FlowMeterComPort = Settings.Default.diameterComPort;
+                });
+            });
+            task1.Wait();
+
+            SettingsManager.SaveSettings();
+
+            ControlDataLoad();
+
+            CTMessageBox.Show("Update complete!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void txbTransmissionRatio_KeyPress(object sender, KeyPressEventArgs e)

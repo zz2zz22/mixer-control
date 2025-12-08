@@ -442,5 +442,17 @@ namespace mixer_control_globalver.Properties {
                 this["diameterComPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string comPortP2 {
+            get {
+                return ((string)(this["comPortP2"]));
+            }
+            set {
+                this["comPortP2"] = value;
+            }
+        }
     }
 }

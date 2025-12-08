@@ -56,30 +56,20 @@ namespace mixer_control_globalver.View.SideUI
             dtgvSpecProcessList.Columns["oil_type"].Visible = false;
             dtgvSpecProcessList.Columns["total_powder_bags"].Visible = false;
             dtgvSpecProcessList.Columns["remain_powder_bags"].Visible = false;
-            if (Settings.Default.language == 0)
+            if (SettingsManager.GetSetting(s => s.Language) == 0)
             {
                 dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\nStep No.";
                 dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\nDescription";
             }
-            else if (Settings.Default.language == 1)
-            {
-                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước\r\n序号";
-                dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả\r\n描述";
-            }
-            else if (Settings.Default.language == 2)
-            {
-                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Step No.";
-                dtgvSpecProcessList.Columns["description"].HeaderText = "Description";
-            }
-            else if (Settings.Default.language == 3)
-            {
-                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Số bước";
-                dtgvSpecProcessList.Columns["description"].HeaderText = "Mô tả";
-            }
-            else if (Settings.Default.language == 4)
+            else if (SettingsManager.GetSetting(s => s.Language) == 1)
             {
                 dtgvSpecProcessList.Columns["process_no"].HeaderText = "序号";
                 dtgvSpecProcessList.Columns["description"].HeaderText = "描述";
+            }
+            else if (SettingsManager.GetSetting(s => s.Language) == 2)
+            {
+                dtgvSpecProcessList.Columns["process_no"].HeaderText = "Step No.";
+                dtgvSpecProcessList.Columns["description"].HeaderText = "Description";
             }
             dtgvSpecProcessList.Columns["process_no"].Width = 120;
         }

@@ -16,9 +16,9 @@ namespace mixer_control_globalver.Controller
                 xlWorkSheet.Range("A1").Value = "MIXER REPORT - " + DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss"); // Thêm ngày vào title
                 xlWorkSheet.Range("B2").Value = TemporaryVariables.tempFileName;
                 xlWorkSheet.Range("B3").Value = TemporaryVariables.tempFormulaLOT;
-                xlWorkSheet.Range("I3").Value = Properties.Settings.Default.isStopBetweenStep ? "YES" : "NO";
-                xlWorkSheet.Range("J3").Value = Properties.Settings.Default.isSkipOpenLid ? "YES" : "NO";
-                xlWorkSheet.Range("K3").Value = Properties.Settings.Default.isOilFeed ? "YES" : "NO";
+                xlWorkSheet.Range("I3").Value = SettingsManager.GetSetting(s => s.StopMachineBetweenRuns) ? "YES" : "NO";
+                xlWorkSheet.Range("J3").Value = SettingsManager.GetSetting(s => s.OpenMixerLidAfterRun) ? "YES" : "NO";
+                xlWorkSheet.Range("K3").Value = SettingsManager.GetSetting(s => s.OilSupplyEnabled) ? "YES" : "NO";
                 for (int i = 0; i < materialDT.Rows.Count; i++)
                 {
                     int row = 9 + i;

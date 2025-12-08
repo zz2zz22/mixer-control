@@ -58,6 +58,7 @@
             this.lb3 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelAnnounceNextStep.SuspendLayout();
             this.panelAnnounce.SuspendLayout();
@@ -470,5 +471,6 @@
         private System.Windows.Forms.Panel panelAnnounceNextStep;
         private System.Windows.Forms.Label labelAnnounceNS;
         private System.IO.Ports.SerialPort serialPort2;
+        private System.IO.Ports.SerialPort serialPort3;
     }
 }

@@ -40,8 +40,8 @@
             this.lbStepNo = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.lbAlert = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -93,7 +93,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(169, 77);
             this.label9.TabIndex = 8;
-            this.label9.Text = "Trạng thái hiện tại";
+            this.label9.Text = "Trạng thái\r\n状态";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbStepTotal
@@ -115,7 +115,7 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(169, 77);
             this.label7.TabIndex = 6;
-            this.label7.Text = "Số lượng đầu vào của bước";
+            this.label7.Text = "Số lượng cần\r\n需求数量";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbMatCode
@@ -139,7 +139,6 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Mã ERP\r\nERP代码";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // lbTotal
             // 
@@ -196,15 +195,6 @@
             this.panel1.Size = new System.Drawing.Size(595, 168);
             this.panel1.TabIndex = 1;
             // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(595, 54);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Thông báo trạng thái:\r\n状态通知";
-            // 
             // lbAlert
             // 
             this.lbAlert.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -216,6 +206,15 @@
             this.lbAlert.TabIndex = 1;
             this.lbAlert.Text = "...";
             this.lbAlert.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(595, 54);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Thông báo trạng thái:\r\n状态通知";
             // 
             // PowderCheckUI
             // 

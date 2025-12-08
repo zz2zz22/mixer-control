@@ -18,17 +18,20 @@ namespace mixer_control_globalver.View.CustomComponent
         public LoadingDialog()
         {
             InitializeComponent();
-            if (Settings.Default.language == 0)
+            switch (SettingsManager.GetSetting(s => s.Language))
             {
-                lb1.Text = "Đang xử lý dữ liệu ...";
-            }
-            else if (Settings.Default.language == 1)
-            {
-                lb1.Text = "处理数据...";
-            }
-            else if (Settings.Default.language == 2)
-            {
-                lb1.Text = "Loading data ...";
+                case 0:
+                    lb1.Text = "Đang xử lý dữ liệu ...";
+                    break;
+                case 1:
+                    lb1.Text = "处理数据...";
+                    break;
+                case 2:
+                    lb1.Text = "Loading data ...";
+                    break;
+                default:
+                    lb1.Text = "Đang xử lý dữ liệu ...";
+                    break;
             }
         }
     }

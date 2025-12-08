@@ -51,6 +51,7 @@ namespace mixer_control_globalver
                     //Check và tạo directory "data" trong thư mục cài đặt của phần mềm
                     Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\data");
                 }
+                lbVersion.Text = "Version: " + GetExecutableInstallerVersion(Application.ExecutablePath);
                 TemporaryVariables.resetAllTempVariables();
 
                 this.Text = string.Empty;
@@ -61,7 +62,17 @@ namespace mixer_control_globalver
             {
                 CTMessageBox.Show("Application initial process error : " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Application initial process error", ex.Message);
+                Environment.Exit(0);
             }
+        }
+        public static string GetExecutableInstallerVersion(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(filePath);
+                return versionInfo.ProductVersion;
+            }
+            return null; // Or throw an exception if the file doesn't exist
         }
 
         ///
@@ -147,9 +158,9 @@ namespace mixer_control_globalver
             }
 
             TemporaryVariables.InitSettingDT();
-            cbxLanguageChoose.SelectedIndex = Settings.Default.language;
+            cbxLanguageChoose.SelectedIndex = SettingsManager.GetSetting(s => s.Language);
 
-            switch (Settings.Default.language)
+            switch (SettingsManager.GetSetting(s => s.Language))
             {
                 case 0:
                     btnChooseSpecTab.ButtonText = "Chọn công thức";
@@ -206,32 +217,30 @@ namespace mixer_control_globalver
             {
                 //Logic check time ở đây
                 bool isRequired2Reset = false;
-                if (!string.IsNullOrEmpty(Settings.Default.timeOilTested))
+                if (!string.IsNullOrEmpty(SettingsManager.GetSetting(s => s.OIlTestedTime)))
                 {
                     string currentDate = DateTime.Now.ToString("dd/MM/yyyy");
                     DateTime curDateTime = DateTime.ParseExact(currentDate + " 08:00:00", "dd/MM/yyyy HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
-                    DateTime checkDateTime = DateTime.ParseExact(Settings.Default.timeOilTested, "dd/MM/yyyy HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
+                    DateTime checkDateTime = DateTime.ParseExact(SettingsManager.GetSetting(s => s.OIlTestedTime), "dd/MM/yyyy HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
                     if (checkDateTime < curDateTime)
                         isRequired2Reset = true;
 
                     if (isRequired2Reset)
                     {
-                        Settings.Default.isOilTested = false;
-                        statusCheckBackgroundWorker.ReportProgress(0);
+                        SettingsManager.UpdateSettings(s => s.OIlTested = false);
                     }
                     else
                     {
-                        Settings.Default.isOilTested = true;
-                        statusCheckBackgroundWorker.ReportProgress(0);
+                        SettingsManager.UpdateSettings(s => s.OIlTested = true);
                     }
-                    Settings.Default.Save();
+                    statusCheckBackgroundWorker.ReportProgress(0);
                 }
                 else
                 {
-                    Settings.Default.isOilTested = false;
-                    Settings.Default.Save();
+                    SettingsManager.UpdateSettings(s => s.OIlTested = false);
                     statusCheckBackgroundWorker.ReportProgress(0);
                 }
+                SettingsManager.SaveSettings();
             }
             catch (Exception ex)
             {
@@ -243,23 +252,23 @@ namespace mixer_control_globalver
         {
             string announceText = String.Empty;
 
-            if (Settings.Default.isOilFeed)
+            if (SettingsManager.GetSetting(s => s.OilSupplyEnabled))
             {
-                if (Settings.Default.isOilTested)
+                if (SettingsManager.GetSetting(s => s.OIlTested))
                 {
-                    switch (Settings.Default.language)
+                    switch (SettingsManager.GetSetting(s => s.Language))
                     {
                         case 0:
-                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + Settings.Default.timeOilTested;
+                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
                             break;
                         case 1:
-                            announceText = "供油器已检查！\r\n检查时间:\r\n" + Settings.Default.timeOilTested;
+                            announceText = "供油器已检查！\r\n检查时间:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
                             break;
                         case 2:
-                            announceText = "Oil feeder checked!\r\nTime:\r\n" + Settings.Default.timeOilTested;
+                            announceText = "Oil feeder checked!\r\nTime:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
                             break;
                         default:
-                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + Settings.Default.timeOilTested;
+                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
                             break;
                     }
                     lbOilTestStatus.BackColor = Color.Yellow;
@@ -267,23 +276,26 @@ namespace mixer_control_globalver
                 }
                 else
                 {
-                    switch (Settings.Default.language)
-                    {
-                        case 0:
-                            announceText = "Chưa kiểm tra bộ nạp dầu.";
-                            break;
-                        case 1:
-                            announceText = "没检查过供油器！";
-                            break;
-                        case 2:
-                            announceText = "Haven't checked the oil feeder!";
-                            break;
-                        default:
-                            announceText = "Chưa kiểm tra bộ nạp dầu.";
-                            break;
-                    }
-                    lbOilTestStatus.BackColor = Color.Red;
-                    lbOilTestStatus.ForeColor = Color.White;
+                    //switch (Settings.Default.language)
+                    //{
+                    //    case 0:
+                    //        announceText = "Chưa kiểm tra bộ nạp dầu.";
+                    //        break;
+                    //    case 1:
+                    //        announceText = "没检查过供油器！";
+                    //        break;
+                    //    case 2:
+                    //        announceText = "Haven't checked the oil feeder!";
+                    //        break;
+                    //    default:
+                    //        announceText = "Chưa kiểm tra bộ nạp dầu.";
+                    //        break;
+                    //}
+                    //lbOilTestStatus.BackColor = Color.Red;
+                    //lbOilTestStatus.ForeColor = Color.White;
+                    announceText = String.Empty;
+                    lbOilTestStatus.BackColor = Color.FromArgb(255, 255, 128);
+                    lbOilTestStatus.ForeColor = Color.Black;
                 }
 
             }
@@ -335,7 +347,7 @@ namespace mixer_control_globalver
                 {
                     if (TemporaryVariables.materialDT.Rows.Count > 0)
                     {
-                        switch (Settings.Default.language)
+                        switch (SettingsManager.GetSetting(s => s.Language))
                         {
                             case 0:
                                 message = "Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?";
@@ -375,21 +387,8 @@ namespace mixer_control_globalver
                 OpenChildForm(new MaterialScale());
             else
             {
-                if (Settings.Default.language == 0)
-                {
-                    message = "Vui lòng chọn một công thức trước!";
-                    caption = "Cảnh báo";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    message = "请先选择需要加工的产品型号！";
-                    caption = "提示";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "Please choose a formula first!";
-                    caption = "Warning";
-                }
+                message = "Please choose a formula first!";
+                caption = "Warning";
                 CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -398,7 +397,7 @@ namespace mixer_control_globalver
         {
             if (!String.IsNullOrEmpty(TemporaryVariables.tempFileName) && TemporaryVariables.materialDT != null && TemporaryVariables.processDT != null)
             {
-                if (!Settings.Default.isTesting)
+                if (!SettingsManager.GetSetting(s => s.DeveloperMode))
                 {
                     if (TemporaryVariables.materialDT.Rows.Count > 0)
                     {
@@ -410,30 +409,15 @@ namespace mixer_control_globalver
                                 notSettingEnough = true;
                             }
                         }
-                        if (String.IsNullOrEmpty(Settings.Default.plc_ip)
-                    || Settings.Default.database_no == 0
-                    || Settings.Default.max_speed == 0
-                    || Settings.Default.spindle_diameter == 0
-                    || Settings.Default.sensor_diameter == 0
-                    || Settings.Default.transmission_ratio == 0
+                        if (String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.PlcIp))
+                    || SettingsManager.GetSetting(s => s.DatabaseNumber) == 0
+                    || SettingsManager.GetSetting(s => s.MaxSpeed) == 0
+                    || SettingsManager.GetSetting(s => s.SpindleDiameter) == 0
+                    || SettingsManager.GetSetting(s => s.SensorDiameter) == 0
+                    || SettingsManager.GetSetting(s => s.TransmissionRatio) == 0
                     || notSettingEnough)
                         {
-                            if (Settings.Default.language == 0)
-                            {
-                                message = "Vui lòng cài đặt đầy đủ các thông tin trong phần cài đặt!";
-                                caption = "Cảnh báo";
-                            }
-                            else if (Settings.Default.language == 1)
-                            {
-                                message = "请在设置部分设置全部信息!";
-                                caption = "提示";
-                            }
-                            else if (Settings.Default.language == 2)
-                            {
-                                message = "Please input all required setting first!";
-                                caption = "Warning";
-                            }
-                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            CTMessageBox.Show("Please input all required setting first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             MainSetting mainSetting = new MainSetting();
                             mainSetting.ShowDialog();
                         }
@@ -442,46 +426,15 @@ namespace mixer_control_globalver
                     }
                     else
                     {
-                        if (Settings.Default.language == 0)
-                        {
-                            message = "Vui lòng xác nhận các nguyên liệu trước!";
-                            caption = "Cảnh báo";
-                        }
-                        else if (Settings.Default.language == 1)
-                        {
-                            message = "请先确认好原料！";
-                            caption = "提示";
-                        }
-                        else if (Settings.Default.language == 2)
-                        {
-                            message = "Please confirm all materials first!";
-                            caption = "Warning";
-                        }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CTMessageBox.Show("Please confirm all materials first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
                 }
                 else
                     OpenChildForm(new AutomationInfo());
             }
             else
             {
-                if (Settings.Default.language == 0)
-                {
-                    message = "Vui lòng chọn một công thức trước!";
-                    caption = "Cảnh báo";
-                }
-                else if (Settings.Default.language == 1)
-                {
-                    message = "请先选择需要加工的产品型号！";
-                    caption = "提示";
-                }
-                else if (Settings.Default.language == 2)
-                {
-                    message = "Please choose a formula first!";
-                    caption = "Warning";
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CTMessageBox.Show("Please choose a formula first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void mainSettingFormClosed(object sender, EventArgs e)
@@ -497,6 +450,7 @@ namespace mixer_control_globalver
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SettingsManager.SaveSettings();
             if (tmrCallBWStatusCheck != null)
             {
                 tmrCallBWStatusCheck.Stop();
@@ -517,11 +471,10 @@ namespace mixer_control_globalver
 
         private void cbxLanguageChoose_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (Settings.Default.language != cbxLanguageChoose.SelectedIndex)
+            if (SettingsManager.GetSetting(s => s.Language) != cbxLanguageChoose.SelectedIndex)
             {
-                Settings.Default.language = cbxLanguageChoose.SelectedIndex;
-                Settings.Default.Save();
-
+                SettingsManager.UpdateSettings(s => s.Language = cbxLanguageChoose.SelectedIndex);
+                SettingsManager.SaveSettings();
                 DialogResult dialogResult = CTMessageBox.Show("A restart process is required to apply new language. Do you want to close the program ?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
