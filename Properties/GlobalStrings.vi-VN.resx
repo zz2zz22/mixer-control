@@ -117,115 +117,90 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ptbxLoadingAnimated.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Left</value>
+  <data name="btnAutomationTab_Text" xml:space="preserve">
+    <value>Tự động hóa</value>
+    <comment>Main Window</comment>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ptbxLoadingAnimated.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="btnChooseSpecTab_Text" xml:space="preserve">
+    <value>Chọn công thức</value>
+    <comment>Main Window</comment>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>706, 245</value>
+  <data name="btnConfirm" xml:space="preserve">
+    <value>Xác nhận</value>
   </data>
-  <data name="&gt;&gt;panelProgressInfo.Name" xml:space="preserve">
-    <value>panelProgressInfo</value>
+  <data name="btnWeightTab_Text" xml:space="preserve">
+    <value>Quét mã nguyên liệu</value>
+    <comment>Main Window</comment>
   </data>
-  <data name="&gt;&gt;panelProgressInfo.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="FormulaListHeaderText" xml:space="preserve">
+    <value>Tên Công Thức</value>
   </data>
-  <data name="panelProgressInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="Label_PasswordConfirm" xml:space="preserve">
+    <value>Vui lòng nhập mật khẩu</value>
   </data>
-  <data name="lb1.Text" xml:space="preserve">
-    <value>Processing please wait a moment ...</value>
+  <data name="Text_Font" xml:space="preserve">
+    <value>Microsoft YaHei UI</value>
+    <comment>Font</comment>
   </data>
-  <data name="&gt;&gt;ptbxLoadingAnimated.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="MessageBoxTitle_Error" xml:space="preserve">
+    <value>Lỗi</value>
   </data>
-  <data name="ptbxLoadingAnimated.Size" type="System.Drawing.Size, System.Drawing">
-    <value>263, 245</value>
+  <data name="MessageBoxTitle_Information" xml:space="preserve">
+    <value>Thông tin</value>
   </data>
-  <data name="&gt;&gt;lb1.Name" xml:space="preserve">
-    <value>lb1</value>
+  <data name="MessageBoxTitle_Warning" xml:space="preserve">
+    <value>Cảnh báo</value>
   </data>
-  <data name="lb1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="Error_CannotLoadFormulaList" xml:space="preserve">
+    <value>Không thể đọc dữ liệu thư mục chứa các công thức.
+Cách xử lý:
+- Kiểm tra thư mục chứa công thức có bị xóa hay di chuyển đến nơi khác không ?
+- Kiểm tra kết nối internet ở góc phải dưới màn hình.
+- Nếu kết nối internet bình thường, máy chủ có thể đã mất kết nối. Vui lòng liên hệ bộ phận IT.</value>
   </data>
-  <data name="lb1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>443, 245</value>
+  <data name="Message_ExitApplication" xml:space="preserve">
+    <value>Thoát ứng dụng ?</value>
+    <comment>Message</comment>
   </data>
-  <data name="&gt;&gt;panelProgressInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Message_LanguageChange" xml:space="preserve">
+    <value>Phải thoát ứng dụng mới có thể cập nhật ngôn ngữ mới. Bạn có muốn tiếp tục ?</value>
+    <comment>Message</comment>
   </data>
-  <data name="panelProgressInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>443, 245</value>
+  <data name="Message_NotChooseFormulaAlert" xml:space="preserve">
+    <value>Vui lòng chọn một công thức !</value>
+    <comment>Message</comment>
   </data>
-  <data name="&gt;&gt;ptbxLoadingAnimated.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="Message_NotInputAllBaseSetting" xml:space="preserve">
+    <value>Cài đặt cơ bản chưa được thiết lập, vui lòng liên hệ đội ngũ kỹ thuật.</value>
+    <comment>Message</comment>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>LoadingDialog</value>
+  <data name="Message_NotScanAllMaterial" xml:space="preserve">
+    <value>Chưa xác nhận đủ tất cả các nguyên vật liệu có trong công thức, vui lòng kiểm tra số lượng hiển thị trên màn hình.</value>
+    <comment>Message</comment>
   </data>
-  <data name="&gt;&gt;lb1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Message_OilTested" xml:space="preserve">
+    <value>Đã kiểm tra bộ nạp dầu!
+Thời gian: 
+</value>
+    <comment>Message</comment>
   </data>
-  <data name="ptbxLoadingAnimated.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="Message_Processing" xml:space="preserve">
+    <value>Đang thực hiện tác vụ, vui lòng đợi giây lát ...</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>LoadingDialog</value>
+  <data name="Message_ResetSpecTab" xml:space="preserve">
+    <value>Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?</value>
+    <comment>Message</comment>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+  <data name="Label_SelectedFormula" xml:space="preserve">
+    <value>Công thức đã chọn:</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Label_FormulaDirectorySetup" xml:space="preserve">
+    <value>Chọn thư mục chứa công thức</value>
   </data>
-  <data name="lb1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="btnTestOilFeed" xml:space="preserve">
+    <value>Test máy cấp dầu</value>
   </data>
-  <data name="&gt;&gt;lb1.Parent" xml:space="preserve">
-    <value>panelProgressInfo</value>
-  </data>
-  <data name="&gt;&gt;lb1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;ptbxLoadingAnimated.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Arial, 10.2pt, style=Bold</value>
-  </data>
-  <data name="panelProgressInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 0</value>
-  </data>
-  <data name="&gt;&gt;ptbxLoadingAnimated.Name" xml:space="preserve">
-    <value>ptbxLoadingAnimated</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="lb1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Baloo Chettan 2, 16.2pt, style=Bold</value>
-  </data>
-  <data name="panelProgressInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;panelProgressInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lb1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="lb1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="ptbxLoadingAnimated.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>CenterImage</value>
-  </data>
-  <data name="$this.Localizable" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="btnCheckProcess" xml:space="preserve">
+    <value>Xem nội dung của công thức</value>
   </data>
 </root>

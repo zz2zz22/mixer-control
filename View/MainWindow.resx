@@ -117,7 +117,447 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnSetting.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnSetting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>733, 3</value>
+  </data>
+  <data name="btnSetting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 56</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnSetting.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;btnSetting.Name" xml:space="preserve">
+    <value>btnSetting</value>
+  </data>
+  <data name="&gt;&gt;btnSetting.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnSetting.Parent" xml:space="preserve">
+    <value>panelHeader</value>
+  </data>
+  <data name="&gt;&gt;btnSetting.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnMaximize.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnMaximize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>879, 3</value>
+  </data>
+  <data name="btnMaximize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 56</value>
+  </data>
+  <data name="btnMaximize.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;btnMaximize.Name" xml:space="preserve">
+    <value>btnMaximize</value>
+  </data>
+  <data name="&gt;&gt;btnMaximize.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnMaximize.Parent" xml:space="preserve">
+    <value>panelHeader</value>
+  </data>
+  <data name="&gt;&gt;btnMaximize.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnClose.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnClose.Location" type="System.Drawing.Point, System.Drawing">
+    <value>940, 3</value>
+  </data>
+  <data name="btnClose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 56</value>
+  </data>
+  <data name="btnClose.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;btnClose.Name" xml:space="preserve">
+    <value>btnClose</value>
+  </data>
+  <data name="&gt;&gt;btnClose.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnClose.Parent" xml:space="preserve">
+    <value>panelHeader</value>
+  </data>
+  <data name="&gt;&gt;btnClose.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="pbxCompanyLogo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="pbxCompanyLogo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pbxCompanyLogo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="pbxCompanyLogo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 63</value>
+  </data>
+  <data name="pbxCompanyLogo.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="pbxCompanyLogo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pbxCompanyLogo.Name" xml:space="preserve">
+    <value>pbxCompanyLogo</value>
+  </data>
+  <data name="&gt;&gt;pbxCompanyLogo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbxCompanyLogo.Parent" xml:space="preserve">
+    <value>panelHeader</value>
+  </data>
+  <data name="&gt;&gt;pbxCompanyLogo.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="panelHeader.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panelHeader.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1006, 65</value>
+  </data>
+  <data name="panelHeader.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panelHeader.Name" xml:space="preserve">
+    <value>panelHeader</value>
+  </data>
+  <data name="&gt;&gt;panelHeader.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelHeader.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelHeader.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lbOilTestStatus.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="lbOilTestStatus.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Arial, 13.8pt, style=Bold</value>
+  </data>
+  <data name="lbOilTestStatus.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbOilTestStatus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 252</value>
+  </data>
+  <data name="lbOilTestStatus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 234</value>
+  </data>
+  <data name="lbOilTestStatus.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lbOilTestStatus.Text" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="lbOilTestStatus.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lbOilTestStatus.Name" xml:space="preserve">
+    <value>lbOilTestStatus</value>
+  </data>
+  <data name="&gt;&gt;lbOilTestStatus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbOilTestStatus.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;lbOilTestStatus.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lbVersion.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="lbVersion.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbVersion.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbVersion.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 580</value>
+  </data>
+  <data name="lbVersion.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 19</value>
+  </data>
+  <data name="lbVersion.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lbVersion.Text" xml:space="preserve">
+    <value>test new function</value>
+  </data>
+  <data name="&gt;&gt;lbVersion.Name" xml:space="preserve">
+    <value>lbVersion</value>
+  </data>
+  <data name="&gt;&gt;lbVersion.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbVersion.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;lbVersion.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cbxLanguageChoose.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="cbxLanguageChoose.Items" xml:space="preserve">
+    <value>Tiếng Việt</value>
+  </data>
+  <data name="cbxLanguageChoose.Items1" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="cbxLanguageChoose.Items2" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="cbxLanguageChoose.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 534</value>
+  </data>
+  <data name="cbxLanguageChoose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 27</value>
+  </data>
+  <data name="cbxLanguageChoose.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cbxLanguageChoose.Name" xml:space="preserve">
+    <value>cbxLanguageChoose</value>
+  </data>
+  <data name="&gt;&gt;cbxLanguageChoose.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbxLanguageChoose.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;cbxLanguageChoose.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnAutomationTab.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="btnAutomationTab.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt, style=Bold</value>
+  </data>
+  <data name="btnAutomationTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="btnAutomationTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>245, 82</value>
+  </data>
+  <data name="btnAutomationTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btnAutomationTab.Name" xml:space="preserve">
+    <value>btnAutomationTab</value>
+  </data>
+  <data name="&gt;&gt;btnAutomationTab.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAutomationTab.Parent" xml:space="preserve">
+    <value>panelBtnAutomation</value>
+  </data>
+  <data name="&gt;&gt;btnAutomationTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panelBtnAutomation.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panelBtnAutomation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 168</value>
+  </data>
+  <data name="panelBtnAutomation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 84</value>
+  </data>
+  <data name="panelBtnAutomation.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;panelBtnAutomation.Name" xml:space="preserve">
+    <value>panelBtnAutomation</value>
+  </data>
+  <data name="&gt;&gt;panelBtnAutomation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelBtnAutomation.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;panelBtnAutomation.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="btnWeightTab.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="btnWeightTab.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt, style=Bold</value>
+  </data>
+  <data name="btnWeightTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="btnWeightTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>245, 82</value>
+  </data>
+  <data name="btnWeightTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btnWeightTab.Name" xml:space="preserve">
+    <value>btnWeightTab</value>
+  </data>
+  <data name="&gt;&gt;btnWeightTab.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnWeightTab.Parent" xml:space="preserve">
+    <value>panelBtnWeight</value>
+  </data>
+  <data name="&gt;&gt;btnWeightTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panelBtnWeight.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panelBtnWeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 84</value>
+  </data>
+  <data name="panelBtnWeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 84</value>
+  </data>
+  <data name="panelBtnWeight.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panelBtnWeight.Name" xml:space="preserve">
+    <value>panelBtnWeight</value>
+  </data>
+  <data name="&gt;&gt;panelBtnWeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelBtnWeight.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;panelBtnWeight.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnChooseSpecTab.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="btnChooseSpecTab.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 12pt, style=Bold</value>
+  </data>
+  <data name="btnChooseSpecTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="btnChooseSpecTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>245, 82</value>
+  </data>
+  <data name="btnChooseSpecTab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;btnChooseSpecTab.Name" xml:space="preserve">
+    <value>btnChooseSpecTab</value>
+  </data>
+  <data name="&gt;&gt;btnChooseSpecTab.Type" xml:space="preserve">
+    <value>XanderUI.XUIButton, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnChooseSpecTab.Parent" xml:space="preserve">
+    <value>panelBtnChoose</value>
+  </data>
+  <data name="&gt;&gt;btnChooseSpecTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panelBtnChoose.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="panelBtnChoose.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelBtnChoose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 84</value>
+  </data>
+  <data name="panelBtnChoose.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;panelBtnChoose.Name" xml:space="preserve">
+    <value>panelBtnChoose</value>
+  </data>
+  <data name="&gt;&gt;panelBtnChoose.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelBtnChoose.Parent" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;panelBtnChoose.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="panelSideMenu.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="panelSideMenu.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 65</value>
+  </data>
+  <data name="panelSideMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>247, 608</value>
+  </data>
+  <data name="panelSideMenu.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panelSideMenu.Name" xml:space="preserve">
+    <value>panelSideMenu</value>
+  </data>
+  <data name="&gt;&gt;panelSideMenu.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelSideMenu.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelSideMenu.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panelMainForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="panelMainForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>247, 65</value>
+  </data>
+  <data name="panelMainForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>759, 608</value>
+  </data>
+  <data name="panelMainForm.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;panelMainForm.Name" xml:space="preserve">
+    <value>panelMainForm</value>
+  </data>
+  <data name="&gt;&gt;panelMainForm.Type" xml:space="preserve">
+    <value>XanderUI.XUIWidgetPanel, XanderUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelMainForm.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelMainForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>1006, 673</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Arial, 10.2pt, style=Bold</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAAAAAAAEAIACFrwAAFgAAAIlQTkcNChoKAAAADUlIRFIAAAIAAAACAAgGAAAA9HjU+gAAAAFz
@@ -871,5 +1311,20 @@
         pAfWwBmvhI6ei1GmHps43JqOAoBR7f7YoEAnjKojRMHDMIIvQ4UPomp+X6kPusxTGMRsiRD4N8b7cR4T
         4TtLAAAAAElFTkSuQmCC
 </value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 3, 4, 3</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>1024, 720</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainWindow</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

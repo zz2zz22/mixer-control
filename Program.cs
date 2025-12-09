@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Configuration;
+using System.Drawing.Text;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -36,11 +38,26 @@ namespace mixer_control_globalver
             //}
 
             SettingsManager.Initialize(); // Load existing settings on startup
-
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
                 try
                 {
+                    switch (SettingsManager.GetSetting(s => s.Language))
+                    {
+                        case 0:
+                            SubMethods.SetLanguage("vi-VN");
+                            break;
+                        case 1:
+                            SubMethods.SetLanguage("zh-CN");
+                            break;
+                        case 2:
+                            SubMethods.SetLanguage("en-US");
+                            break;
+                        default:
+                            SubMethods.SetLanguage("");
+                            break;
+                    }
+
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     main = new MainWindow();

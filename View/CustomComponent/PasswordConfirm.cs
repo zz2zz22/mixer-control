@@ -17,9 +17,23 @@ namespace mixer_control_globalver.View.CustomComponent
 {
     public partial class PasswordConfirm : Form
     {
-        string message = String.Empty, caption = String.Empty;
         public PasswordConfirm()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
         }
         private void CheckPassword(string password)
@@ -56,8 +70,8 @@ namespace mixer_control_globalver.View.CustomComponent
 
         private void PasswordConfirm_Load(object sender, EventArgs e)
         {
-            lbAnnounce.Text = "Enter password";
-            btnConfirm.ButtonText = "Confirm";
+            lbAnnounce.Text = GlobalStrings.Label_PasswordConfirm;
+            btnConfirm.ButtonText = GlobalStrings.btnConfirm;
         }
 
         private void btnConfirm_Click(object sender, EventArgs e)

@@ -21,6 +21,21 @@ namespace mixer_control_globalver.View.SideUI
         IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainSetting()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
 
             this.Text = string.Empty;

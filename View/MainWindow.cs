@@ -1,8 +1,6 @@
 ﻿using mixer_control_globalver.Controller;
-using mixer_control_globalver.Controller.IniFile;
 using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Controller.PLC;
-using mixer_control_globalver.Model.PLC;
 using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
@@ -26,7 +24,6 @@ namespace mixer_control_globalver
         /// FIELDS
         ///
         private object lockObject = new object();
-        private string message = String.Empty, caption = String.Empty;
         private Form activeForm = null;
 
         private BackgroundWorker statusCheckBackgroundWorker;
@@ -115,7 +112,7 @@ namespace mixer_control_globalver
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = CTMessageBox.Show("Exit the application ?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult dialogResult = CTMessageBox.Show(GlobalStrings.Message_ExitApplication, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.Yes)
             {
                 PLCMethods.ResetPLCVariables();
@@ -160,29 +157,12 @@ namespace mixer_control_globalver
             TemporaryVariables.InitSettingDT();
             cbxLanguageChoose.SelectedIndex = SettingsManager.GetSetting(s => s.Language);
 
-            switch (SettingsManager.GetSetting(s => s.Language))
-            {
-                case 0:
-                    btnChooseSpecTab.ButtonText = "Chọn công thức";
-                    btnWeightTab.ButtonText = "Xác nhận nguyên vật liệu";
-                    btnAutomationTab.ButtonText = "Tự động hóa";
-                    break;
-                case 1:
-                    btnChooseSpecTab.ButtonText = "选择产品型号";
-                    btnWeightTab.ButtonText = "原料确认";
-                    btnAutomationTab.ButtonText = "自动化";
-                    break;
-                case 2:
-                    btnChooseSpecTab.ButtonText = "Choose formula";
-                    btnWeightTab.ButtonText = "Material Confirmation";
-                    btnAutomationTab.ButtonText = "Automation";
-                    break;
-                default:
-                    btnChooseSpecTab.ButtonText = "Chọn công thức";
-                    btnWeightTab.ButtonText = "Xác nhận nguyên vật liệu";
-                    btnAutomationTab.ButtonText = "Tự động hóa";
-                    break;
-            }
+            btnChooseSpecTab.ButtonText = GlobalStrings.btnChooseSpecTab_Text;
+            btnChooseSpecTab.Font = new Font(GlobalStrings.Text_Font, 12, FontStyle.Bold);
+            btnWeightTab.ButtonText = GlobalStrings.btnWeightTab_Text;
+            btnWeightTab.Font = new Font(GlobalStrings.Text_Font, 12, FontStyle.Bold);
+            btnAutomationTab.ButtonText = GlobalStrings.btnAutomationTab_Text;
+            btnAutomationTab.Font = new Font(GlobalStrings.Text_Font, 12, FontStyle.Bold);
             openSpecTab();
         }
 
@@ -256,48 +236,16 @@ namespace mixer_control_globalver
             {
                 if (SettingsManager.GetSetting(s => s.OIlTested))
                 {
-                    switch (SettingsManager.GetSetting(s => s.Language))
-                    {
-                        case 0:
-                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
-                            break;
-                        case 1:
-                            announceText = "供油器已检查！\r\n检查时间:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
-                            break;
-                        case 2:
-                            announceText = "Oil feeder checked!\r\nTime:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
-                            break;
-                        default:
-                            announceText = "Đã kiểm tra bộ nạp dầu!\r\nThời gian:\r\n" + SettingsManager.GetSetting(s => s.OIlTestedTime);
-                            break;
-                    }
+                    announceText = GlobalStrings.Message_OilTested + SettingsManager.GetSetting(s => s.OIlTestedTime);
                     lbOilTestStatus.BackColor = Color.Yellow;
                     lbOilTestStatus.ForeColor = Color.Black;
                 }
                 else
                 {
-                    //switch (Settings.Default.language)
-                    //{
-                    //    case 0:
-                    //        announceText = "Chưa kiểm tra bộ nạp dầu.";
-                    //        break;
-                    //    case 1:
-                    //        announceText = "没检查过供油器！";
-                    //        break;
-                    //    case 2:
-                    //        announceText = "Haven't checked the oil feeder!";
-                    //        break;
-                    //    default:
-                    //        announceText = "Chưa kiểm tra bộ nạp dầu.";
-                    //        break;
-                    //}
-                    //lbOilTestStatus.BackColor = Color.Red;
-                    //lbOilTestStatus.ForeColor = Color.White;
                     announceText = String.Empty;
                     lbOilTestStatus.BackColor = Color.FromArgb(255, 255, 128);
                     lbOilTestStatus.ForeColor = Color.Black;
                 }
-
             }
             else
             {
@@ -347,26 +295,7 @@ namespace mixer_control_globalver
                 {
                     if (TemporaryVariables.materialDT.Rows.Count > 0)
                     {
-                        switch (SettingsManager.GetSetting(s => s.Language))
-                        {
-                            case 0:
-                                message = "Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?";
-                                caption = "Cảnh báo";
-                                break;
-                            case 1:
-                                message = "选择新公式将导致当前和以前的数据丢失并重置。继续 ？";
-                                caption = "提示";
-                                break;
-                            case 2:
-                                message = "Choosing a new formula will cause current and previous data to be lost and reset. Continue ?";
-                                caption = "Warning";
-                                break;
-                            default:
-                                message = "Chọn công thức mới sẽ khiến dữ liệu đang và đã làm trước đó sẽ bị mất và khởi tạo lại. Tiếp tục ?";
-                                caption = "Cảnh báo";
-                                break;
-                        }
-                        DialogResult dialogResult = CTMessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                        DialogResult dialogResult = CTMessageBox.Show(GlobalStrings.Message_ResetSpecTab, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                         if (dialogResult == DialogResult.OK)
                             OpenChildForm(new ChooseSpec());
                     }
@@ -387,9 +316,7 @@ namespace mixer_control_globalver
                 OpenChildForm(new MaterialScale());
             else
             {
-                message = "Please choose a formula first!";
-                caption = "Warning";
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CTMessageBox.Show(GlobalStrings.Message_NotChooseFormulaAlert, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -417,7 +344,7 @@ namespace mixer_control_globalver
                     || SettingsManager.GetSetting(s => s.TransmissionRatio) == 0
                     || notSettingEnough)
                         {
-                            CTMessageBox.Show("Please input all required setting first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            CTMessageBox.Show(GlobalStrings.Message_NotInputAllBaseSetting, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             MainSetting mainSetting = new MainSetting();
                             mainSetting.ShowDialog();
                         }
@@ -426,7 +353,7 @@ namespace mixer_control_globalver
                     }
                     else
                     {
-                        CTMessageBox.Show("Please confirm all materials first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CTMessageBox.Show(GlobalStrings.Message_NotScanAllMaterial, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 else
@@ -434,7 +361,7 @@ namespace mixer_control_globalver
             }
             else
             {
-                CTMessageBox.Show("Please choose a formula first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CTMessageBox.Show(GlobalStrings.Message_NotChooseFormulaAlert, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void mainSettingFormClosed(object sender, EventArgs e)
@@ -475,7 +402,7 @@ namespace mixer_control_globalver
             {
                 SettingsManager.UpdateSettings(s => s.Language = cbxLanguageChoose.SelectedIndex);
                 SettingsManager.SaveSettings();
-                DialogResult dialogResult = CTMessageBox.Show("A restart process is required to apply new language. Do you want to close the program ?", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult dialogResult = CTMessageBox.Show(GlobalStrings.Message_LanguageChange, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {
                     Environment.Exit(0);

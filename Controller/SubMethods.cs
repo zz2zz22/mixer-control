@@ -1,13 +1,17 @@
 ﻿using ExcelDataReader;
 using mixer_control_globalver.Controller.LogFile;
+using mixer_control_globalver.Properties;
 using mixer_control_globalver.View.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Drawing.Text;
+using System.Globalization;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
@@ -213,6 +217,21 @@ class SubMethods
         catch (Exception ex)
         {
             SystemLog.Output(SystemLog.MSG_TYPE.Err, "Restore user.config error", ex.Message);
+        }
+    }
+
+    public static void SetLanguage(string cultureCode)
+    {
+        if(!String.IsNullOrEmpty(cultureCode))
+        {
+            CultureInfo newCulture = new CultureInfo(cultureCode);
+            Thread.CurrentThread.CurrentUICulture = newCulture;
+            Thread.CurrentThread.CurrentCulture = newCulture;
+        }
+        else
+        {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
         }
     }
 }

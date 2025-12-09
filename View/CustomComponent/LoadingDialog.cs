@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
@@ -17,22 +18,24 @@ namespace mixer_control_globalver.View.CustomComponent
     {
         public LoadingDialog()
         {
-            InitializeComponent();
             switch (SettingsManager.GetSetting(s => s.Language))
             {
                 case 0:
-                    lb1.Text = "Đang xử lý dữ liệu ...";
+                    SubMethods.SetLanguage("vi-VN");
                     break;
                 case 1:
-                    lb1.Text = "处理数据...";
+                    SubMethods.SetLanguage("zh-CN");
                     break;
                 case 2:
-                    lb1.Text = "Loading data ...";
+                    SubMethods.SetLanguage("en-US");
                     break;
                 default:
-                    lb1.Text = "Đang xử lý dữ liệu ...";
+                    SubMethods.SetLanguage("");
                     break;
             }
+            InitializeComponent();
+            this.lb1.Text = GlobalStrings.Message_Processing;
+            this.lb1.Font = new Font(GlobalStrings.Text_Font, 12, FontStyle.Bold);
         }
     }
 }

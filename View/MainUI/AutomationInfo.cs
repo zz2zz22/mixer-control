@@ -69,6 +69,21 @@ namespace mixer_control_globalver.View.MainUI
         #region Contructor
         public AutomationInfo()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
         }
         #endregion Contructor

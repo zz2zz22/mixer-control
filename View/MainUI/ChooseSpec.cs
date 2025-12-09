@@ -18,11 +18,25 @@ namespace mixer_control_globalver.View.MainUI
     public partial class ChooseSpec : Form
     {
         //Fields
-        string message = String.Empty, caption = String.Empty;
         public static bool isConfirmed;
 
         public ChooseSpec()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
         }
         #region Methods
@@ -47,70 +61,24 @@ namespace mixer_control_globalver.View.MainUI
                     }
                 }
 
-                dtgvListSpecification.DataSource = dt;
-                if (SettingsManager.GetSetting(s => s.Language) == 0)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "Tên tệp";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "产品型号名称";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                {
-                    dtgvListSpecification.Columns["file_name"].HeaderText = "File name";
-                }
+                dtgvListSpecification.Columns["file_name"].HeaderText = GlobalStrings.FormulaListHeaderText;
                 dtgvListSpecification.Columns["file_path"].Visible = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                if (SettingsManager.GetSetting(s => s.Language) == 0)
-                {
-                    message = "Không thể tải dữ liệu tệp!" + "\r\n\r\n" + ex.Message;
-                    caption = "Lỗi";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                {
-                    message = "Load dirctory files failed!" + "\r\n\r\n" + ex.Message;
-                    caption = "Error";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                {
-                    message = "上传产品型号失败！" + "\r\n\r\n" + ex.Message;
-                    caption = "错误";
-                }
-                SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CTMessageBox.Show(GlobalStrings.Error_CannotLoadFormulaList, GlobalStrings.MessageBoxTitle_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         #endregion
         private void ChooseSpec_Load(object sender, EventArgs e)
         {
-            if (SettingsManager.GetSetting(s => s.Language) == 0)
-            {
-                lb1.Text = "Công thức đã chọn:";
-                lb2.Text = "Danh sách công thức:";
+            lb1.Text = GlobalStrings.Label_SelectedFormula;
+            lb2.Text = GlobalStrings.Label_FormulaDirectorySetup;
 
-                btnConfirmChoose.ButtonText = "Tiến hành xác nhận liệu";
-                btnCheckProcess.ButtonText = "Xem quy trình";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 1)
-            {
-                lb1.Text = "选定的配方:";
-                lb2.Text = "产品型号列表:";
-
-                btnConfirmChoose.ButtonText = "开始材料确认。";
-                btnCheckProcess.ButtonText = "检查流程步骤";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 2)
-            {
-                lb1.Text = "Selected Formula:";
-                lb2.Text = "Formula setting files:";
-
-                btnConfirmChoose.ButtonText = "Begin Material Confirmation";
-                btnCheckProcess.ButtonText = "Check process step";
-            }
+            btnTestOilFeed.ButtonText = GlobalStrings.btnTestOilFeed;
+            btnConfirmChoose.ButtonText = GlobalStrings.btnConfirm;
+            btnCheckProcess.ButtonText = GlobalStrings.btnCheckProcess;
 
             SettingsManager.UpdateSettings(s => s.EndReportEnabled = true);
             try
