@@ -160,6 +160,7 @@ How to fix:
 - Check if the directory being deleted or moved to another place? 
 - Check the internet connection in the lower right corner of the screen.
 - If the internet connection is normal, the server may have lost connection. Please contact the IT department.</value>
+    <comment>Error Message</comment>
   </data>
   <data name="Message_ExitApplication" xml:space="preserve">
     <value>Exit the application ? </value>
@@ -208,5 +209,18 @@ How to fix:
   <data name="btnCheckProcess" xml:space="preserve">
     <value>Check formula process</value>
     <comment>Choose Formula Window</comment>
+  </data>
+  <data name="Message_NotEnableOilSupplyFunctionYet" xml:space="preserve">
+    <value>Oil supply mode not being turned on yet.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Error_CannotLoadExcelFile" xml:space="preserve">
+    <value>Cannot read this formula file data.
+</value>
+    <comment>Error Message</comment>
+  </data>
+  <data name="Error_ReadFile" xml:space="preserve">
+    <value>Cannot open Excel file. </value>
+    <comment>Error Message</comment>
   </data>
 </root>

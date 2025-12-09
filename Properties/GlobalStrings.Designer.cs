@@ -115,6 +115,16 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot read this formula file data.
+        ///.
+        /// </summary>
+        public static string Error_CannotLoadExcelFile {
+            get {
+                return ResourceManager.GetString("Error_CannotLoadExcelFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to read directory data containing formulas.
         ///How to fix:
         ///- Check if the directory being deleted or moved to another place? 
@@ -124,6 +134,15 @@ namespace mixer_control_globalver.Properties {
         public static string Error_CannotLoadFormulaList {
             get {
                 return ResourceManager.GetString("Error_CannotLoadFormulaList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot open Excel file. .
+        /// </summary>
+        public static string Error_ReadFile {
+            get {
+                return ResourceManager.GetString("Error_ReadFile", resourceCulture);
             }
         }
         
@@ -187,6 +206,15 @@ namespace mixer_control_globalver.Properties {
         public static string Message_NotChooseFormulaAlert {
             get {
                 return ResourceManager.GetString("Message_NotChooseFormulaAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oil supply mode not being turned on yet..
+        /// </summary>
+        public static string Message_NotEnableOilSupplyFunctionYet {
+            get {
+                return ResourceManager.GetString("Message_NotEnableOilSupplyFunctionYet", resourceCulture);
             }
         }
         

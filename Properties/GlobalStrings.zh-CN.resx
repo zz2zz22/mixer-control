@@ -203,4 +203,14 @@
   <data name="btnCheckProcess" xml:space="preserve">
     <value>检查流程步骤</value>
   </data>
+  <data name="Message_NotEnableOilSupplyFunctionYet" xml:space="preserve">
+    <value>供油模式尚未开启。</value>
+  </data>
+  <data name="Error_CannotLoadExcelFile" xml:space="preserve">
+    <value>无法读取此公式文件数据。
+</value>
+  </data>
+  <data name="Error_ReadFile" xml:space="preserve">
+    <value>无法打开Excel文件。</value>
+  </data>
 </root>

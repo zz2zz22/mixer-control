@@ -203,4 +203,14 @@ Time:
   <data name="btnCheckProcess" xml:space="preserve">
     <value>Check formula process</value>
   </data>
+  <data name="Message_NotEnableOilSupplyFunctionYet" xml:space="preserve">
+    <value>Oil supply mode not being turned on yet.</value>
+  </data>
+  <data name="Error_CannotLoadExcelFile" xml:space="preserve">
+    <value>Cannot read this formula file data.
+</value>
+  </data>
+  <data name="Error_ReadFile" xml:space="preserve">
+    <value>Cannot open Excel file. </value>
+  </data>
 </root>

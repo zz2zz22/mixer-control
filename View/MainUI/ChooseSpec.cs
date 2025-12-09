@@ -60,7 +60,7 @@ namespace mixer_control_globalver.View.MainUI
                         dt.Rows.Add(Path.GetFileNameWithoutExtension(fileName), fileName);
                     }
                 }
-
+                dtgvListSpecification.DataSource = dt;
                 dtgvListSpecification.Columns["file_name"].HeaderText = GlobalStrings.FormulaListHeaderText;
                 dtgvListSpecification.Columns["file_path"].Visible = false;
             }
@@ -74,11 +74,16 @@ namespace mixer_control_globalver.View.MainUI
         private void ChooseSpec_Load(object sender, EventArgs e)
         {
             lb1.Text = GlobalStrings.Label_SelectedFormula;
+            lb1.Font = new System.Drawing.Font(GlobalStrings.Text_Font, lb1.Font.Size, lb1.Font.Style);
             lb2.Text = GlobalStrings.Label_FormulaDirectorySetup;
+            lb2.Font = new System.Drawing.Font(GlobalStrings.Text_Font, lb2.Font.Size, lb2.Font.Style);
 
             btnTestOilFeed.ButtonText = GlobalStrings.btnTestOilFeed;
+            btnTestOilFeed.Font = new System.Drawing.Font(GlobalStrings.Text_Font, btnTestOilFeed.Font.Size, btnTestOilFeed.Font.Style);
             btnConfirmChoose.ButtonText = GlobalStrings.btnConfirm;
+            btnConfirmChoose.Font = new System.Drawing.Font(GlobalStrings.Text_Font, btnConfirmChoose.Font.Size, btnConfirmChoose.Font.Style);
             btnCheckProcess.ButtonText = GlobalStrings.btnCheckProcess;
+            btnCheckProcess.Font = new System.Drawing.Font(GlobalStrings.Text_Font, btnCheckProcess.Font.Size, btnCheckProcess.Font.Style);
 
             SettingsManager.UpdateSettings(s => s.EndReportEnabled = true);
             try
@@ -262,23 +267,7 @@ namespace mixer_control_globalver.View.MainUI
                                 }
                                 else
                                 {
-                                    string exMessage;
-                                    switch (SettingsManager.GetSetting(s => s.Language))
-                                    {
-                                        case 0:
-                                            exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";
-                                            break;
-                                        case 1:
-                                            exMessage = "无法打开文件或与服务器的连接丢失，请检查文件或互联网连接！";
-                                            break;
-                                        case 2:
-                                            exMessage = "Unable to open file or lost connection to server, please check file or internet connection!";
-                                            break;
-                                        default:
-                                            exMessage = "Không thể mở file hoặc mất kết nối đến server, vui lòng kiểm tra file hoặc kết nối internet!";
-                                            break;
-                                    }
-                                    throw new Exception(exMessage);
+                                    throw new Exception(GlobalStrings.Error_ReadFile);
                                 }
                                 isSuccess = true;
                                 loading.BeginInvoke(new Action(() => loading.Close()));
@@ -287,25 +276,11 @@ namespace mixer_control_globalver.View.MainUI
                             {
                                 isSuccess = false;
                                 loading.BeginInvoke(new Action(() => loading.Close()));
-                                if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                {
-                                    message = "Lỗi khi tải dữ liệu excel!" + "\r\n\r\n" + ex.Message;
-                                    caption = "Lỗi";
-                                }
-                                else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                {
-                                    message = "下载EXCEL失败!" + "\r\n\r\n" + ex.Message;
-                                    caption = "错误";
-                                }
-                                else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                {
-                                    message = "Load Excel data failed!" + "\r\n\r\n" + ex.Message;
-                                    caption = "Error";
-                                }
+                                
                                 TemporaryVariables.resetAllTempVariables();
 
-                                SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                SystemLog.Output(SystemLog.MSG_TYPE.Err, GlobalStrings.MessageBoxTitle_Error, GlobalStrings.Error_CannotLoadExcelFile);
+                                CTMessageBox.Show(GlobalStrings.Error_CannotLoadExcelFile, GlobalStrings.MessageBoxTitle_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }));
@@ -331,94 +306,7 @@ namespace mixer_control_globalver.View.MainUI
             Program.main.openScaleTab();
         }
 
-        private void btnImportTemplate_Click(object sender, EventArgs e)
-        {
-            PasswordConfirm passwordConfirm = new PasswordConfirm();
-            passwordConfirm.FormClosed += importExcelPassFormClosed;
-            passwordConfirm.ShowDialog();
-        }
-
-        private void importExcelPassFormClosed(object sender, EventArgs e)
-        {
-            ((Form)sender).FormClosed -= importExcelPassFormClosed;
-            if (isConfirmed)
-            {
-                isConfirmed = false;
-                try
-                {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                    {
-                        fileDialog.Title = "Nhập file công thức";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                    {
-                        fileDialog.Title = "导入公式文件";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                    {
-                        fileDialog.Title = "Import formula";
-                    }
-                    fileDialog.DefaultExt = "Excel";
-                    fileDialog.Filter = "Excel files (*.xlsx)|*.xlsx";
-                    fileDialog.CheckPathExists = true;
-                    fileDialog.Multiselect = true;
-                    fileDialog.InitialDirectory = "C:\\";
-
-                    if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        foreach (string _file in fileDialog.FileNames)
-                        {
-                            FileInfo d = new FileInfo(_file);
-                            if (File.Exists(Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name)))
-                            {
-                                File.Delete(Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name));
-                            }
-                            File.Move(_file, Path.Combine(SettingsManager.GetSetting(s => s.FormulaDirectory) + "\\" + d.Name));
-                        }
-                        if (SettingsManager.GetSetting(s => s.Language) == 0)
-                        {
-                            message = "Thêm công thức thành công!";
-                            caption = "Thông tin";
-                        }
-                        else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                        {
-                            message = "更多成功秘诀！";
-                            caption = "信息";
-                        }
-                        else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                        {
-                            message = "Successfully import formula !";
-                            caption = "Information";
-                        }
-                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                    {
-                        message = "Thêm công thức thất bại !" + "\r\n\r\n" + ex.Message;
-                        caption = "Lỗi";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                    {
-                        message = "更多失败的食谱！" + "\r\n\r\n" + ex.Message;
-                        caption = "错误";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                    {
-                        message = "Failed to import formula!" + "\r\n\r\n" + ex.Message;
-                        caption = "Error";
-                    }
-                    LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
-                    SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
+        
         private void txbSearchFormula_TextChanged(object sender, EventArgs e)
         {
             if (dtgvListSpecification.Rows.Count > 0)
@@ -454,50 +342,8 @@ namespace mixer_control_globalver.View.MainUI
                 }
                 else
                 {
-                    switch (SettingsManager.GetSetting(s => s.Language))
-                    {
-                        case 0:
-                            message = "Máy không được kích hoạt chế độ cấp dầu!";
-                            caption = "Cảnh báo";
-                            break;
-                        case 1:
-                            message = "机器未激活供油模式！";
-                            caption = "警报";
-                            break;
-                        case 2:
-                            message = "The machine does not activate oil supply mode!";
-                            caption = "Alert";
-                            break;
-                        default:
-                            message = "Máy không được kích hoạt chế độ cấp dầu!";
-                            caption = "Cảnh báo";
-                            break;
-                    }
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CTMessageBox.Show(GlobalStrings.Message_NotEnableOilSupplyFunctionYet, GlobalStrings.MessageBoxTitle_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
-            else
-            {
-                switch (SettingsManager.GetSetting(s => s.Language))
-                {
-                    case 0:
-                        message = "Máy đã được test cấp dầu!";
-                        caption = "Cảnh báo";
-                        break;
-                    case 1:
-                        message = "本机已经过油泵测试！";
-                        caption = "警报";
-                        break;
-                    case 2:
-                        message = "The machine has been tested for oil pump!";
-                        caption = "Alert";
-                        break;
-                    default:
-                        message = "Máy đã được test cấp dầu!";
-                        caption = "Cảnh báo";
-                        break;
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -507,25 +353,6 @@ namespace mixer_control_globalver.View.MainUI
             {
                 CheckFormulaProcess checkFormula = new CheckFormulaProcess();
                 checkFormula.ShowDialog();
-            }
-            else
-            {
-                if (SettingsManager.GetSetting(s => s.Language) == 0)
-                {
-                    message = "Chưa chọn công thức hoặc công thức không có dữ liệu !";
-                    caption = "Lỗi";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                {
-                    message = "未选择公式或公式没有数据！";
-                    caption = "错误";
-                }
-                else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                {
-                    message = "No formula has been selected or the formula has no data!";
-                    caption = "Error";
-                }
-                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

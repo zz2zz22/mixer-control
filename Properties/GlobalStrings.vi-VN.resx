@@ -203,4 +203,14 @@ Thời gian:
   <data name="btnCheckProcess" xml:space="preserve">
     <value>Xem nội dung của công thức</value>
   </data>
+  <data name="Message_NotEnableOilSupplyFunctionYet" xml:space="preserve">
+    <value>Chế độ cấp dầu chưa được kích hoạt.</value>
+  </data>
+  <data name="Error_CannotLoadExcelFile" xml:space="preserve">
+    <value>Không thể đọc dữ liệu file công thức này.
+</value>
+  </data>
+  <data name="Error_ReadFile" xml:space="preserve">
+    <value>Không thể mở file excel.</value>
+  </data>
 </root>
