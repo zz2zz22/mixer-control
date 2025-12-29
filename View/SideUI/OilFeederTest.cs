@@ -336,6 +336,12 @@ namespace mixer_control_globalver.View.SideUI
             this.Dispose();
         }
 
+        private void btnStopTest_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+                SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x02, 0x5D, 0xA5 });
+        }
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             //do
@@ -344,7 +350,10 @@ namespace mixer_control_globalver.View.SideUI
             //    pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("OTV", "start")), Convert.ToInt32(ini.Read("OTV", "bit")));
             //} while (ConnectionPLC != 0);
             if (serialPort1.IsOpen)
+            {
+                SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x02, 0x5D, 0xA5 });
                 CloseSerialPort();
+            }
             this.Close();
         }
         void tmrEnsureWorkerGetsCalled_Callback(object obj)

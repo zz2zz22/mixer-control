@@ -120,7 +120,7 @@
             this.lb2.AutoSize = true;
             this.lb2.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lb2.Location = new System.Drawing.Point(488, 230);
+            this.lb2.Location = new System.Drawing.Point(483, 199);
             this.lb2.Name = "lb2";
             this.lb2.Size = new System.Drawing.Size(243, 19);
             this.lb2.TabIndex = 30;
@@ -131,7 +131,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.lbFormulaName);
-            this.panel1.Location = new System.Drawing.Point(483, 72);
+            this.panel1.Location = new System.Drawing.Point(487, 53);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(264, 146);
             this.panel1.TabIndex = 29;
@@ -153,7 +153,7 @@
             this.lb3.AutoSize = true;
             this.lb3.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb3.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lb3.Location = new System.Drawing.Point(483, 50);
+            this.lb3.Location = new System.Drawing.Point(483, 31);
             this.lb3.Name = "lb3";
             this.lb3.Size = new System.Drawing.Size(120, 19);
             this.lb3.TabIndex = 20;

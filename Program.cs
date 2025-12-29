@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Configuration;
-using System.Drawing.Text;
-using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 

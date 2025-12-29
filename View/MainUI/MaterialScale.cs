@@ -1,29 +1,21 @@
 ﻿using mixer_control_globalver.Controller;
 using mixer_control_globalver.Controller.LogFile;
 using mixer_control_globalver.Properties;
-using mixer_control_globalver.View.CustomComponent;
 using mixer_control_globalver.View.CustomControls;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 
 namespace mixer_control_globalver.View.MainUI
 {
     public partial class MaterialScale : Form, IMessageFilter
     {
         int totalMaterial = 0;
-
-        string message = String.Empty, caption = String.Empty;
 
         private readonly StringBuilder _buffer = new StringBuilder();
         const int WM_CHAR = 0x0102;
@@ -33,6 +25,21 @@ namespace mixer_control_globalver.View.MainUI
 
         public MaterialScale()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
             // Add message filter to hook WM_KEYDOWN events.
             Application.AddMessageFilter(this);
@@ -75,41 +82,12 @@ namespace mixer_control_globalver.View.MainUI
                                     TemporaryVariables.tempFormulaLOT = data[1];
                                     if (!String.IsNullOrEmpty(data[3]))
                                         totalMaterial = Convert.ToInt32(data[3]);
-                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                    {
-                                        message = "Đã nhập công thức!";
-                                        caption = "Thông tin";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                    {
-                                        message = "公式已输入！";
-                                        caption = "信息";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                    {
-                                        message = "Formula entered!";
-                                        caption = "Information";
-                                    }
-                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    
+                                    CTMessageBox.Show(GlobalStrings.Message_PDF417Scanned, GlobalStrings.MessageBoxTitle_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 }
                                 else
                                 {
-                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                    {
-                                        message = "Công thức không trùng khớp!";
-                                        caption = "Cảnh báo";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                    {
-                                        message = "公式不符！";
-                                        caption = "警报";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                    {
-                                        message = "Formula is not match!";
-                                        caption = "Warning";
-                                    }
-                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    CTMessageBox.Show(GlobalStrings.Message_PDF417NotMatch, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                     Program.main.openSpecTab();
                                 }
                             }
@@ -117,22 +95,7 @@ namespace mixer_control_globalver.View.MainUI
                             {
                                 if (totalMaterial == 0)
                                 {
-                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                    {
-                                        message = "Vui lòng quét mã vạch của công thức trước!";
-                                        caption = "Cảnh báo";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                    {
-                                        message = "请先扫描菜谱条形码！";
-                                        caption = "警报";
-                                    }
-                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                    {
-                                        message = "Please scan the formula barcode first!";
-                                        caption = "Warning";
-                                    }
-                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    CTMessageBox.Show(GlobalStrings.Message_NotScanPDF417, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                 }
                                 else
                                 {
@@ -156,23 +119,7 @@ namespace mixer_control_globalver.View.MainUI
                         }
                         else
                         {
-                            if (SettingsManager.GetSetting(s => s.Language) == 0)
-                            {
-                                message = "Không thể nhận dạng mã QR!";
-                                caption = "Lỗi";
-                            }
-                            else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                            {
-                                message = "无法识别二维码！";
-                                caption = "错误";
-                            }
-                            else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                            {
-                                message = "Can not read QR code!";
-                                caption = "Error";
-                            }
-                            SystemLog.Output(SystemLog.MSG_TYPE.Err, caption, message);
-                            CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            CTMessageBox.Show(GlobalStrings.Error_CanNotRecognizeQR, GlobalStrings.MessageBoxTitle_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 });
@@ -184,63 +131,35 @@ namespace mixer_control_globalver.View.MainUI
             if (TemporaryVariables.materialDT.Rows.Count > 0)
             {
                 flpMaterialList.Controls.Clear();
-                for (int i= 0; i < TemporaryVariables.materialDT.Rows.Count; i ++)
+                for (int i = 0; i < TemporaryVariables.materialDT.Rows.Count; i++)
                 {
                     CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(TemporaryVariables.materialDT.Rows[i]["mat_name"].ToString(), TemporaryVariables.materialDT.Rows[i]["weight"].ToString(), TemporaryVariables.materialDT.Rows[i]["lot_no"].ToString());
                     flpMaterialList.Controls.Add(customMaterial);
                 }
-            }     
+            }
             totalMaterial = TemporaryVariables.materialDT.Rows.Count;
-            if (SettingsManager.GetSetting(s => s.Language) == 0)
-            {
-                lb1.Text = "Danh sách nguyên vật liệu đã xác nhận:";
-                lb2.Text = "Số nguyên vật liệu đã xác nhận:";
-                lb3.Text = "Công thức:";
-                lb4.Text = "Nguyên vật liệu vừa xác nhận:";
-                btnProceedAutomation.ButtonText = "Tiến hành chạy tự động";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 1)
-            {
-                lb1.Text = "确认材料清单：";
-                lb2.Text = "确认材料数量：";
-                lb3.Text = "型号:";
-                lb4.Text = "最新确认材料：";
-                btnProceedAutomation.ButtonText = "开始运行";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 2)
-            {
-                lb1.Text = "Confirmed materials list:";
-                lb2.Text = "Confirmed materials amount:";
-                lb3.Text = "Formula:";
-                lb4.Text = "Latest confirmed material:";
-                btnProceedAutomation.ButtonText = "Begin automation process";
-            }
+
+            lb1.Text = GlobalStrings.Label_ScannedMaterialList;
+            lb1.Font = new Font(GlobalStrings.Text_Font, lb1.Font.Size, lb1.Font.Style);
+            lb2.Text = GlobalStrings.Label_ScannedMaterialAmount;
+            lb2.Font = new Font(GlobalStrings.Text_Font, lb2.Font.Size, lb2.Font.Style);
+            lb3.Text = GlobalStrings.Label_ScannedMaterialFormulaName;
+            lb3.Font = new Font(GlobalStrings.Text_Font, lb3.Font.Size, lb3.Font.Style);
+            lb4.Text = GlobalStrings.Label_ScannedMaterialCode;
+            lb4.Font = new Font(GlobalStrings.Text_Font, lb4.Font.Size, lb4.Font.Style);
+            btnProceedAutomation.ButtonText = GlobalStrings.btnContinueAutomation_Text;
+            btnProceedAutomation.Font = new Font(GlobalStrings.Text_Font, btnProceedAutomation.Font.Size, btnProceedAutomation.Font.Style);
         }
 
         private void btnProceedAutomation_Click(object sender, EventArgs e)
         {
-            if(!SettingsManager.GetSetting(s => s.DeveloperMode))
+            if (!SettingsManager.GetSetting(s => s.DeveloperMode))
             {
                 if (TemporaryVariables.materialDT.Rows.Count == totalMaterial)
                     Program.main.openAutomationTab();
                 else
                 {
-                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                    {
-                        message = "Chưa quét đủ số lượng nguyên vật liệu. Vui lòng kiểm tra lại.";
-                        caption = "Cảnh báo";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                    {
-                        message = "没有扫描足够的材料。请再检查一次。";
-                        caption = "警报";
-                    }
-                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                    {
-                        message = "Not scanning enough materials. Please check again.";
-                        caption = "Warning";
-                    }
-                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    CTMessageBox.Show(GlobalStrings.Message_NotScanAllMaterial, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else

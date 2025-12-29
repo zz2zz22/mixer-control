@@ -97,6 +97,51 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Continue to automation process.
+        /// </summary>
+        public static string btnContinueAutomation_Text {
+            get {
+                return ResourceManager.GetString("btnContinueAutomation_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CW (Clockwise).
+        /// </summary>
+        public static string btnNormalRoll_Text {
+            get {
+                return ResourceManager.GetString("btnNormalRoll_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motor Stop.
+        /// </summary>
+        public static string btnResetRoll_Text {
+            get {
+                return ResourceManager.GetString("btnResetRoll_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CCW (Counterclockwise).
+        /// </summary>
+        public static string btnReverseRoll_Text {
+            get {
+                return ResourceManager.GetString("btnReverseRoll_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start the current step.
+        /// </summary>
+        public static string btnStartAutomation_Text {
+            get {
+                return ResourceManager.GetString("btnStartAutomation_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Oil Supply Machine Test.
         /// </summary>
         public static string btnTestOilFeed {
@@ -138,6 +183,15 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The QR code just scan is not in the right format. Please check again..
+        /// </summary>
+        public static string Error_CanNotRecognizeQR {
+            get {
+                return ResourceManager.GetString("Error_CanNotRecognizeQR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot open Excel file. .
         /// </summary>
         public static string Error_ReadFile {
@@ -152,6 +206,33 @@ namespace mixer_control_globalver.Properties {
         public static string FormulaListHeaderText {
             get {
                 return ResourceManager.GetString("FormulaListHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanned material name:.
+        /// </summary>
+        public static string Label_CurrentScannedMaterialName {
+            get {
+                return ResourceManager.GetString("Label_CurrentScannedMaterialName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed:.
+        /// </summary>
+        public static string Label_CurrentSpeed {
+            get {
+                return ResourceManager.GetString("Label_CurrentSpeed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temperature:.
+        /// </summary>
+        public static string Label_CurrentTemperature {
+            get {
+                return ResourceManager.GetString("Label_CurrentTemperature", resourceCulture);
             }
         }
         
@@ -174,11 +255,65 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scanned materials / total materials.
+        /// </summary>
+        public static string Label_ScannedMaterialAmount {
+            get {
+                return ResourceManager.GetString("Label_ScannedMaterialAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanned material code.
+        /// </summary>
+        public static string Label_ScannedMaterialCode {
+            get {
+                return ResourceManager.GetString("Label_ScannedMaterialCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formula Name.
+        /// </summary>
+        public static string Label_ScannedMaterialFormulaName {
+            get {
+                return ResourceManager.GetString("Label_ScannedMaterialFormulaName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material lists.
+        /// </summary>
+        public static string Label_ScannedMaterialList {
+            get {
+                return ResourceManager.GetString("Label_ScannedMaterialList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected formula :.
         /// </summary>
         public static string Label_SelectedFormula {
             get {
                 return ResourceManager.GetString("Label_SelectedFormula", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (rpm).
+        /// </summary>
+        public static string Label_SpeedUnit {
+            get {
+                return ResourceManager.GetString("Label_SpeedUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Celsius).
+        /// </summary>
+        public static string Label_TemperatureUnit {
+            get {
+                return ResourceManager.GetString("Label_TemperatureUnit", resourceCulture);
             }
         }
         
@@ -237,11 +372,38 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please scan the PDF_417 code on the SOP file first..
+        /// </summary>
+        public static string Message_NotScanPDF417 {
+            get {
+                return ResourceManager.GetString("Message_NotScanPDF417", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Oil feeder checked!\r\nTime:\r\n.
         /// </summary>
         public static string Message_OilTested {
             get {
                 return ResourceManager.GetString("Message_OilTested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SOP PDF_417 code you just scanned is not match with the selected automation formula please check again..
+        /// </summary>
+        public static string Message_PDF417NotMatch {
+            get {
+                return ResourceManager.GetString("Message_PDF417NotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The scanned SOP code matches the selected formula. Please scan the material codes included in the SOP..
+        /// </summary>
+        public static string Message_PDF417Scanned {
+            get {
+                return ResourceManager.GetString("Message_PDF417Scanned", resourceCulture);
             }
         }
         

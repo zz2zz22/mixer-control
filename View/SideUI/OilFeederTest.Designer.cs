@@ -41,6 +41,7 @@
             this.btnStartTesting = new XanderUI.XUIButton();
             this.label1 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.btnStopTest = new XanderUI.XUIButton();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.panelTestOil.SuspendLayout();
@@ -97,6 +98,7 @@
             // panelTestOil
             // 
             this.panelTestOil.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.panelTestOil.Controls.Add(this.btnStopTest);
             this.panelTestOil.Controls.Add(this.label2);
             this.panelTestOil.Controls.Add(this.rtb_log);
             this.panelTestOil.Controls.Add(this.txbTestMass);
@@ -112,7 +114,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 170);
+            this.label2.Location = new System.Drawing.Point(12, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 23);
             this.label2.TabIndex = 21;
@@ -121,12 +123,11 @@
             // rtb_log
             // 
             this.rtb_log.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.rtb_log.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.rtb_log.Font = new System.Drawing.Font("Microsoft YaHei", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtb_log.Location = new System.Drawing.Point(0, 193);
+            this.rtb_log.Location = new System.Drawing.Point(3, 29);
             this.rtb_log.Name = "rtb_log";
             this.rtb_log.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtb_log.Size = new System.Drawing.Size(556, 169);
+            this.rtb_log.Size = new System.Drawing.Size(364, 109);
             this.rtb_log.TabIndex = 20;
             this.rtb_log.Text = "";
             this.rtb_log.TextChanged += new System.EventHandler(this.rtb_log_TextChanged);
@@ -135,9 +136,9 @@
             // 
             this.txbTestMass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.txbTestMass.Font = new System.Drawing.Font("Microsoft YaHei", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbTestMass.Location = new System.Drawing.Point(16, 40);
+            this.txbTestMass.Location = new System.Drawing.Point(12, 203);
             this.txbTestMass.Name = "txbTestMass";
-            this.txbTestMass.Size = new System.Drawing.Size(200, 47);
+            this.txbTestMass.Size = new System.Drawing.Size(317, 47);
             this.txbTestMass.TabIndex = 19;
             this.txbTestMass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txbTestMass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txbTestMass_KeyPress);
@@ -146,9 +147,9 @@
             // 
             this.panelStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelStatus.Controls.Add(this.lbStatus);
-            this.panelStatus.Location = new System.Drawing.Point(236, 40);
+            this.panelStatus.Location = new System.Drawing.Point(373, 29);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(308, 116);
+            this.panelStatus.Size = new System.Drawing.Size(171, 109);
             this.panelStatus.TabIndex = 18;
             // 
             // lbStatus
@@ -159,7 +160,7 @@
             this.lbStatus.ForeColor = System.Drawing.Color.Red;
             this.lbStatus.Location = new System.Drawing.Point(0, 0);
             this.lbStatus.Name = "lbStatus";
-            this.lbStatus.Size = new System.Drawing.Size(306, 114);
+            this.lbStatus.Size = new System.Drawing.Size(169, 107);
             this.lbStatus.TabIndex = 0;
             this.lbStatus.Text = "...";
             this.lbStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -179,7 +180,7 @@
             this.btnStartTesting.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnStartTesting.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnStartTesting.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnStartTesting.Location = new System.Drawing.Point(16, 93);
+            this.btnStartTesting.Location = new System.Drawing.Point(12, 279);
             this.btnStartTesting.Name = "btnStartTesting";
             this.btnStartTesting.Size = new System.Drawing.Size(200, 71);
             this.btnStartTesting.TabIndex = 17;
@@ -190,11 +191,34 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
+            this.label1.Location = new System.Drawing.Point(12, 177);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(326, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nhập khối lượng dầu muốn thử nghiệm:\r\n";
+            // 
+            // btnStopTest
+            // 
+            this.btnStopTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStopTest.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnStopTest.ButtonImage = global::mixer_control_globalver.Properties.Resources.cancel;
+            this.btnStopTest.ButtonStyle = XanderUI.XUIButton.Style.MaterialRounded;
+            this.btnStopTest.ButtonText = "FORCE STOP";
+            this.btnStopTest.ClickBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(195)))), ((int)(((byte)(195)))));
+            this.btnStopTest.ClickTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnStopTest.CornerRadius = 10;
+            this.btnStopTest.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStopTest.Horizontal_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnStopTest.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.btnStopTest.HoverTextColor = System.Drawing.Color.DodgerBlue;
+            this.btnStopTest.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
+            this.btnStopTest.Location = new System.Drawing.Point(343, 279);
+            this.btnStopTest.Name = "btnStopTest";
+            this.btnStopTest.Size = new System.Drawing.Size(200, 71);
+            this.btnStopTest.TabIndex = 22;
+            this.btnStopTest.TextColor = System.Drawing.Color.Black;
+            this.btnStopTest.Vertical_Alignment = System.Drawing.StringAlignment.Center;
+            this.btnStopTest.Click += new System.EventHandler(this.btnStopTest_Click);
             // 
             // OilFeederTest
             // 
@@ -231,5 +255,6 @@
         private System.Windows.Forms.TextBox txbTestMass;
         private System.Windows.Forms.RichTextBox rtb_log;
         private System.Windows.Forms.Label label2;
+        private XanderUI.XUIButton btnStopTest;
     }
 }

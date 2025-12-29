@@ -92,14 +92,12 @@
             this.tabPageBasicSetting = new System.Windows.Forms.TabPage();
             this.tabPageSubSetting = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbFRComPort = new System.Windows.Forms.ComboBox();
             this.btnTestFRConnect = new XanderUI.XUIButton();
             this.btnTestPort2 = new XanderUI.XUIButton();
             this.label34 = new System.Windows.Forms.Label();
             this.cbPump2ComPort = new System.Windows.Forms.ComboBox();
             this.label36 = new System.Windows.Forms.Label();
             this.cbDiameterComPort = new System.Windows.Forms.ComboBox();
-            this.label29 = new System.Windows.Forms.Label();
             this.txbTolerance = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.btnTestPort1 = new XanderUI.XUIButton();
@@ -124,6 +122,8 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
+            this.label29 = new System.Windows.Forms.Label();
+            this.switchEnableSecondaryOilSup = new XanderUI.XUISwitch();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -193,7 +193,7 @@
             this.switchTest.BackColor = System.Drawing.Color.Transparent;
             this.switchTest.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchTest.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchTest.Location = new System.Drawing.Point(281, 378);
+            this.switchTest.Location = new System.Drawing.Point(304, 378);
             this.switchTest.Name = "switchTest";
             this.switchTest.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchTest.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -426,7 +426,7 @@
             this.switchTestOilMultiple.BackColor = System.Drawing.Color.Transparent;
             this.switchTestOilMultiple.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchTestOilMultiple.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchTestOilMultiple.Location = new System.Drawing.Point(281, 495);
+            this.switchTestOilMultiple.Location = new System.Drawing.Point(304, 495);
             this.switchTestOilMultiple.Name = "switchTestOilMultiple";
             this.switchTestOilMultiple.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchTestOilMultiple.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -459,6 +459,8 @@
             // tabPageLogic
             // 
             this.tabPageLogic.BackColor = System.Drawing.Color.PeachPuff;
+            this.tabPageLogic.Controls.Add(this.switchEnableSecondaryOilSup);
+            this.tabPageLogic.Controls.Add(this.label29);
             this.tabPageLogic.Controls.Add(this.btnTransferUserSettings);
             this.tabPageLogic.Controls.Add(this.switchPowderBagCheck);
             this.tabPageLogic.Controls.Add(this.label6);
@@ -494,7 +496,7 @@
             this.btnTransferUserSettings.HoverBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
             this.btnTransferUserSettings.HoverTextColor = System.Drawing.Color.DodgerBlue;
             this.btnTransferUserSettings.ImagePosition = XanderUI.XUIButton.imgPosition.Left;
-            this.btnTransferUserSettings.Location = new System.Drawing.Point(355, 413);
+            this.btnTransferUserSettings.Location = new System.Drawing.Point(355, 363);
             this.btnTransferUserSettings.Name = "btnTransferUserSettings";
             this.btnTransferUserSettings.Size = new System.Drawing.Size(160, 55);
             this.btnTransferUserSettings.TabIndex = 34;
@@ -792,7 +794,7 @@
             this.switchShowHiddenInfo.BackColor = System.Drawing.Color.Transparent;
             this.switchShowHiddenInfo.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
             this.switchShowHiddenInfo.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
-            this.switchShowHiddenInfo.Location = new System.Drawing.Point(281, 437);
+            this.switchShowHiddenInfo.Location = new System.Drawing.Point(304, 437);
             this.switchShowHiddenInfo.Name = "switchShowHiddenInfo";
             this.switchShowHiddenInfo.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchShowHiddenInfo.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
@@ -878,10 +880,10 @@
             this.tabPageSubSetting.Controls.Add(this.groupBox5);
             this.tabPageSubSetting.Controls.Add(this.groupBox3);
             this.tabPageSubSetting.Controls.Add(this.groupBox2);
-            this.tabPageSubSetting.Location = new System.Drawing.Point(4, 25);
+            this.tabPageSubSetting.Location = new System.Drawing.Point(4, 28);
             this.tabPageSubSetting.Name = "tabPageSubSetting";
             this.tabPageSubSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSubSetting.Size = new System.Drawing.Size(969, 555);
+            this.tabPageSubSetting.Size = new System.Drawing.Size(969, 552);
             this.tabPageSubSetting.TabIndex = 1;
             this.tabPageSubSetting.Text = "Other Settings";
             // 
@@ -891,14 +893,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
-            this.groupBox5.Controls.Add(this.cbFRComPort);
             this.groupBox5.Controls.Add(this.btnTestFRConnect);
             this.groupBox5.Controls.Add(this.btnTestPort2);
             this.groupBox5.Controls.Add(this.label34);
             this.groupBox5.Controls.Add(this.cbPump2ComPort);
             this.groupBox5.Controls.Add(this.label36);
             this.groupBox5.Controls.Add(this.cbDiameterComPort);
-            this.groupBox5.Controls.Add(this.label29);
             this.groupBox5.Controls.Add(this.txbTolerance);
             this.groupBox5.Controls.Add(this.label24);
             this.groupBox5.Controls.Add(this.btnTestPort1);
@@ -915,19 +915,10 @@
             this.groupBox5.Controls.Add(this.label17);
             this.groupBox5.Location = new System.Drawing.Point(8, 150);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(591, 388);
+            this.groupBox5.Size = new System.Drawing.Size(591, 385);
             this.groupBox5.TabIndex = 25;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Gasoline pump setting (Do NOT change)";
-            // 
-            // cbFRComPort
-            // 
-            this.cbFRComPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFRComPort.FormattingEnabled = true;
-            this.cbFRComPort.Location = new System.Drawing.Point(15, 204);
-            this.cbFRComPort.Name = "cbFRComPort";
-            this.cbFRComPort.Size = new System.Drawing.Size(147, 27);
-            this.cbFRComPort.TabIndex = 31;
             // 
             // btnTestFRConnect
             // 
@@ -1004,20 +995,10 @@
             // 
             this.cbDiameterComPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbDiameterComPort.FormattingEnabled = true;
-            this.cbDiameterComPort.Location = new System.Drawing.Point(157, 312);
+            this.cbDiameterComPort.Location = new System.Drawing.Point(15, 204);
             this.cbDiameterComPort.Name = "cbDiameterComPort";
-            this.cbDiameterComPort.Size = new System.Drawing.Size(124, 27);
+            this.cbDiameterComPort.Size = new System.Drawing.Size(146, 27);
             this.cbDiameterComPort.TabIndex = 34;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(14, 315);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(137, 19);
-            this.label29.TabIndex = 33;
-            this.label29.Text = "Diameter Sensor:";
             // 
             // txbTolerance
             // 
@@ -1285,6 +1266,30 @@
             this.label23.TabIndex = 19;
             this.label23.Text = "IP:";
             // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(6, 288);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(164, 38);
+            this.label29.TabIndex = 35;
+            this.label29.Text = "Enable 2 type of oil:\r\n(2 time pump)";
+            // 
+            // switchEnableSecondaryOilSup
+            // 
+            this.switchEnableSecondaryOilSup.BackColor = System.Drawing.Color.Transparent;
+            this.switchEnableSecondaryOilSup.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchEnableSecondaryOilSup.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchEnableSecondaryOilSup.Location = new System.Drawing.Point(176, 296);
+            this.switchEnableSecondaryOilSup.Name = "switchEnableSecondaryOilSup";
+            this.switchEnableSecondaryOilSup.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchEnableSecondaryOilSup.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchEnableSecondaryOilSup.Size = new System.Drawing.Size(60, 30);
+            this.switchEnableSecondaryOilSup.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchEnableSecondaryOilSup.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchEnableSecondaryOilSup.TabIndex = 36;
+            this.switchEnableSecondaryOilSup.Text = "xuiSwitch1";
+            // 
             // MainSetting
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1414,9 +1419,7 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.ComboBox cbxLEDStyle;
         private System.Windows.Forms.ComboBox cbDiameterComPort;
-        private System.Windows.Forms.Label label29;
         private XanderUI.XUIButton btnTestFRConnect;
-        private System.Windows.Forms.ComboBox cbFRComPort;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.ComboBox cbPump2ComPort;
         private System.Windows.Forms.Label label36;
@@ -1424,5 +1427,7 @@
         private XanderUI.XUIButton btnTestPort2;
         private System.IO.Ports.SerialPort serialPort3;
         private XanderUI.XUIButton btnTransferUserSettings;
+        private XanderUI.XUISwitch switchEnableSecondaryOilSup;
+        private System.Windows.Forms.Label label29;
     }
 }

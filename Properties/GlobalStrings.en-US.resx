@@ -213,4 +213,59 @@ Time:
   <data name="Error_ReadFile" xml:space="preserve">
     <value>Cannot open Excel file. </value>
   </data>
+  <data name="Message_PDF417Scanned" xml:space="preserve">
+    <value>The scanned SOP code matches the selected formula. Please scan the material codes included in the SOP.</value>
+  </data>
+  <data name="Message_PDF417NotMatch" xml:space="preserve">
+    <value>The SOP PDF_417 code you just scanned is not match with the selected automation formula please check again.</value>
+  </data>
+  <data name="Message_NotScanPDF417" xml:space="preserve">
+    <value>Please scan the PDF_417 code on the SOP file first.</value>
+  </data>
+  <data name="Error_CanNotRecognizeQR" xml:space="preserve">
+    <value>The QR code just scan is not in the right format. Please check again.</value>
+  </data>
+  <data name="Label_ScannedMaterialList" xml:space="preserve">
+    <value>Material lists</value>
+  </data>
+  <data name="Label_ScannedMaterialAmount" xml:space="preserve">
+    <value>Scanned materials / 
+total materials</value>
+  </data>
+  <data name="Label_ScannedMaterialFormulaName" xml:space="preserve">
+    <value>Formula Name</value>
+  </data>
+  <data name="Label_CurrentScannedMaterialName" xml:space="preserve">
+    <value>Scanned material name:</value>
+  </data>
+  <data name="Label_ScannedMaterialCode" xml:space="preserve">
+    <value>Scanned material code</value>
+  </data>
+  <data name="btnContinueAutomation_Text" xml:space="preserve">
+    <value>Continue to automation process</value>
+  </data>
+  <data name="Label_CurrentSpeed" xml:space="preserve">
+    <value>Speed:</value>
+  </data>
+  <data name="Label_CurrentTemperature" xml:space="preserve">
+    <value>Temperature:</value>
+  </data>
+  <data name="Label_SpeedUnit" xml:space="preserve">
+    <value>(rpm)</value>
+  </data>
+  <data name="Label_TemperatureUnit" xml:space="preserve">
+    <value>(Celsius)</value>
+  </data>
+  <data name="btnStartAutomation_Text" xml:space="preserve">
+    <value>Start the current step</value>
+  </data>
+  <data name="btnNormalRoll_Text" xml:space="preserve">
+    <value>CW (Clockwise)</value>
+  </data>
+  <data name="btnReverseRoll_Text" xml:space="preserve">
+    <value>CCW (Counterclockwise)</value>
+  </data>
+  <data name="btnResetRoll_Text" xml:space="preserve">
+    <value>Motor Stop</value>
+  </data>
 </root>

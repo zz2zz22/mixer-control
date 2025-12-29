@@ -12,6 +12,7 @@ using mixer_control_globalver.View.SideUI;
 using System;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Ports;
@@ -47,6 +48,8 @@ namespace mixer_control_globalver.View.MainUI
         bool isCompleteOIlSupply = false;
         bool isCompleteFirstOilSup = false;
 
+        double initOilMass = 0, afterOilMass = 0;
+
         private int oilSupplyAttemps = 30;
 
         double realMass = 0, initMass = 0, finalMass = 0, allowMass = 0;
@@ -56,10 +59,15 @@ namespace mixer_control_globalver.View.MainUI
         IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
 
         BackgroundWorker bgWorker;
+        BackgroundWorker bgWorkerOilSupply;
         System.Windows.Forms.Timer tmrCallBgWorker;
+        System.Windows.Forms.Timer tmrCallBgWorkerOilSupply;
         System.Threading.Timer tmrEnsureWorkerGetsCalled;
+        System.Threading.Timer tmrEnsureWorkerGetsCalledOilSupply;
 
         object lockObject = new object();
+        object lockObjectOilSupply = new object();
+
 
         #endregion Fields
 
@@ -93,53 +101,77 @@ namespace mixer_control_globalver.View.MainUI
         /// FORMS EVENT HANDLER
         /// </summary>
         #region Forms event handler
+        private void serialPort3_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                int bytesToRead = serialPort3.BytesToRead;
+                byte[] buffer = new byte[bytesToRead];
+                serialPort3.Read(buffer, 0, bytesToRead);
+
+                string hex = BitConverter.ToString(buffer);
+                if (buffer.Length >= 9 && buffer[0] == 0x01 && buffer[1] == 0x03)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        //txtDataRead.AppendText("buffer[0] " + buffer[0] + ", buffer[1] " + buffer[1] + ", buffer[2] " + buffer[2] + Environment.NewLine);
+                        ushort T = 0;
+                        for (int i = 0; i < buffer[2] / 2; i++)
+                        {
+                            T += (ushort)((buffer[3 + 2 * i] << 8) | buffer[4 + 2 * i]);
+                        }
+
+                        double total = T / 1000.0;
+                        labelTest.Text = total.ToString();
+                        //txtDataRead.Clear();
+                        //foreach (byte b in buffer)
+                        //{
+                        //    txtDataRead.Text += b.ToString() + " ";
+                        //}
+                        //txtDataRead.AppendText(Environment.NewLine +
+                        //    "buffer[0] " + buffer[0] + ", buffer[1] " + buffer[1] + ", buffer[2] " + buffer[2] + Environment.NewLine);
+                    }));
+                }
+            }
+            catch (Exception)
+            {
+                //this.Invoke(new Action(() =>
+                //{
+                //    txtDataRead.AppendText("Lỗi đọc: " + ex.Message + Environment.NewLine);
+                //}));
+            }
+        }
+
+
         private void AutomationInfo_Load(object sender, EventArgs e)
         {
             if (SettingsManager.GetSetting(s => s.OilSupplyEnabled))
             {
                 LoadConnection2SerialPort(1);
-                LoadConnection2SerialPort(2);
+                if(SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                    LoadConnection2SerialPort(3);
+                if (SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply))
+                    LoadConnection2SerialPort(2);
             }
+            
 
-            if (SettingsManager.GetSetting(s => s.Language) == 0)
-            {
-                lb1.Text = "Tốc độ hiện tại:";
-                lb3.Text = "Nhiệt độ hiện tại:";
-                lb2.Text = "(vòng/phút)";
-                lb4.Text = "(Độ C)";
-                lbShowF.Text = "Công thức:";
+            lb1.Text = GlobalStrings.Label_CurrentSpeed;
+            lb1.Font = new Font(GlobalStrings.Text_Font, lb1.Font.Size, lb1.Font.Style);
+            lb3.Text = GlobalStrings.Label_CurrentTemperature;
+            lb3.Font = new Font(GlobalStrings.Text_Font, lb3.Font.Size, lb3.Font.Style);
+            lb2.Text = GlobalStrings.Label_SpeedUnit;
+            lb2.Font = new Font(GlobalStrings.Text_Font, lb2.Font.Size, lb2.Font.Style);
+            lb4.Text = GlobalStrings.Label_TemperatureUnit;
+            lb4.Font = new Font(GlobalStrings.Text_Font, lb4.Font.Size, lb4.Font.Style);
 
-                btnStartProcess.ButtonText = "Bắt đầu thực hiện bước";
-                btnNormalRoll.Text = "Quay Thuận";
-                btnReverseRoll.Text = "Quay Ngược";
-                btnResetRoll.Text = "Ngừng Quay";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 1)
-            {
-                lb1.Text = "实时转速:";
-                lb3.Text = "实时温度:";
-                lb2.Text = "(转/分)";
-                lb4.Text = "(摄氏度)";
-                lbShowF.Text = "型号:";
-
-                btnStartProcess.ButtonText = "开始执行此步骤";
-                btnNormalRoll.Text = "顺转";
-                btnReverseRoll.Text = "逆转";
-                btnResetRoll.Text = "停止旋转";
-            }
-            else if (SettingsManager.GetSetting(s => s.Language) == 2)
-            {
-                lb1.Text = "Current speed:";
-                lb3.Text = "Current temperature:";
-                lb2.Text = "(rpm)";
-                lb4.Text = "(Celsius)";
-                lbShowF.Text = "Formula:";
-
-                btnStartProcess.ButtonText = "Start Process";
-                btnNormalRoll.Text = "Clockwise";
-                btnReverseRoll.Text = "Reverse Clockwise";
-                btnResetRoll.Text = "Stop Motor";
-            }
+            btnStartProcess.ButtonText = GlobalStrings.btnStartAutomation_Text;
+            btnStartProcess.Font = new Font(GlobalStrings.Text_Font, btnStartProcess.Font.Size, btnStartProcess.Font.Style);
+            btnNormalRoll.Text = GlobalStrings.btnNormalRoll_Text;
+            btnNormalRoll.Font = new Font(GlobalStrings.Text_Font, btnNormalRoll.Font.Size, btnNormalRoll.Font.Style);
+            btnReverseRoll.Text = GlobalStrings.btnReverseRoll_Text;
+            btnReverseRoll.Font = new Font(GlobalStrings.Text_Font, btnReverseRoll.Font.Size, btnReverseRoll.Font.Style);
+            btnResetRoll.Text = GlobalStrings.btnResetRoll_Text;
+            btnResetRoll.Font = new Font(GlobalStrings.Text_Font, btnResetRoll.Font.Size, btnResetRoll.Font.Style);
 
             if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
             {
@@ -240,60 +272,6 @@ namespace mixer_control_globalver.View.MainUI
 
             return crc;
         }
-        private void serialPort2_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            try
-            {
-                int bytesToRead = serialPort2.BytesToRead;
-                byte[] buffer = new byte[bytesToRead];
-                serialPort2.Read(buffer, 0, bytesToRead);
-
-                string hex = BitConverter.ToString(buffer);
-
-                if (buffer.Length >= 17 && buffer[0] == 0x01 && buffer[1] == 0x03)
-                {
-                    this.Invoke(new Action(() =>
-                    {
-                        byte[] bytes1 = new byte[4];
-                        byte[] bytes2 = new byte[4];
-                        byte[] bytes3 = new byte[4];
-
-                        for (int i = 0; i < 2; i++)
-                        {
-                            bytes1[i * 2] = buffer[i * 2 + 4];
-                            bytes1[i * 2 + 1] = buffer[i * 2 + 3];
-
-                            bytes2[i * 2] = buffer[i * 2 + 8];
-                            bytes2[i * 2 + 1] = buffer[i * 2 + 7];
-
-                            bytes3[i * 2] = buffer[i * 2 + 12];
-                            bytes3[i * 2 + 1] = buffer[i * 2 + 11];
-                        }
-
-                        float flowrate = BitConverter.ToSingle(bytes1.ToArray(), 0);
-                        //txtFlowrate.Text = flowrate.ToString();
-
-                        float totalHundred = BitConverter.ToSingle(bytes2.ToArray(), 0);
-                        float totalDecimal = BitConverter.ToSingle(bytes3.ToArray(), 0);
-                        float result = totalHundred * 100 + totalDecimal;
-                        realMass = result;
-
-                        //txtDataRead.Clear();
-                        //foreach (byte b in buffer)
-                        //{
-                        //    txtDataRead.Text += b.ToString() + " ";
-                        //}
-                    }));
-                }
-            }
-            catch (Exception)
-            {
-                //this.Invoke(new Action(() =>
-                //{
-                //    txtDataRead.AppendText("Lỗi đọc: " + ex.Message + Environment.NewLine);
-                //}));
-            }
-        }
 
         private void StartAutomationProcess()
         {
@@ -339,6 +317,32 @@ namespace mixer_control_globalver.View.MainUI
                                 pLC.WriteBoolToPLC(false, db, Convert.ToInt32(ini.Read("SR", "start")), Convert.ToInt32(ini.Read("SR", "bit")));
 
                                 isStartSuccess = true;
+
+                                ////Tạo 1 bg worker để handle cấp dầu
+                                //try
+                                //{
+                                //    // this timer calls bgWorker again and again after regular intervals
+                                //    tmrCallBgWorkerOilSupply = new System.Windows.Forms.Timer();//Timer for do task
+                                //    tmrCallBgWorkerOilSupply.Tick += new EventHandler(timerOilSupply_nextRun_Tick);
+                                //    tmrCallBgWorkerOilSupply.Interval = 100; //3600000;
+
+                                //    // this is our worker
+                                //    bgWorkerOilSupply = new BackgroundWorker();
+
+                                //    // work happens in this method
+                                //    bgWorkerOilSupply.DoWork += new DoWorkEventHandler(BWOilSupply_DoWork);
+                                //    bgWorkerOilSupply.ProgressChanged += BWOilSupply_ProgressChanged;
+                                //    bgWorkerOilSupply.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BWOilSupply_RunWorkerCompleted);
+                                //    bgWorkerOilSupply.WorkerReportsProgress = true;
+
+                                //    tmrCallBgWorker.Start();
+                                //}
+                                //catch (Exception ex)
+                                //{
+                                //    CTMessageBox.Show(ex.Message);
+                                //}
+
+
                                 if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
                                 {
                                     XLWorkbook workbook = new XLWorkbook(TemporaryVariables.tempReportPath);
@@ -402,11 +406,74 @@ namespace mixer_control_globalver.View.MainUI
 
         }
 
+        private void timerOilSupply_nextRun_Tick(object sender, EventArgs e)
+        {
+            if (Monitor.TryEnter(lockObject))
+            {
+                try
+                {
+                    // if bgworker is not busy the call the worker
+                    if (!bgWorkerOilSupply.IsBusy)
+                    {
+                        bgWorkerOilSupply.RunWorkerAsync();
+                    }
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
+                }
+            }
+            else
+            {
+                // as the bgworker is busy we will start a timer that will try to call the bgworker again after some time
+                tmrEnsureWorkerGetsCalledOilSupply = new System.Threading.Timer(new TimerCallback(tmrOilSupplyEnsureWorkerGetsCalled_Callback), null, 0, 10);
+            }
+        }
+
+        private void BWOilSupply_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        private void BWOilSupply_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            //Logic update máy cấp dầu
+        }
+
+        private void BWOilSupply_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
+
+        void tmrOilSupplyEnsureWorkerGetsCalled_Callback(object obj)
+        {
+            // this timer was started as the bgworker was busy before now it will try to call the bgworker again
+            if (Monitor.TryEnter(lockObject))
+            {
+                try
+                {
+                    if (!bgWorkerOilSupply.IsBusy)
+                    {
+                        bgWorkerOilSupply.RunWorkerAsync();
+                    }
+                }
+                finally
+                {
+                    Monitor.Exit(lockObject);
+                }
+                tmrEnsureWorkerGetsCalledOilSupply = null;
+            }
+        }
+
         private void btnStartProcess_Click(object sender, EventArgs e)
         {
             if (SettingsManager.GetSetting(s => s.CheckPowderEnabled) && (!String.IsNullOrEmpty(powderBefore) || !String.IsNullOrEmpty(powderAfter)))
             {
-                if(isOilFeed && SettingsManager.GetSetting(s => s.OilSupplyEnabled))
+                if (isOilFeed && SettingsManager.GetSetting(s => s.OilSupplyEnabled))
                 {
                     PowderCheckUI checkPowder = new PowderCheckUI(powderBefore, powderAfter, processNumber, totalPowderInFormula, totalPowder - remainPowder, 1);
                     checkPowder.FormClosed += powderCheckUIBeforeOilSupplyFormClosed;
@@ -568,14 +635,10 @@ namespace mixer_control_globalver.View.MainUI
                                 if (!String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.FlowMeterComPort)))
                                 {
                                     serialPort3.PortName = SettingsManager.GetSetting(s => s.FlowMeterComPort);
-                                    serialPort3.BaudRate = 9600;
-                                    serialPort3.DataBits = 8;
-                                    serialPort3.Parity = Parity.None;
-                                    serialPort3.StopBits = StopBits.One;
-                                    serialPort3.Handshake = Handshake.None;
-                                    serialPort3.ReadTimeout = 1000;
-                                    serialPort3.WriteTimeout = 1000;
-                                    Thread.Sleep(serialPort3.ReadTimeout);
+                                    serialPort3.BaudRate = Convert.ToInt32(SettingsManager.GetSetting(s => s.OilSupplyBaudRate));
+                                    serialPort3.DataBits = Convert.ToInt32(SettingsManager.GetSetting(s => s.OilSupplyDataBits));
+                                    serialPort3.StopBits = (StopBits)Enum.Parse(typeof(StopBits), SettingsManager.GetSetting(s => s.OilSupplyStopBits));
+                                    serialPort3.Parity = (Parity)Enum.Parse(typeof(Parity), SettingsManager.GetSetting(s => s.OilSupplyParity));
                                     if (!serialPort3.IsOpen)
                                     {
                                         throw new Exception("Connot open connection to diameter serial port.");
@@ -595,7 +658,6 @@ namespace mixer_control_globalver.View.MainUI
             }
             catch (Exception ex)
             {
-                CTMessageBox.Show("Failed to init connection to serial port : " + ex.Message, "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 SystemLog.Output(SystemLog.MSG_TYPE.Err, "Failed to init connection to serial port", ex.Message);
             }
         }
@@ -1163,6 +1225,9 @@ namespace mixer_control_globalver.View.MainUI
         }
 
         #endregion PLC event handler
+
+
+
         #endregion PLC logic
 
         /// <summary>
@@ -1429,8 +1494,20 @@ namespace mixer_control_globalver.View.MainUI
                 //}
             }
         }
+
+
         private void UpdateUIWithBGWorkerVariables()
         {
+            if(SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+            {
+                if (serialPort3.IsOpen)
+                {
+                    byte[] request = { 0x01, 0x03, 0x00, 0x0D, 0x00, 0x02, 0x55, 0xC8 }; // Đọc giá trị tổng (Lít)
+                    serialPort3.DiscardInBuffer();
+                    serialPort3.Write(request, 0, request.Length);
+                }
+            }
+
             PLCConnector pLC = new PLCConnector(SettingsManager.GetSetting(s => s.PlcIp), 0, 0, out ConnectionPLC);
             if (ConnectionPLC == 0)
             {
@@ -1515,12 +1592,15 @@ namespace mixer_control_globalver.View.MainUI
                                                     }
                                                     lbAnnounce.Text = announce;
 
-                                                    SubMethods.FuelSetting(serialPort1, oilMass + 1); // Cho +1 lít để xem còn chênh lệch hay không
+                                                    if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                                                        SubMethods.FuelSetting(serialPort1, oilMass + 1); // Cho +1 lít để xem còn chênh lệch hay không
+                                                    else
+                                                        SubMethods.FuelSetting(serialPort1, oilMass);
 
                                                     Thread.Sleep(200);
                                                     buffer = new byte[256]; // Tùy chỉnh kích thước buffer nếu cần
                                                     bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
-                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Mass set receive", buffer.ToString());
+                                                    //SystemLog.Output(SystemLog.MSG_TYPE.Err, "Mass set receive", buffer.ToString());
                                                     if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
                                                     {
                                                         Thread.Sleep(200);
@@ -1536,9 +1616,34 @@ namespace mixer_control_globalver.View.MainUI
                                                         {
                                                             Thread.Sleep(200);
                                                             SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
+                                                            if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                                                            {
+                                                                if (!serialPort3.IsOpen)
+                                                                {
+                                                                    LoadConnection2SerialPort(3);
+
+                                                                    byte[] request = { 0x01, 0x03, 0x00, 0x0D, 0x00, 0x02, 0x55, 0xC8 }; // Đọc giá trị đo (Lít)
+                                                                    serialPort3.DiscardInBuffer();
+                                                                    serialPort3.Write(request, 0, request.Length);
+                                                                }
+                                                            }
                                                         }
                                                         else if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 1 && buffer[4] == 95 && buffer[5] == 165)
                                                         {
+                                                            if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                                                            {
+                                                                if (!serialPort3.IsOpen)
+                                                                {
+                                                                    LoadConnection2SerialPort(3);
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (labelTest.Text != "test")
+                                                                    {
+                                                                        initOilMass = Convert.ToDouble(labelTest.Text);
+                                                                    }
+                                                                }
+                                                            }
                                                             isSendOilMass = true; //Check if the signal is sent
                                                         }
                                                     }
@@ -1585,7 +1690,7 @@ namespace mixer_control_globalver.View.MainUI
                                             {
                                                 if (SettingsManager.GetSetting(s => s.Language) == 0)
                                                 {
-                                                    announce = "Bắt đầu cấp dầu ...";
+                                                    announce = "Đang cấp dầu...";
                                                 }
                                                 else if (SettingsManager.GetSetting(s => s.Language) == 1)
                                                 {
@@ -1627,332 +1732,83 @@ namespace mixer_control_globalver.View.MainUI
                                     {
                                         if (!isCompleteOIlSupply)
                                         {
-                                            if(!isCompleteFirstOilSup)
+                                            if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
                                             {
-                                                //byte[] command = new byte[] { 0x5A, 0x01, 0x04, 0x5F, 0xA5 };
-                                                byte[] command = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
-                                                serialPort1.Write(command, 0, command.Length);
-                                                buffer = new byte[256];
-                                                // Đọc dữ liệu phản hồi từ máy bơm xăng
-                                                bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
-
-                                                if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
+                                                if (serialPort3.IsOpen)
                                                 {
-                                                    CloseSerialPort(serialPort1);
+                                                    byte[] request = { 0x01, 0x03, 0x00, 0x0D, 0x00, 0x02, 0x55, 0xC8 }; // Đọc giá trị đo (Lít)
+                                                    serialPort3.DiscardInBuffer();
+                                                    serialPort3.Write(request, 0, request.Length);
 
-                                                    if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
+                                                    afterOilMass = Convert.ToDouble(labelTest.Text);
+                                                    double suppliedMass = 0;
+                                                    if (afterOilMass < initOilMass)
                                                     {
-                                                        XLWorkbook workbookEnd = new XLWorkbook(TemporaryVariables.tempReportPath);
-                                                        var reportSheetEnd = workbookEnd.Worksheet(1);
-                                                        int rowEnd = 8 + processNumber;
-                                                        lbAnnounce.Text = "";
-
-                                                        if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
-                                                        {
-                                                            if (finalMass > initMass)
-                                                            {
-                                                                double diviantionMass = oilMass - (finalMass - initMass);
-                                                                if (diviantionMass > allowMass)
-                                                                {
-                                                                    reportSheetEnd.Range("V" + rowEnd).Value = "Low - " + (diviantionMass - allowMass);
-                                                                    lbAnnounce.Text = "Thiếu " + (diviantionMass - allowMass);
-                                                                }
-                                                                else if (diviantionMass < allowMass * -1)
-                                                                {
-                                                                    reportSheetEnd.Range("V" + rowEnd).Value = "High - " + (diviantionMass * -1 - allowMass);
-                                                                    lbAnnounce.Text = "Dư" + (diviantionMass * -1 - allowMass);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                lbAnnounce.Text = "Giá trị cuối đang bé hơn " + finalMass + " < " + initMass;
-                                                            }
-                                                        }
-
-                                                        DateTime timeOilEnd = DateTime.UtcNow;
-                                                        reportSheetEnd.Range("R" + rowEnd).Value = timeOilEnd;
-                                                        reportSheetEnd.Range("S" + rowEnd).Value = timeOilEnd;
-                                                        workbookEnd.Save();
-                                                    }
-                                                    isCompleteFirstOilSup = true;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (isOilFeed2 && SettingsManager.GetSetting(s => s.OilSupplyEnabled)) // Check to see if the current working step 
-                                                {
-                                                    if (!isOilFeeding2)
-                                                    {
-                                                        //bool checkConnect = SubMethods.CheckConnectStatus(serialPort1, new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 });
-                                                        if (serialPort2.IsOpen)
-                                                        {
-                                                            if (!isSendOilMass2)
-                                                            {
-                                                                try
-                                                                {
-
-                                                                    if (countTimeOutOil2 <= oilSupplyAttemps)
-                                                                    {
-                                                                        countTimeOutOil2++;
-                                                                        if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                                                        {
-                                                                            announce = "Đang truyền khối lượng dầu 2 ...";
-                                                                        }
-                                                                        else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                                                        {
-                                                                            announce = "传输油量2...";
-                                                                        }
-                                                                        else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                                                        {
-                                                                            announce = "Sending oil mass 2...";
-                                                                        }
-                                                                        lbAnnounce.Text = announce;
-
-                                                                        SubMethods.FuelSetting(serialPort2, oilMass2); // Cho +1 lít để xem còn chênh lệch hay không
-
-                                                                        Thread.Sleep(200);
-                                                                        buffer = new byte[256]; // Tùy chỉnh kích thước buffer nếu cần
-                                                                        bytesRead = serialPort2.Read(buffer, 0, buffer.Length);
-                                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "Mass 2 set receive", buffer.ToString());
-                                                                        if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
-                                                                        {
-                                                                            Thread.Sleep(200);
-                                                                            byte[] command2 = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
-                                                                            serialPort2.Write(command2, 0, command2.Length);
-                                                                            buffer = new byte[256];
-                                                                            // Đọc dữ liệu phản hồi từ máy bơm xăng
-                                                                            Thread.Sleep(200);
-                                                                            bytesRead = serialPort2.Read(buffer, 0, buffer.Length);
-                                                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Status 2 receive", buffer.ToString());
-                                                                            if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
-                                                                            {
-                                                                                Thread.Sleep(200);
-                                                                                SubMethods.SendCommand(serialPort2, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
-                                                                            }
-                                                                            else if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 1 && buffer[4] == 95 && buffer[5] == 165)
-                                                                            {
-                                                                                isSendOilMass2 = true; //Check if the signal is sent
-                                                                            }
-                                                                        }
-
-                                                                       
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        if (tmrCallBgWorker != null)
-                                                                        {
-                                                                            tmrCallBgWorker.Stop();
-                                                                            tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
-                                                                            bgWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
-                                                                            bgWorker.ProgressChanged -= BW_ProgressChanged;
-                                                                            bgWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
-                                                                        }
-
-                                                                        if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                                                        {
-                                                                            message = "Không thể kết nối máy cấp dầu!";
-                                                                            caption = "Thông tin";
-                                                                        }
-                                                                        else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                                                        {
-                                                                            message = "无法连接加油机！";
-                                                                            caption = "信息";
-                                                                        }
-                                                                        else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                                                        {
-                                                                            message = "Cannot connect to oil pump!";
-                                                                            caption = "Information";
-                                                                        }
-                                                                        CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                                                        Program.main.openScaleTab();
-                                                                    }
-                                                                }
-                                                                catch (Exception ex)
-                                                                {
-                                                                    isSendOilMass2 = false;
-                                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Send mass to serialport error", ex.Message);
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                try
-                                                                {
-                                                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                                                    {
-                                                                        announce = "Bắt đầu cấp dầu lần 2 ...";
-                                                                    }
-                                                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                                                    {
-                                                                        announce = "开始注油 2...";
-                                                                    }
-                                                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                                                    {
-                                                                        announce = "Start oil feeding 2...";
-                                                                    }
-                                                                    lbAnnounce.Text = announce;
-                                                                    isOilFeeding2 = true;
-                                                                    //if (Settings.Default.isSaveReport)
-                                                                    //{
-                                                                    //    XLWorkbook workbook = new XLWorkbook(TemporaryVariables.tempReportPath);
-                                                                    //    var reportSheet = workbook.Worksheet(1);
-                                                                    //    int row = 8 + processNumber;
-
-                                                                    //    DateTime timeOilStart = DateTime.UtcNow;
-                                                                    //    reportSheet.Range("P" + row).Value = timeOilStart;
-                                                                    //    reportSheet.Range("Q" + row).Value = timeOilStart;
-                                                                    //    workbook.Save();
-                                                                    //}
-                                                                }
-                                                                catch (Exception ex)
-                                                                {
-                                                                    isOilFeeding2 = false;
-                                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Save oil start report fail", ex.Message);
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            LoadConnection2SerialPort(2);
-                                                        }
+                                                        rtbRemark.Text = "Cảm biến reset cmnr \r\nTrước: " + initOilMass + " - Sau: " + afterOilMass;
+                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "Cảm biến reset", "Trước: " + initOilMass + " - Sau: " + afterOilMass);
                                                     }
                                                     else
                                                     {
-                                                        try
-                                                        {
-                                                            if (!isCompleteOIlSupply)
-                                                            {
-                                                                //byte[] command = new byte[] { 0x5A, 0x01, 0x04, 0x5F, 0xA5 };
-                                                                byte[] command2 = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
-                                                                serialPort2.Write(command2, 0, command2.Length);
-                                                                buffer = new byte[256];
-                                                                // Đọc dữ liệu phản hồi từ máy bơm xăng
-                                                                bytesRead = serialPort2.Read(buffer, 0, buffer.Length);
-
-                                                                if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
-                                                                {
-                                                                    if (SettingsManager.GetSetting(s => s.Language) == 0)
-                                                                    {
-                                                                        announce = "Đã hoàn tất cấp dầu...";
-                                                                    }
-                                                                    else if (SettingsManager.GetSetting(s => s.Language) == 1)
-                                                                    {
-                                                                        announce = "供油完毕...";
-                                                                    }
-                                                                    else if (SettingsManager.GetSetting(s => s.Language) == 2)
-                                                                    {
-                                                                        announce = "Oil feed finish ...";
-                                                                    }
-                                                                    lbAnnounce.Text = announce;
-
-                                                                    CheckStart();
-
-                                                                    CloseSerialPort(serialPort2);
-
-                                                                    //if (Settings.Default.isSaveReport)
-                                                                    //{
-                                                                    //    XLWorkbook workbookEnd = new XLWorkbook(TemporaryVariables.tempReportPath);
-                                                                    //    var reportSheetEnd = workbookEnd.Worksheet(1);
-                                                                    //    int rowEnd = 8 + processNumber;
-                                                                    //    lbAnnounce.Text = "";
-
-                                                                    //    if (Settings.Default.isOilMeasurement)
-                                                                    //    {
-                                                                    //        if (finalMass > initMass)
-                                                                    //        {
-                                                                    //            double diviantionMass = oilMass - (finalMass - initMass);
-                                                                    //            if (diviantionMass > allowMass)
-                                                                    //            {
-                                                                    //                reportSheetEnd.Range("V" + rowEnd).Value = "Low - " + (diviantionMass - allowMass);
-                                                                    //                lbAnnounce.Text = "Thiếu " + (diviantionMass - allowMass);
-                                                                    //            }
-                                                                    //            else if (diviantionMass < allowMass * -1)
-                                                                    //            {
-                                                                    //                reportSheetEnd.Range("V" + rowEnd).Value = "High - " + (diviantionMass * -1 - allowMass);
-                                                                    //                lbAnnounce.Text = "Dư" + (diviantionMass * -1 - allowMass);
-                                                                    //            }
-                                                                    //        }
-                                                                    //        else
-                                                                    //        {
-                                                                    //            lbAnnounce.Text = "Giá trị cuối đang bé hơn " + finalMass + " < " + initMass;
-                                                                    //        }
-                                                                    //    }
-
-                                                                    //    DateTime timeOilEnd = DateTime.UtcNow;
-                                                                    //    reportSheetEnd.Range("R" + rowEnd).Value = timeOilEnd;
-                                                                    //    reportSheetEnd.Range("S" + rowEnd).Value = timeOilEnd;
-                                                                    //    workbookEnd.Save();
-                                                                    //}
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                CheckStart();
-                                                            }
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport read data timeout", ex.Message);
-                                                        }
+                                                        suppliedMass = afterOilMass - initOilMass;
+                                                        SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Cảm biến bình thường", "Trước: " + initOilMass + " - Sau: " + afterOilMass);
+                                                    }
+                                                    if (SubMethods.AreDoublesNearlyEqual(oilMass, suppliedMass, 0.5))
+                                                    {
+                                                        lbAnnounce.Text = "Đã dừng máy khi đọc được " + suppliedMass;
+                                                        SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
+                                                        CloseSerialPort(serialPort3);
                                                     }
                                                 }
-                                                else
+                                            }
+
+                                            //byte[] command = new byte[] { 0x5A, 0x01, 0x04, 0x5F, 0xA5 };
+                                            byte[] command = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
+                                            serialPort1.Write(command, 0, command.Length);
+                                            buffer = new byte[256];
+                                            // Đọc dữ liệu phản hồi từ máy bơm xăng
+                                            bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+
+                                            if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
+                                            {
+                                                CheckStart();
+
+                                                CloseSerialPort(serialPort1);
+
+                                                if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
                                                 {
-                                                    //if (Settings.Default.language == 0)
-                                                    //{
-                                                    //    announce = "Đã hoàn tất cấp dầu...";
-                                                    //}
-                                                    //else if (Settings.Default.language == 1)
-                                                    //{
-                                                    //    announce = "供油完毕...";
-                                                    //}
-                                                    //else if (Settings.Default.language == 2)
-                                                    //{
-                                                    //    announce = "Oil feed finish ...";
-                                                    //}
-                                                    //lbAnnounce.Text = announce;
+                                                    XLWorkbook workbookEnd = new XLWorkbook(TemporaryVariables.tempReportPath);
+                                                    var reportSheetEnd = workbookEnd.Worksheet(1);
+                                                    int rowEnd = 8 + processNumber;
+                                                    lbAnnounce.Text = "";
 
-                                                    CheckStart();
-
-                                                    //CloseSerialPort(serialPort1);
-
-                                                    //if (Settings.Default.isSaveReport)
+                                                    //if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
                                                     //{
-                                                    //    XLWorkbook workbookEnd = new XLWorkbook(TemporaryVariables.tempReportPath);
-                                                    //    var reportSheetEnd = workbookEnd.Worksheet(1);
-                                                    //    int rowEnd = 8 + processNumber;
-                                                    //    lbAnnounce.Text = "";
-
-                                                    //    if (Settings.Default.isOilMeasurement)
+                                                    //    if (finalMass > initMass)
                                                     //    {
-                                                    //        if (finalMass > initMass)
+                                                    //        double diviantionMass = oilMass - (finalMass - initMass);
+                                                    //        if (diviantionMass > allowMass)
                                                     //        {
-                                                    //            double diviantionMass = oilMass - (finalMass - initMass);
-                                                    //            if (diviantionMass > allowMass)
-                                                    //            {
-                                                    //                reportSheetEnd.Range("V" + rowEnd).Value = "Low - " + (diviantionMass - allowMass);
-                                                    //                lbAnnounce.Text = "Thiếu " + (diviantionMass - allowMass);
-                                                    //            }
-                                                    //            else if (diviantionMass < allowMass * -1)
-                                                    //            {
-                                                    //                reportSheetEnd.Range("V" + rowEnd).Value = "High - " + (diviantionMass * -1 - allowMass);
-                                                    //                lbAnnounce.Text = "Dư" + (diviantionMass * -1 - allowMass);
-                                                    //            }
+                                                    //            reportSheetEnd.Range("V" + rowEnd).Value = "Low - " + (diviantionMass - allowMass);
+                                                    //            lbAnnounce.Text = "Thiếu " + (diviantionMass - allowMass);
                                                     //        }
-                                                    //        else
+                                                    //        else if (diviantionMass < allowMass * -1)
                                                     //        {
-                                                    //            lbAnnounce.Text = "Giá trị cuối đang bé hơn " + finalMass + " < " + initMass;
+                                                    //            reportSheetEnd.Range("V" + rowEnd).Value = "High - " + (diviantionMass * -1 - allowMass);
+                                                    //            lbAnnounce.Text = "Dư" + (diviantionMass * -1 - allowMass);
                                                     //        }
                                                     //    }
-
-                                                    //    DateTime timeOilEnd = DateTime.UtcNow;
-                                                    //    reportSheetEnd.Range("R" + rowEnd).Value = timeOilEnd;
-                                                    //    reportSheetEnd.Range("S" + rowEnd).Value = timeOilEnd;
-                                                    //    workbookEnd.Save();
+                                                    //    else
+                                                    //    {
+                                                    //        lbAnnounce.Text = "Giá trị cuối đang bé hơn " + finalMass + " < " + initMass;
+                                                    //    }
                                                     //}
-                                                }
 
+                                                    DateTime timeOilEnd = DateTime.UtcNow;
+                                                    reportSheetEnd.Range("R" + rowEnd).Value = timeOilEnd;
+                                                    reportSheetEnd.Range("S" + rowEnd).Value = timeOilEnd;
+                                                    workbookEnd.Save();
+                                                }
                                             }
-                                            
                                         }
                                         else
                                         {
@@ -2000,14 +1856,14 @@ namespace mixer_control_globalver.View.MainUI
                                 {
                                     if (tempSpeed != speed2)
                                     {
-                                        TimeSpan time1 = TimeSpan.Parse(lbCountDown.Text);
-                                        TimeSpan time2 = TimeSpan.Parse(timeChange);
+                                        TimeSpan time1 = TimeSpan.Parse(lbCountDown.Text, CultureInfo.InvariantCulture);
+                                        TimeSpan time2 = TimeSpan.Parse(timeChange, CultureInfo.InvariantCulture);
                                         // Compare times
                                         int comparisonResult = TimeSpan.Compare(time1, time2);
                                         if (comparisonResult <= 0)
                                         {
                                             isSpeedChanged = true;
-                                            pLC.WriteRealtoPLC(Convert.ToSingle(speed2), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
+                                            pLC.WriteRealtoPLC(float.Parse(speed2.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), db, Convert.ToInt32(ini.Read("WS", "start")), 2);
                                             tempSpeed = speed2;
                                         }
                                     }

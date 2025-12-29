@@ -399,6 +399,7 @@
     <Compile Include="Controller\Device\QRGenerate.cs" />
     <Compile Include="Controller\Device\QYLED_DLL.cs" />
     <Compile Include="Controller\IniFile\IniFileGenerator.cs" />
+    <Compile Include="Controller\InvariantDoubleConverter.cs" />
     <Compile Include="Controller\LogFile\ClearMemmory.cs" />
     <Compile Include="Controller\LogFile\EventBroker.cs" />
     <Compile Include="Controller\LogFile\SystemLog.cs" />

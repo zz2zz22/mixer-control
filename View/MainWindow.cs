@@ -40,6 +40,24 @@ namespace mixer_control_globalver
         ///
         public MainWindow()
         {
+            switch (SettingsManager.GetSetting(s => s.Language))
+            {
+                case 0:
+                    SubMethods.SetLanguage("vi-VN");
+                    SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Language set to Vietnamese", "Application language set to Vietnamese.");
+                    break;
+                case 1:
+                    SubMethods.SetLanguage("zh-CN");
+                    SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Language set to Chinese", "Application language set to Chinese.");
+                    break;
+                case 2:
+                    SubMethods.SetLanguage("en-US");
+                    SystemLog.Output(SystemLog.MSG_TYPE.Nor, "Language set to English", "Application language set to English.");
+                    break;
+                default:
+                    SubMethods.SetLanguage("");
+                    break;
+            }
             InitializeComponent();
             try
             {

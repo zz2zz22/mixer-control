@@ -62,6 +62,9 @@ namespace mixer_control_globalver.View.MainUI
                 }
                 dtgvListSpecification.DataSource = dt;
                 dtgvListSpecification.Columns["file_name"].HeaderText = GlobalStrings.FormulaListHeaderText;
+                dtgvListSpecification.ColumnHeadersDefaultCellStyle.Font = new System.Drawing.Font(GlobalStrings.Text_Font, dtgvListSpecification.ColumnHeadersDefaultCellStyle.Font.Size, dtgvListSpecification.ColumnHeadersDefaultCellStyle.Font.Style);
+                dtgvListSpecification.DefaultCellStyle.Font = new System.Drawing.Font(GlobalStrings.Text_Font, dtgvListSpecification.DefaultCellStyle.Font.Size, dtgvListSpecification.DefaultCellStyle.Font.Style);
+
                 dtgvListSpecification.Columns["file_path"].Visible = false;
             }
             catch (Exception)

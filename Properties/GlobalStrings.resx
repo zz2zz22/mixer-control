@@ -139,7 +139,7 @@
   </data>
   <data name="Label_PasswordConfirm" xml:space="preserve">
     <value>Please enter password</value>
-    <comment>Message</comment>
+    <comment>Choose Formula Window</comment>
   </data>
   <data name="Text_Font" xml:space="preserve">
     <value>Microsoft YaHei UI</value>
@@ -222,5 +222,77 @@ How to fix:
   <data name="Error_ReadFile" xml:space="preserve">
     <value>Cannot open Excel file. </value>
     <comment>Error Message</comment>
+  </data>
+  <data name="Message_PDF417Scanned" xml:space="preserve">
+    <value>The scanned SOP code matches the selected formula. Please scan the material codes included in the SOP.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_PDF417NotMatch" xml:space="preserve">
+    <value>The SOP PDF_417 code you just scanned is not match with the selected automation formula please check again.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_NotScanPDF417" xml:space="preserve">
+    <value>Please scan the PDF_417 code on the SOP file first.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Error_CanNotRecognizeQR" xml:space="preserve">
+    <value>The QR code just scan is not in the right format. Please check again.</value>
+    <comment>Error Message</comment>
+  </data>
+  <data name="Label_ScannedMaterialList" xml:space="preserve">
+    <value>Material lists</value>
+    <comment>Material Scan Window</comment>
+  </data>
+  <data name="Label_ScannedMaterialAmount" xml:space="preserve">
+    <value>Scanned materials / total materials</value>
+    <comment>Material Scan Window</comment>
+  </data>
+  <data name="Label_ScannedMaterialFormulaName" xml:space="preserve">
+    <value>Formula Name</value>
+    <comment>Material Scan Window</comment>
+  </data>
+  <data name="Label_CurrentScannedMaterialName" xml:space="preserve">
+    <value>Scanned material name:</value>
+    <comment>Choose Formula Window</comment>
+  </data>
+  <data name="Label_ScannedMaterialCode" xml:space="preserve">
+    <value>Scanned material code</value>
+    <comment>Material Scan Window</comment>
+  </data>
+  <data name="btnContinueAutomation_Text" xml:space="preserve">
+    <value>Continue to automation process</value>
+    <comment>Material Scan Window</comment>
+  </data>
+  <data name="Label_CurrentSpeed" xml:space="preserve">
+    <value>Speed:</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="Label_CurrentTemperature" xml:space="preserve">
+    <value>Temperature:</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="Label_SpeedUnit" xml:space="preserve">
+    <value>(rpm)</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="Label_TemperatureUnit" xml:space="preserve">
+    <value>(Celsius)</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="btnStartAutomation_Text" xml:space="preserve">
+    <value>Start the current step</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="btnNormalRoll_Text" xml:space="preserve">
+    <value>CW (Clockwise)</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="btnReverseRoll_Text" xml:space="preserve">
+    <value>CCW (Counterclockwise)</value>
+    <comment>Automation Window</comment>
+  </data>
+  <data name="btnResetRoll_Text" xml:space="preserve">
+    <value>Motor Stop</value>
+    <comment>Automation Window</comment>
   </data>
 </root>

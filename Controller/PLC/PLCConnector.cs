@@ -2,6 +2,7 @@
 using Sharp7;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace mixer_control_globalver.Model.PLC
 {
@@ -196,7 +197,7 @@ namespace mixer_control_globalver.Model.PLC
             try
             {
                 byte[] buffer = new byte[2];
-                Sharp7.S7.SetWordAt(buffer, 0, ushort.Parse(value.ToString()));
+                Sharp7.S7.SetWordAt(buffer, 0, ushort.Parse(value.ToString(CultureInfo.InvariantCulture)));
                 Client.WriteArea(S7Area.DB, db, start, 2, S7WordLength.Byte, buffer);
             }
             catch (Exception ex)

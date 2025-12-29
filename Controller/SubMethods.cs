@@ -56,6 +56,10 @@ class SubMethods
     //{
 
     //}
+    public static bool AreDoublesNearlyEqual(double a, double b, double epsilon)
+    {
+        return Math.Abs(a - b) < epsilon;
+    }
 
     public static void FuelSetting(SerialPort serialPort, double numberReal)
     {

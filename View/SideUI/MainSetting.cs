@@ -21,21 +21,6 @@ namespace mixer_control_globalver.View.SideUI
         IniFileGenerator ini = new IniFileGenerator(AppDomain.CurrentDomain.BaseDirectory + "\\data\\setting.ini");
         public MainSetting()
         {
-            switch (SettingsManager.GetSetting(s => s.Language))
-            {
-                case 0:
-                    SubMethods.SetLanguage("vi-VN");
-                    break;
-                case 1:
-                    SubMethods.SetLanguage("zh-CN");
-                    break;
-                case 2:
-                    SubMethods.SetLanguage("en-US");
-                    break;
-                default:
-                    SubMethods.SetLanguage("");
-                    break;
-            }
             InitializeComponent();
 
             this.Text = string.Empty;
@@ -99,13 +84,13 @@ namespace mixer_control_globalver.View.SideUI
 
             lbSettingAnnounce.Text = String.Empty;
             txbPLCIpSetting.Text = SettingsManager.GetSetting(s => s.PlcIp);
-            txbDatabaseNo.Text = SettingsManager.GetSetting(s => s.DatabaseNumber).ToString();
-            txbMotorMaxSpeed.Text = SettingsManager.GetSetting(s => s.MaxSpeed).ToString();
-            txbMotorDiameter.Text = SettingsManager.GetSetting(s => s.SpindleDiameter).ToString();
-            txbSensorDiameter.Text = SettingsManager.GetSetting(s => s.SensorDiameter).ToString();
-            txbTransmissionRatio.Text = SettingsManager.GetSetting(s => s.TransmissionRatio).ToString();
+            txbDatabaseNo.Text = SettingsManager.GetSetting(s => s.DatabaseNumber).ToString(CultureInfo.InvariantCulture);
+            txbMotorMaxSpeed.Text = SettingsManager.GetSetting(s => s.MaxSpeed).ToString(CultureInfo.InvariantCulture);
+            txbMotorDiameter.Text = SettingsManager.GetSetting(s => s.SpindleDiameter).ToString(CultureInfo.InvariantCulture);
+            txbSensorDiameter.Text = SettingsManager.GetSetting(s => s.SensorDiameter).ToString(CultureInfo.InvariantCulture);
+            txbTransmissionRatio.Text = SettingsManager.GetSetting(s => s.TransmissionRatio).ToString(CultureInfo.InvariantCulture);
             txbAuthorSkipPass.Text = SettingsManager.GetSetting(s => s.SkipStepPassword);
-            txbTolerance.Text = SettingsManager.GetSetting(s => s.OilToleranceMass).ToString();
+            txbTolerance.Text = SettingsManager.GetSetting(s => s.OilToleranceMass).ToString(CultureInfo.InvariantCulture);
 
             switchOilMode.SwitchState = SettingsManager.GetSetting(s => s.OilSupplyEnabled) ?
                 XanderUI.XUISwitch.State.On :
@@ -155,6 +140,10 @@ namespace mixer_control_globalver.View.SideUI
                 XanderUI.XUISwitch.State.On :
                 XanderUI.XUISwitch.State.Off;
 
+            switchEnableSecondaryOilSup.SwitchState = SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
+
             cbxPLCValueSetting.DataSource = TemporaryVariables.settingDT;
             cbxPLCValueSetting.ValueMember = "value_member";
             cbxPLCValueSetting.DisplayMember = "display_member";
@@ -200,6 +189,7 @@ namespace mixer_control_globalver.View.SideUI
                 s.MultipleOilTestEnabled = switchTestOilMultiple.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
                 s.FlowMeterEnabled = switchOilDiaMeasurement.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
                 s.CheckPowderEnabled = switchPowderBagCheck.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.EnableSecondaryOilSupply = switchEnableSecondaryOilSup.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
                 s.LedScreenIp = txbLEDIP.Text.Trim();
                 s.LedScreenColor = cbxLEDColor.SelectedIndex + 1;
                 s.LedScreenStyle = cbxLEDStyle.SelectedIndex;
@@ -378,8 +368,8 @@ namespace mixer_control_globalver.View.SideUI
                     if (!String.IsNullOrEmpty(cbComPort.Text))
                     {
                         serialPort1.PortName = cbComPort.Text;
-                        serialPort1.BaudRate = Convert.ToInt32(cbBaudRate.Text);
-                        serialPort1.DataBits = Convert.ToInt32(cbDataBits.Text);
+                        serialPort1.BaudRate = int.Parse(cbBaudRate.Text, CultureInfo.InvariantCulture);
+                        serialPort1.DataBits = int.Parse(cbDataBits.Text, CultureInfo.InvariantCulture);
                         serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.Text);
                         serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), cbParityBits.Text);
                         serialPort1.ReadTimeout = 1000;
@@ -471,9 +461,9 @@ namespace mixer_control_globalver.View.SideUI
             {
                 try
                 {
-                    if (!String.IsNullOrEmpty(cbFRComPort.Text))
+                    if (!String.IsNullOrEmpty(cbDiameterComPort.Text))
                     {
-                        serialPort3.PortName = cbFRComPort.Text;
+                        serialPort3.PortName = cbDiameterComPort.Text;
                         serialPort3.BaudRate = Convert.ToInt32(cbBaudRate.Text);
                         serialPort3.DataBits = Convert.ToInt32(cbDataBits.Text);
                         serialPort3.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cbStopBits.Text);

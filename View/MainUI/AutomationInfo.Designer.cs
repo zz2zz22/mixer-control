@@ -59,6 +59,7 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
+            this.labelTest = new System.Windows.Forms.Label();
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelAnnounceNextStep.SuspendLayout();
             this.panelAnnounce.SuspendLayout();
@@ -71,6 +72,7 @@
             // 
             // panelAutomationInfoMain
             // 
+            this.panelAutomationInfoMain.Controls.Add(this.labelTest);
             this.panelAutomationInfoMain.Controls.Add(this.panelAnnounceNextStep);
             this.panelAutomationInfoMain.Controls.Add(this.panelAnnounce);
             this.panelAutomationInfoMain.Controls.Add(this.panelCountdown);
@@ -406,9 +408,18 @@
             this.lb3.TabIndex = 1;
             this.lb3.Text = "Nhiệt độ:";
             // 
-            // serialPort2
+            // serialPort3
             // 
-            this.serialPort2.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort2_DataReceived);
+            this.serialPort3.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort3_DataReceived);
+            // 
+            // labelTest
+            // 
+            this.labelTest.AutoSize = true;
+            this.labelTest.Location = new System.Drawing.Point(410, 565);
+            this.labelTest.Name = "labelTest";
+            this.labelTest.Size = new System.Drawing.Size(39, 19);
+            this.labelTest.TabIndex = 32;
+            this.labelTest.Text = "test";
             // 
             // AutomationInfo
             // 
@@ -472,5 +483,6 @@
         private System.Windows.Forms.Label labelAnnounceNS;
         private System.IO.Ports.SerialPort serialPort2;
         private System.IO.Ports.SerialPort serialPort3;
+        private System.Windows.Forms.Label labelTest;
     }
 }

@@ -43,6 +43,7 @@ namespace mixer_control_globalver.Model
         public bool CheckPowderEnabled { get; set; } = false; //Is check powder enabled
 
         public bool FlowMeterEnabled { get; set; } = false; //Is flow meter enabled
+        public bool EnableSecondaryOilSupply { get; set; } = false; //Is flow meter enabled
 
         //PLC settings
         public string PlcIp { get; set; } //IP address of the PLC

@@ -213,4 +213,59 @@
   <data name="Error_ReadFile" xml:space="preserve">
     <value>无法打开Excel文件。</value>
   </data>
+  <data name="Message_PDF417Scanned" xml:space="preserve">
+    <value>扫描到的标准操作规程 SOP 代码与所选配方匹配。请扫描 SOP 中包含的物料代码。</value>
+  </data>
+  <data name="Message_PDF417NotMatch" xml:space="preserve">
+    <value>您刚刚扫描的 SOP PDF_417 代码与所选自动化公式不匹配，请再次检查。</value>
+  </data>
+  <data name="Message_NotScanPDF417" xml:space="preserve">
+    <value>请先扫描SOP文件上的PDF_417条码。</value>
+  </data>
+  <data name="Error_CanNotRecognizeQR" xml:space="preserve">
+    <value>您刚刚扫描的二维码格式不正确，请再次检查。</value>
+  </data>
+  <data name="Label_ScannedMaterialList" xml:space="preserve">
+    <value>材料清单</value>
+  </data>
+  <data name="Label_ScannedMaterialAmount" xml:space="preserve">
+    <value>扫描材料/
+材料总数</value>
+  </data>
+  <data name="Label_ScannedMaterialFormulaName" xml:space="preserve">
+    <value>配方名称</value>
+  </data>
+  <data name="Label_CurrentScannedMaterialName" xml:space="preserve">
+    <value>刚刚扫描的材料名称：</value>
+  </data>
+  <data name="Label_ScannedMaterialCode" xml:space="preserve">
+    <value>扫描物料代码</value>
+  </data>
+  <data name="btnContinueAutomation_Text" xml:space="preserve">
+    <value>继续自动化流程</value>
+  </data>
+  <data name="Label_CurrentSpeed" xml:space="preserve">
+    <value>速度:</value>
+  </data>
+  <data name="Label_CurrentTemperature" xml:space="preserve">
+    <value>温度：</value>
+  </data>
+  <data name="Label_SpeedUnit" xml:space="preserve">
+    <value>(每分钟转一圈)</value>
+  </data>
+  <data name="Label_TemperatureUnit" xml:space="preserve">
+    <value>(摄氏度)</value>
+  </data>
+  <data name="btnStartAutomation_Text" xml:space="preserve">
+    <value>开始当前步骤</value>
+  </data>
+  <data name="btnNormalRoll_Text" xml:space="preserve">
+    <value> CW (顺时针)</value>
+  </data>
+  <data name="btnReverseRoll_Text" xml:space="preserve">
+    <value>CCW (逆时针)</value>
+  </data>
+  <data name="btnResetRoll_Text" xml:space="preserve">
+    <value>电机停止</value>
+  </data>
 </root>

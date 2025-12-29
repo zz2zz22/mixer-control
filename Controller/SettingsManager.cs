@@ -14,6 +14,16 @@ public static class SettingsManager
     // A semaphore ensures only one thread performs an operation at a time.
     private static readonly SemaphoreSlim _settingsLock = new SemaphoreSlim(1, 1);
 
+    private static readonly JsonSerializerOptions JsonOptions =
+    new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        Converters =
+        {
+            new InvariantDoubleConverter()
+        }
+    };
+
 
     // Helper method to determine the persistent file path
     private static string GetSettingsFilePath()
@@ -67,7 +77,7 @@ public static class SettingsManager
                 Console.WriteLine("Settings file not found. Creating default settings file.");
                 // We use the default values already present in _currentSettings 
                 // and save them to disk immediately.
-                var json = JsonSerializer.Serialize(_currentSettings, new JsonSerializerOptions { WriteIndented = true });
+                var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
                 File.WriteAllText(SettingsFilePath, json);
             }
         }
@@ -87,7 +97,7 @@ public static class SettingsManager
         try
         {
             // Serialize the *current* atomic snapshot of the settings object
-            var json = JsonSerializer.Serialize(_currentSettings, new JsonSerializerOptions { WriteIndented = true });
+            var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
 
             // Synchronous write
             File.WriteAllText(SettingsFilePath, json);

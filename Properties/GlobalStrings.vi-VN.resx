@@ -213,4 +213,59 @@ Thời gian:
   <data name="Error_ReadFile" xml:space="preserve">
     <value>Không thể mở file excel.</value>
   </data>
+  <data name="Message_PDF417Scanned" xml:space="preserve">
+    <value>Mã SOP vừa quét đã khớp với công thức đã chọn. Vui lòng quét các mã nguyên vật liệu có trong SOP.</value>
+  </data>
+  <data name="Message_PDF417NotMatch" xml:space="preserve">
+    <value>Mã SOP PDF_417 bạn vừa quét không khớp với công thức tự động hóa đã chọn, vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="Message_NotScanPDF417" xml:space="preserve">
+    <value>Vui lòng quét mã vạch PDF_417 trên tập tin SOP trước.</value>
+  </data>
+  <data name="Error_CanNotRecognizeQR" xml:space="preserve">
+    <value>Mã QR vừa quét không đúng định dạng. Vui lòng kiểm tra lại.</value>
+  </data>
+  <data name="Label_ScannedMaterialList" xml:space="preserve">
+    <value>Danh sách nguyên vật liệu</value>
+  </data>
+  <data name="Label_ScannedMaterialAmount" xml:space="preserve">
+    <value>Nguyên vật liệu đã quét / 
+Tổng số nguyên liệu</value>
+  </data>
+  <data name="Label_ScannedMaterialFormulaName" xml:space="preserve">
+    <value>Tên công thức</value>
+  </data>
+  <data name="Label_CurrentScannedMaterialName" xml:space="preserve">
+    <value>Tên nguyên liệu vừa quét:</value>
+  </data>
+  <data name="Label_ScannedMaterialCode" xml:space="preserve">
+    <value>Nguyên vật liệu vừa quét</value>
+  </data>
+  <data name="btnContinueAutomation_Text" xml:space="preserve">
+    <value>Chuyển qua bước tự động hóa</value>
+  </data>
+  <data name="Label_CurrentSpeed" xml:space="preserve">
+    <value>Tốc độ:</value>
+  </data>
+  <data name="Label_CurrentTemperature" xml:space="preserve">
+    <value>Nhiệt độ:</value>
+  </data>
+  <data name="Label_SpeedUnit" xml:space="preserve">
+    <value>(vòng mỗi phút)</value>
+  </data>
+  <data name="Label_TemperatureUnit" xml:space="preserve">
+    <value>(Độ C)</value>
+  </data>
+  <data name="btnStartAutomation_Text" xml:space="preserve">
+    <value>Bắt đầu bước hiện tại</value>
+  </data>
+  <data name="btnNormalRoll_Text" xml:space="preserve">
+    <value>Quay Thuận</value>
+  </data>
+  <data name="btnReverseRoll_Text" xml:space="preserve">
+    <value>Quay Ngược</value>
+  </data>
+  <data name="btnResetRoll_Text" xml:space="preserve">
+    <value>Dừng Máy</value>
+  </data>
 </root>
