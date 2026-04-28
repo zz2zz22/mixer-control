@@ -123,7 +123,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnSetting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>733, 3</value>
+    <value>735, 3</value>
   </data>
   <data name="btnSetting.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 56</value>
@@ -148,7 +148,7 @@
     <value>Top, Right</value>
   </data>
   <data name="btnMaximize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>879, 3</value>
+    <value>881, 3</value>
   </data>
   <data name="btnMaximize.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 56</value>
@@ -172,7 +172,7 @@
     <value>Top, Right</value>
   </data>
   <data name="btnClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>940, 3</value>
+    <value>942, 3</value>
   </data>
   <data name="btnClose.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 56</value>
@@ -229,7 +229,7 @@
     <value>0, 0</value>
   </data>
   <data name="panelHeader.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1006, 65</value>
+    <value>1008, 65</value>
   </data>
   <data name="panelHeader.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -292,10 +292,10 @@
     <value>NoControl</value>
   </data>
   <data name="lbVersion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 580</value>
+    <value>12, 588</value>
   </data>
   <data name="lbVersion.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 19</value>
+    <value>129, 16</value>
   </data>
   <data name="lbVersion.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -328,10 +328,10 @@
     <value>English</value>
   </data>
   <data name="cbxLanguageChoose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 534</value>
+    <value>12, 542</value>
   </data>
   <data name="cbxLanguageChoose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 27</value>
+    <value>229, 24</value>
   </data>
   <data name="cbxLanguageChoose.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -508,7 +508,7 @@
     <value>0, 65</value>
   </data>
   <data name="panelSideMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 608</value>
+    <value>247, 616</value>
   </data>
   <data name="panelSideMenu.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -532,7 +532,7 @@
     <value>247, 65</value>
   </data>
   <data name="panelMainForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>759, 608</value>
+    <value>761, 616</value>
   </data>
   <data name="panelMainForm.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -553,7 +553,7 @@
     <value>True</value>
   </metadata>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1006, 673</value>
+    <value>1008, 681</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial, 10.2pt, style=Bold</value>

@@ -59,7 +59,6 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
-            this.labelTest = new System.Windows.Forms.Label();
             this.panelAutomationInfoMain.SuspendLayout();
             this.panelAnnounceNextStep.SuspendLayout();
             this.panelAnnounce.SuspendLayout();
@@ -72,7 +71,6 @@
             // 
             // panelAutomationInfoMain
             // 
-            this.panelAutomationInfoMain.Controls.Add(this.labelTest);
             this.panelAutomationInfoMain.Controls.Add(this.panelAnnounceNextStep);
             this.panelAutomationInfoMain.Controls.Add(this.panelAnnounce);
             this.panelAutomationInfoMain.Controls.Add(this.panelCountdown);
@@ -97,7 +95,7 @@
             // panelAnnounceNextStep
             // 
             this.panelAnnounceNextStep.Controls.Add(this.labelAnnounceNS);
-            this.panelAnnounceNextStep.Location = new System.Drawing.Point(339, 400);
+            this.panelAnnounceNextStep.Location = new System.Drawing.Point(348, 398);
             this.panelAnnounceNextStep.Name = "panelAnnounceNextStep";
             this.panelAnnounceNextStep.Size = new System.Drawing.Size(408, 82);
             this.panelAnnounceNextStep.TabIndex = 31;
@@ -116,7 +114,7 @@
             // panelAnnounce
             // 
             this.panelAnnounce.Controls.Add(this.lbAnnounce);
-            this.panelAnnounce.Location = new System.Drawing.Point(339, 250);
+            this.panelAnnounce.Location = new System.Drawing.Point(343, 248);
             this.panelAnnounce.Name = "panelAnnounce";
             this.panelAnnounce.Size = new System.Drawing.Size(408, 64);
             this.panelAnnounce.TabIndex = 30;
@@ -135,7 +133,7 @@
             // panelCountdown
             // 
             this.panelCountdown.Controls.Add(this.lbCountDown);
-            this.panelCountdown.Location = new System.Drawing.Point(339, 320);
+            this.panelCountdown.Location = new System.Drawing.Point(343, 318);
             this.panelCountdown.Name = "panelCountdown";
             this.panelCountdown.Size = new System.Drawing.Size(408, 74);
             this.panelCountdown.TabIndex = 28;
@@ -158,7 +156,7 @@
             this.lbFormulaName.AutoSize = true;
             this.lbFormulaName.Location = new System.Drawing.Point(117, 11);
             this.lbFormulaName.Name = "lbFormulaName";
-            this.lbFormulaName.Size = new System.Drawing.Size(24, 19);
+            this.lbFormulaName.Size = new System.Drawing.Size(19, 16);
             this.lbFormulaName.TabIndex = 27;
             this.lbFormulaName.Text = "...";
             this.lbFormulaName.Click += new System.EventHandler(this.lbFormulaName_Click);
@@ -168,7 +166,7 @@
             this.lbShowF.AutoSize = true;
             this.lbShowF.Location = new System.Drawing.Point(12, 11);
             this.lbShowF.Name = "lbShowF";
-            this.lbShowF.Size = new System.Drawing.Size(99, 19);
+            this.lbShowF.Size = new System.Drawing.Size(84, 16);
             this.lbShowF.TabIndex = 26;
             this.lbShowF.Text = "Công thức:";
             // 
@@ -224,9 +222,9 @@
             this.btnActivateSpeedControl.BackColor = System.Drawing.Color.Yellow;
             this.btnActivateSpeedControl.Enabled = false;
             this.btnActivateSpeedControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnActivateSpeedControl.Location = new System.Drawing.Point(503, 11);
+            this.btnActivateSpeedControl.Location = new System.Drawing.Point(545, 3);
             this.btnActivateSpeedControl.Name = "btnActivateSpeedControl";
-            this.btnActivateSpeedControl.Size = new System.Drawing.Size(244, 61);
+            this.btnActivateSpeedControl.Size = new System.Drawing.Size(202, 61);
             this.btnActivateSpeedControl.TabIndex = 24;
             this.btnActivateSpeedControl.Text = "Chế độ tự động đang bật\r\nAutomation mode ON";
             this.btnActivateSpeedControl.UseVisualStyleBackColor = false;
@@ -250,7 +248,7 @@
             this.btnResetRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetRoll.BackColor = System.Drawing.Color.White;
             this.btnResetRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnResetRoll.Location = new System.Drawing.Point(566, 550);
+            this.btnResetRoll.Location = new System.Drawing.Point(566, 548);
             this.btnResetRoll.Name = "btnResetRoll";
             this.btnResetRoll.Size = new System.Drawing.Size(181, 48);
             this.btnResetRoll.TabIndex = 23;
@@ -263,7 +261,7 @@
             this.lbProcessNo.AutoSize = true;
             this.lbProcessNo.Location = new System.Drawing.Point(12, 44);
             this.lbProcessNo.Name = "lbProcessNo";
-            this.lbProcessNo.Size = new System.Drawing.Size(148, 19);
+            this.lbProcessNo.Size = new System.Drawing.Size(126, 16);
             this.lbProcessNo.TabIndex = 0;
             this.lbProcessNo.Text = "Bắt đầu bước số:\r\n";
             this.lbProcessNo.Click += new System.EventHandler(this.lbProcessNo_Click);
@@ -273,7 +271,7 @@
             this.btnReverseRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnReverseRoll.BackColor = System.Drawing.Color.White;
             this.btnReverseRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnReverseRoll.Location = new System.Drawing.Point(365, 488);
+            this.btnReverseRoll.Location = new System.Drawing.Point(365, 486);
             this.btnReverseRoll.Name = "btnReverseRoll";
             this.btnReverseRoll.Size = new System.Drawing.Size(181, 48);
             this.btnReverseRoll.TabIndex = 22;
@@ -286,7 +284,7 @@
             this.btnNormalRoll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNormalRoll.BackColor = System.Drawing.Color.White;
             this.btnNormalRoll.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNormalRoll.Location = new System.Drawing.Point(566, 488);
+            this.btnNormalRoll.Location = new System.Drawing.Point(566, 486);
             this.btnNormalRoll.Name = "btnNormalRoll";
             this.btnNormalRoll.Size = new System.Drawing.Size(181, 48);
             this.btnNormalRoll.TabIndex = 21;
@@ -301,7 +299,7 @@
             this.panelShowSpeed.Controls.Add(this.panel1);
             this.panelShowSpeed.Controls.Add(this.lb2);
             this.panelShowSpeed.Controls.Add(this.lb1);
-            this.panelShowSpeed.Location = new System.Drawing.Point(339, 78);
+            this.panelShowSpeed.Location = new System.Drawing.Point(343, 76);
             this.panelShowSpeed.Name = "panelShowSpeed";
             this.panelShowSpeed.Size = new System.Drawing.Size(408, 80);
             this.panelShowSpeed.TabIndex = 2;
@@ -336,7 +334,7 @@
             this.lb2.ForeColor = System.Drawing.Color.White;
             this.lb2.Location = new System.Drawing.Point(0, 52);
             this.lb2.Name = "lb2";
-            this.lb2.Size = new System.Drawing.Size(91, 19);
+            this.lb2.Size = new System.Drawing.Size(80, 16);
             this.lb2.TabIndex = 3;
             this.lb2.Text = "(vòng/phút)\r\n";
             // 
@@ -347,7 +345,7 @@
             this.lb1.ForeColor = System.Drawing.Color.White;
             this.lb1.Location = new System.Drawing.Point(3, 0);
             this.lb1.Name = "lb1";
-            this.lb1.Size = new System.Drawing.Size(69, 19);
+            this.lb1.Size = new System.Drawing.Size(58, 16);
             this.lb1.TabIndex = 1;
             this.lb1.Text = "Tốc độ:";
             // 
@@ -358,7 +356,7 @@
             this.panelShowTemperature.Controls.Add(this.panel2);
             this.panelShowTemperature.Controls.Add(this.lb4);
             this.panelShowTemperature.Controls.Add(this.lb3);
-            this.panelShowTemperature.Location = new System.Drawing.Point(339, 164);
+            this.panelShowTemperature.Location = new System.Drawing.Point(343, 162);
             this.panelShowTemperature.Name = "panelShowTemperature";
             this.panelShowTemperature.Size = new System.Drawing.Size(408, 80);
             this.panelShowTemperature.TabIndex = 4;
@@ -393,7 +391,7 @@
             this.lb4.ForeColor = System.Drawing.Color.White;
             this.lb4.Location = new System.Drawing.Point(3, 51);
             this.lb4.Name = "lb4";
-            this.lb4.Size = new System.Drawing.Size(59, 19);
+            this.lb4.Size = new System.Drawing.Size(49, 16);
             this.lb4.TabIndex = 3;
             this.lb4.Text = "(Độ C)";
             // 
@@ -404,22 +402,9 @@
             this.lb3.ForeColor = System.Drawing.Color.White;
             this.lb3.Location = new System.Drawing.Point(3, 0);
             this.lb3.Name = "lb3";
-            this.lb3.Size = new System.Drawing.Size(81, 19);
+            this.lb3.Size = new System.Drawing.Size(70, 16);
             this.lb3.TabIndex = 1;
             this.lb3.Text = "Nhiệt độ:";
-            // 
-            // serialPort3
-            // 
-            this.serialPort3.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort3_DataReceived);
-            // 
-            // labelTest
-            // 
-            this.labelTest.AutoSize = true;
-            this.labelTest.Location = new System.Drawing.Point(410, 565);
-            this.labelTest.Name = "labelTest";
-            this.labelTest.Size = new System.Drawing.Size(39, 19);
-            this.labelTest.TabIndex = 32;
-            this.labelTest.Text = "test";
             // 
             // AutomationInfo
             // 
@@ -483,6 +468,5 @@
         private System.Windows.Forms.Label labelAnnounceNS;
         private System.IO.Ports.SerialPort serialPort2;
         private System.IO.Ports.SerialPort serialPort3;
-        private System.Windows.Forms.Label labelTest;
     }
 }

@@ -60,6 +60,9 @@ namespace mixer_control_globalver.Model
         public string OilSupplyDataBits { get; set; } = "8"; //Data bits setting for oil supply communication
         public string OilSupplyParity { get; set; } = "None"; //Parity setting for oil supply communication
         public string OilSupplyStopBits { get; set; } = "One"; //Stop bits setting for oil supply communication
+        public int OilSupplyAttempts { get; set; } = 30; //Number of attempts for oil supply communication
+        public double VolumnCompensation { get; set; } = 0; //Volume compensation setting for oil supply
+        public double VolumnCompareValue { get; set; } = 0.005; //Volume comparison setting for oil supply
 
         //Led screen settings
         public string LedScreenIp { get; set; } //IP address of the LED screen
@@ -68,5 +71,8 @@ namespace mixer_control_globalver.Model
 
         //Flow meter settings
         public string FlowMeterComPort { get; set; } //COM port for flow meter
+
+        //Exact match settings
+        public bool ExactMatchEnabled { get; set; } = false; //Is exact match enabled
     }
 }

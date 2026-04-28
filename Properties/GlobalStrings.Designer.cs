@@ -160,6 +160,15 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to initiate connection to PLC.
+        /// </summary>
+        public static string Error_CannotInitPLC {
+            get {
+                return ResourceManager.GetString("Error_CannotInitPLC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot read this formula file data.
         ///.
         /// </summary>
@@ -318,11 +327,48 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automation mode is off. Cannot start the process..
+        /// </summary>
+        public static string Message_AutomationIsOff {
+            get {
+                return ResourceManager.GetString("Message_AutomationIsOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can NOT connect to oil supply machine..
+        /// </summary>
+        public static string Message_CanNOTConnectToOilSupply {
+            get {
+                return ResourceManager.GetString("Message_CanNOTConnectToOilSupply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start the current process? 
+        ///Please note that all material have been put in the mixer before hit start!.
+        /// </summary>
+        public static string Message_ConfirmStart {
+            get {
+                return ResourceManager.GetString("Message_ConfirmStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit the application ? .
         /// </summary>
         public static string Message_ExitApplication {
             get {
                 return ResourceManager.GetString("Message_ExitApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current automation formula is finished. .
+        /// </summary>
+        public static string Message_FormulaFinished {
+            get {
+                return ResourceManager.GetString("Message_FormulaFinished", resourceCulture);
             }
         }
         
@@ -381,6 +427,15 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Oil supply machine is running..
+        /// </summary>
+        public static string Message_OilSupplyIsRunning {
+            get {
+                return ResourceManager.GetString("Message_OilSupplyIsRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Oil feeder checked!\r\nTime:\r\n.
         /// </summary>
         public static string Message_OilTested {
@@ -408,6 +463,15 @@ namespace mixer_control_globalver.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The process is finished. Press &quot;OK&quot; to open mixer lid and &quot;Cancel&quot; to keep the mixer lid close..
+        /// </summary>
+        public static string Message_ProcessFinished {
+            get {
+                return ResourceManager.GetString("Message_ProcessFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Processing please wait a moment ....
         /// </summary>
         public static string Message_Processing {
@@ -422,6 +486,33 @@ namespace mixer_control_globalver.Properties {
         public static string Message_ResetSpecTab {
             get {
                 return ResourceManager.GetString("Message_ResetSpecTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skip to the next process..
+        /// </summary>
+        public static string Message_SkipProcess {
+            get {
+                return ResourceManager.GetString("Message_SkipProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transferring oil mass information ....
+        /// </summary>
+        public static string Message_TransferingOilMass {
+            get {
+                return ResourceManager.GetString("Message_TransferingOilMass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for sensor data indicate the mixer is in the right position..
+        /// </summary>
+        public static string Message_WaitForSensorData {
+            get {
+                return ResourceManager.GetString("Message_WaitForSensorData", resourceCulture);
             }
         }
         

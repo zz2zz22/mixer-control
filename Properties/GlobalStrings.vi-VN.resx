@@ -268,4 +268,35 @@ Tổng số nguyên liệu</value>
   <data name="btnResetRoll_Text" xml:space="preserve">
     <value>Dừng Máy</value>
   </data>
+  <data name="Message_ConfirmStart" xml:space="preserve">
+    <value>Bắt đầu quy trình hiện tại?
+Xin lưu ý rằng tất cả nguyên liệu đã được cho vào máy trộn trước khi bấm bắt đầu!</value>
+  </data>
+  <data name="Message_AutomationIsOff" xml:space="preserve">
+    <value>Chế độ tự động hóa đã tắt. Không thể bắt đầu quy trình.</value>
+  </data>
+  <data name="Message_SkipProcess" xml:space="preserve">
+    <value>Chuyển sang quy trình tiếp theo.</value>
+  </data>
+  <data name="Error_CannotInitPLC" xml:space="preserve">
+    <value>Không thể thiết lập kết nối với PLC.</value>
+  </data>
+  <data name="Message_ProcessFinished" xml:space="preserve">
+    <value>Quá trình đã hoàn tất. Nhấn "OK" để mở nắp máy trộn và "Cancel" để giữ nắp máy trộn đóng.</value>
+  </data>
+  <data name="Message_FormulaFinished" xml:space="preserve">
+    <value>Công thức tự động hóa hiện tại đã hoàn tất.</value>
+  </data>
+  <data name="Message_CanNOTConnectToOilSupply" xml:space="preserve">
+    <value>Không thể kết nối với máy cấp dầu.</value>
+  </data>
+  <data name="Message_WaitForSensorData" xml:space="preserve">
+    <value>Đang chờ dữ liệu cảm biến cho biết máy trộn đã ở đúng vị trí.</value>
+  </data>
+  <data name="Message_TransferingOilMass" xml:space="preserve">
+    <value>Truyền khối lượng dầu...</value>
+  </data>
+  <data name="Message_OilSupplyIsRunning" xml:space="preserve">
+    <value>Máy cung cấp dầu đang hoạt động.</value>
+  </data>
 </root>

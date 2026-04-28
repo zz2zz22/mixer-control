@@ -52,6 +52,11 @@ class SubMethods
         return s;
     }
 
+    public static bool CheckDoubleIsInRange(double value, double range)
+    {
+        return Math.Abs(value) <= range;
+    }
+
     //public static double ConvertString2Double (string value)
     //{
 

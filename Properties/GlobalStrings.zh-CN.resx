@@ -268,4 +268,35 @@
   <data name="btnResetRoll_Text" xml:space="preserve">
     <value>电机停止</value>
   </data>
+  <data name="Message_ConfirmStart" xml:space="preserve">
+    <value>开始当前流程吗？
+请注意，所有材料在按下开始键之前都已放入搅拌机！</value>
+  </data>
+  <data name="Message_AutomationIsOff" xml:space="preserve">
+    <value>自动化模式已关闭。无法启动该进程。</value>
+  </data>
+  <data name="Message_SkipProcess" xml:space="preserve">
+    <value>跳至下一步。</value>
+  </data>
+  <data name="Error_CannotInitPLC" xml:space="preserve">
+    <value>无法建立与PLC的连接。</value>
+  </data>
+  <data name="Message_ProcessFinished" xml:space="preserve">
+    <value>操作已完成。按“OK”打开搅拌机盖，按“Cancel”保持搅拌机盖关闭。</value>
+  </data>
+  <data name="Message_FormulaFinished" xml:space="preserve">
+    <value>当前自动化公式已完成。</value>
+  </data>
+  <data name="Message_CanNOTConnectToOilSupply" xml:space="preserve">
+    <value>无法连接到供油机。</value>
+  </data>
+  <data name="Message_WaitForSensorData" xml:space="preserve">
+    <value>等待传感器数据表明搅拌器处于正确位置。</value>
+  </data>
+  <data name="Message_TransferingOilMass" xml:space="preserve">
+    <value>传递油质量信息……</value>
+  </data>
+  <data name="Message_OilSupplyIsRunning" xml:space="preserve">
+    <value>供油机正在运转。</value>
+  </data>
 </root>

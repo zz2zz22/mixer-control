@@ -7,11 +7,13 @@ using mixer_control_globalver.View.CustomControls;
 using mixer_control_globalver.View.SideUI;
 using System;
 using System.Data;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Threading;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace mixer_control_globalver.View.MainUI
 {
@@ -176,10 +178,10 @@ namespace mixer_control_globalver.View.MainUI
                                                 string powderBefore, powderAfter;
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][3].ToString()))
-                                                    changeSpeed = Convert.ToInt32(processDT.Rows[j][3].ToString());
+                                                    changeSpeed = int.Parse(processDT.Rows[j][3].ToString(), CultureInfo.InvariantCulture);
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][4].ToString()))
-                                                    changeTime = Convert.ToInt32(processDT.Rows[j][4].ToString());
+                                                    changeTime = int.Parse(processDT.Rows[j][4].ToString(), CultureInfo.InvariantCulture);
 
                                                 if (processDT.Rows[j][5].ToString().ToLower() == "yes")
                                                     isVaccum = true;
@@ -192,8 +194,8 @@ namespace mixer_control_globalver.View.MainUI
 
                                                 if (!string.IsNullOrEmpty(processDT.Rows[j][10].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][9].ToString()))
                                                 {
-                                                    oilMass = Convert.ToDouble(processDT.Rows[j][10].ToString());
-                                                    oilWeight = Convert.ToDouble(processDT.Rows[j][9].ToString());
+                                                    oilMass = double.Parse(processDT.Rows[j][10].ToString(), CultureInfo.InvariantCulture);
+                                                    oilWeight = double.Parse(processDT.Rows[j][9].ToString(), CultureInfo.InvariantCulture);
                                                 }
                                                 else
                                                 {
@@ -201,25 +203,13 @@ namespace mixer_control_globalver.View.MainUI
                                                     oilWeight = 0;
                                                 }
 
-                                                if (processDT.Rows[j][17].ToString().ToLower() == "yes")
-                                                    isOilFeed2 = true;
 
-                                                if (!string.IsNullOrEmpty(processDT.Rows[j][18].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][19].ToString()))
-                                                {
-                                                    oilMass2 = Convert.ToDouble(processDT.Rows[j][19].ToString());
-                                                    oilWeight2 = Convert.ToDouble(processDT.Rows[j][18].ToString());
-                                                }
-                                                else
-                                                {
-                                                    oilMass2 = 0;
-                                                    oilWeight2 = 0;
-                                                }
 
                                                 if (!String.IsNullOrEmpty(processDT.Rows[j][13].ToString()) && !String.IsNullOrEmpty(processDT.Rows[j][14].ToString()))
                                                 {
                                                     //Edit to read total powder bags
-                                                    totalPowder = Convert.ToInt32(processDT.Rows[j][13].ToString());
-                                                    remainPowder = Convert.ToInt32(processDT.Rows[j][14].ToString());
+                                                    totalPowder = int.Parse(processDT.Rows[j][13].ToString(), CultureInfo.InvariantCulture);
+                                                    remainPowder = int.Parse(processDT.Rows[j][14].ToString(), CultureInfo.InvariantCulture);
                                                 }
                                                 else
                                                 {
@@ -229,7 +219,33 @@ namespace mixer_control_globalver.View.MainUI
 
                                                 string stepDesc = processDT.Rows[j][12].ToString();
                                                 string oilType = processDT.Rows[j][11].ToString();
-                                                string oilType2 = processDT.Rows[j][20].ToString();
+                                                string oilType2 = String.Empty;
+
+                                                if (SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply))
+                                                {
+                                                    oilType2 = processDT.Rows[j][20].ToString();
+                                                    if (processDT.Rows[j][17].ToString().ToLower() == "yes")
+                                                        isOilFeed2 = true;
+
+                                                    if (!string.IsNullOrEmpty(processDT.Rows[j][18].ToString()) && !string.IsNullOrEmpty(processDT.Rows[j][19].ToString()))
+                                                    {
+                                                        oilMass2 = double.Parse(processDT.Rows[j][19].ToString(), CultureInfo.InvariantCulture);
+                                                        oilWeight2 = double.Parse(processDT.Rows[j][18].ToString(), CultureInfo.InvariantCulture);
+                                                    }
+                                                    else
+                                                    {
+                                                        oilMass2 = 0;
+                                                        oilWeight2 = 0;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    oilType2 = String.Empty;
+                                                    isOilFeed2 = false;
+                                                    oilMass2 = 0;
+                                                    oilWeight2 = 0;
+                                                }
+
 
                                                 if (SettingsManager.GetSetting(s => s.CheckPowderEnabled))
                                                 {
@@ -243,27 +259,29 @@ namespace mixer_control_globalver.View.MainUI
                                                 }
 
                                                 TemporaryVariables.processDT.Rows.Add(processDT.Rows[j][0].ToString(),
-                                                processDT.Rows[j][1].ToString(),
-                                                processDT.Rows[j][2].ToString(),
-                                                changeSpeed,
-                                                changeTime,
-                                                isVaccum,
-                                                processDT.Rows[j][6].ToString(),
-                                                isSkipAnnounce,
-                                                stepDesc,
-                                                false,
-                                                isOilFeed,
-                                                oilMass,
-                                                oilWeight,
-                                                oilType,
-                                                totalPowder,
-                                                remainPowder,
-                                                powderBefore,
-                                                powderAfter,
-                                                isOilFeed2,
-                                                oilMass2,
-                                                oilWeight2,
-                                                oilType2);
+                                            processDT.Rows[j][1].ToString(),
+                                            processDT.Rows[j][2].ToString(),
+                                            changeSpeed,
+                                            changeTime,
+                                            isVaccum,
+                                            processDT.Rows[j][6].ToString(),
+                                            isSkipAnnounce,
+                                            stepDesc,
+                                            false,
+                                            isOilFeed,
+                                            oilMass,
+                                            oilWeight,
+                                            oilType,
+                                            totalPowder,
+                                            remainPowder,
+                                            powderBefore,
+                                            powderAfter,
+                                            isOilFeed2,
+                                            oilMass2,
+                                            oilWeight2,
+                                            oilType2
+                                            );
+
                                             }
                                         }
                                     }
@@ -279,7 +297,7 @@ namespace mixer_control_globalver.View.MainUI
                             {
                                 isSuccess = false;
                                 loading.BeginInvoke(new Action(() => loading.Close()));
-                                
+
                                 TemporaryVariables.resetAllTempVariables();
 
                                 SystemLog.Output(SystemLog.MSG_TYPE.Err, GlobalStrings.MessageBoxTitle_Error, GlobalStrings.Error_CannotLoadExcelFile);
@@ -309,7 +327,7 @@ namespace mixer_control_globalver.View.MainUI
             Program.main.openScaleTab();
         }
 
-        
+
         private void txbSearchFormula_TextChanged(object sender, EventArgs e)
         {
             if (dtgvListSpecification.Rows.Count > 0)

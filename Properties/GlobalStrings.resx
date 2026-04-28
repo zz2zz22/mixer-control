@@ -295,4 +295,45 @@ How to fix:
     <value>Motor Stop</value>
     <comment>Automation Window</comment>
   </data>
+  <data name="Message_ConfirmStart" xml:space="preserve">
+    <value>Start the current process? 
+Please note that all material have been put in the mixer before hit start!</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_AutomationIsOff" xml:space="preserve">
+    <value>Automation mode is off. Cannot start the process.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_SkipProcess" xml:space="preserve">
+    <value>Skip to the next process.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Error_CannotInitPLC" xml:space="preserve">
+    <value>Failed to initiate connection to PLC</value>
+    <comment>Error Message</comment>
+  </data>
+  <data name="Message_ProcessFinished" xml:space="preserve">
+    <value>The process is finished. Press "OK" to open mixer lid and "Cancel" to keep the mixer lid close.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_FormulaFinished" xml:space="preserve">
+    <value>Current automation formula is finished. </value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_CanNOTConnectToOilSupply" xml:space="preserve">
+    <value>Can NOT connect to oil supply machine.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_WaitForSensorData" xml:space="preserve">
+    <value>Waiting for sensor data indicate the mixer is in the right position.</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_TransferingOilMass" xml:space="preserve">
+    <value>Transferring oil mass information ...</value>
+    <comment>Message</comment>
+  </data>
+  <data name="Message_OilSupplyIsRunning" xml:space="preserve">
+    <value>Oil supply machine is running.</value>
+    <comment>Message</comment>
+  </data>
 </root>

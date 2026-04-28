@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,13 +78,33 @@ namespace mixer_control_globalver.View.MainUI
                             if (countSharp >= 3)
                             {
                                 string[] data = _buffer.ToString().Split('#');
-                                if (data[0].ToUpper() == lbFormulaName.Text.Trim().ToUpper() || lbFormulaName.Text.Trim().ToUpper().Contains(data[0].ToUpper()))
+                                if (lbFormulaName.Text.Trim().ToUpper().Contains(data[0].ToUpper()))
                                 {
-                                    TemporaryVariables.tempFormulaLOT = data[1];
-                                    if (!String.IsNullOrEmpty(data[3]))
-                                        totalMaterial = Convert.ToInt32(data[3]);
-                                    
-                                    CTMessageBox.Show(GlobalStrings.Message_PDF417Scanned, GlobalStrings.MessageBoxTitle_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    if (SettingsManager.GetSetting(s => s.ExactMatchEnabled))
+                                    {
+                                        string formulaNameWithoutOil = lbFormulaName.Text.Trim().ToUpper().Replace("-OIL", "");
+                                        if (data[0].ToUpper() == formulaNameWithoutOil)
+                                        {
+                                            TemporaryVariables.tempFormulaLOT = data[1];
+                                            if (!String.IsNullOrEmpty(data[3]))
+                                                totalMaterial = int.Parse(data[3], CultureInfo.InvariantCulture);
+
+                                            CTMessageBox.Show(GlobalStrings.Message_PDF417Scanned, GlobalStrings.MessageBoxTitle_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        }
+                                        else
+                                        {
+                                            CTMessageBox.Show(GlobalStrings.Message_PDF417NotMatch, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                            Program.main.openSpecTab();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TemporaryVariables.tempFormulaLOT = data[1];
+                                        if (!String.IsNullOrEmpty(data[3]))
+                                            totalMaterial = int.Parse(data[3], CultureInfo.InvariantCulture);
+
+                                        CTMessageBox.Show(GlobalStrings.Message_PDF417Scanned, GlobalStrings.MessageBoxTitle_Information, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
                                 }
                                 else
                                 {
@@ -107,8 +128,7 @@ namespace mixer_control_globalver.View.MainUI
                                         DataRow[] foundAuthors = TemporaryVariables.materialDT.Select("mat_name = '" + data[0].ToUpper() + "' and id = '" + data[1] + "'");
                                         if (foundAuthors.Length == 0)
                                         {
-                                            TemporaryVariables.materialDT.Rows.Add(data[0].ToUpper(), Convert.ToInt32(data[1]), Convert.ToDouble(data[2]), data[3]);
-                                            CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(data[0].ToUpper(), data[2], data[3]);
+                                            TemporaryVariables.materialDT.Rows.Add(data[0].ToUpper(), int.Parse(data[1], CultureInfo.InvariantCulture), double.Parse(data[2], CultureInfo.InvariantCulture), data[3]); CustomMaterialDataRow customMaterial = new CustomMaterialDataRow(data[0].ToUpper(), data[2], data[3]);
                                             lbJustConfirm.Text = data[0].ToUpper();
                                             lbConfirmAmount.Text = TemporaryVariables.materialDT.Rows.Count.ToString() + "/" + totalMaterial;
                                             flpMaterialList.Controls.Add(customMaterial);

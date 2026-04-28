@@ -92,6 +92,10 @@ namespace mixer_control_globalver.View.SideUI
             txbAuthorSkipPass.Text = SettingsManager.GetSetting(s => s.SkipStepPassword);
             txbTolerance.Text = SettingsManager.GetSetting(s => s.OilToleranceMass).ToString(CultureInfo.InvariantCulture);
 
+            txbOilSupplyAttempts.Text = SettingsManager.GetSetting(s => s.OilSupplyAttempts).ToString(CultureInfo.InvariantCulture);
+            txbVolumnCompensation.Text = SettingsManager.GetSetting(s => s.VolumnCompensation).ToString(CultureInfo.InvariantCulture);
+            txbVolumnCompareValue.Text = SettingsManager.GetSetting(s => s.VolumnCompareValue).ToString(CultureInfo.InvariantCulture);
+
             switchOilMode.SwitchState = SettingsManager.GetSetting(s => s.OilSupplyEnabled) ?
                 XanderUI.XUISwitch.State.On :
                 XanderUI.XUISwitch.State.Off;
@@ -153,6 +157,10 @@ namespace mixer_control_globalver.View.SideUI
             cbxLEDStyle.SelectedIndex = SettingsManager.GetSetting(s => s.LedScreenStyle);
             txbLEDIP.Text = SettingsManager.GetSetting(s => s.LedScreenIp);
 
+            switchEnableExactMatch.SwitchState = SettingsManager.GetSetting(s => s.ExactMatchEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
+
             LoadNotSettingValue();
         }
         private void MainSetting_Load(object sender, EventArgs e)
@@ -200,6 +208,11 @@ namespace mixer_control_globalver.View.SideUI
                 s.OilSupplyDataBits = cbDataBits.Text;
                 s.OilSupplyStopBits = cbStopBits.Text;
                 s.OilSupplyParity = cbParityBits.Text;
+                s.OilSupplyAttempts = int.Parse(txbOilSupplyAttempts.Text.Trim(), CultureInfo.InvariantCulture);
+                s.VolumnCompensation = double.Parse(txbVolumnCompensation.Text.Trim(), CultureInfo.InvariantCulture);
+                s.VolumnCompareValue = double.Parse(txbVolumnCompareValue.Text.Trim(), CultureInfo.InvariantCulture);
+
+                s.ExactMatchEnabled = switchEnableExactMatch.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
             });
            
             SettingsManager.SaveSettings();
@@ -470,7 +483,7 @@ namespace mixer_control_globalver.View.SideUI
                         serialPort3.Parity = (Parity)Enum.Parse(typeof(Parity), cbParityBits.Text);
                         serialPort3.ReadTimeout = 1000;
                         serialPort3.Open();
-                        bool isConnected = SubMethods.CheckConnectStatus(serialPort2); // Đọc trạng thái máy
+                        bool isConnected = SubMethods.CheckConnectStatus(serialPort3); // Đọc trạng thái máy
                         CloseSerialPort(serialPort3);
                         if (!isConnected)
                         {

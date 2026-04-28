@@ -149,38 +149,50 @@ namespace mixer_control_globalver.View.SideUI
                             int countSharp = _buffer.ToString().Count(f => f == '#');
                             if (countSharp == 2)
                             {
-                                string[] bufferData = _buffer.ToString().Split('#');
-                                if (bufferData[0].ToString().Equals(lbMatCode.Text.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                                try
                                 {
-                                    string loadMaterialCode = finalData[currentMaterialNo].Split('#')[0];
-                                    string loadMaterialQuantity = finalData[currentMaterialNo].Split('#')[1];
-                                    string data = String.Empty;
-                                    currentScan++;
-                                    lbCurrentStatus.Text = currentScan + "/" + loadMaterialQuantity;
-                                    data = lbMatCode.Text.Trim() + ";" + total + ";" + step + ";" + stepTotal + ";" + currentScan + "/" + loadMaterialQuantity;
-                                    SendLEDData(data);
-                                    if (currentScan == Convert.ToInt32(loadMaterialQuantity))
+                                    string[] bufferData = _buffer.ToString().Split('#');
+                                    if (bufferData[0].ToString().Equals(lbMatCode.Text.Trim(), StringComparison.CurrentCultureIgnoreCase))
                                     {
-                                        if (currentMaterialNo == totalMaterialType - 1)
+                                        string loadMaterialCode = finalData[currentMaterialNo].Split('#')[0];
+                                        string loadMaterialQuantity = finalData[currentMaterialNo].Split('#')[1];
+                                        string data = String.Empty;
+                                        currentScan++;
+                                        lbCurrentStatus.Text = currentScan + "/" + loadMaterialQuantity;
+                                        data = lbMatCode.Text.Trim() + ";" + total + ";" + step + ";" + stepTotal + ";" + currentScan + "/" + loadMaterialQuantity;
+                                        SendLEDData(data);
+                                        if (currentScan == Convert.ToInt32(loadMaterialQuantity))
                                         {
-                                            this.Close();
-                                        }
-                                        else
-                                        {
-                                            currentScan = 0;
-                                            currentMaterialNo++;
-                                            loadMaterialCode = finalData[currentMaterialNo].Split('#')[0];
-                                            loadMaterialQuantity = finalData[currentMaterialNo].Split('#')[1];
-                                            lbMatCode.Text = loadMaterialCode;
-                                            lbCurrentStatus.Text = currentScan + "/" + loadMaterialQuantity;
-                                            data = loadMaterialCode + ";" + total + ";" + step + ";" + stepTotal + ";" + currentScan + "/" + loadMaterialQuantity;
-                                            SendLEDData(data);
+                                            if (currentMaterialNo == totalMaterialType - 1)
+                                            {
+                                                this.Close();
+                                            }
+                                            else
+                                            {
+                                                currentScan = 0;
+                                                currentMaterialNo++;
+                                                loadMaterialCode = finalData[currentMaterialNo].Split('#')[0];
+                                                loadMaterialQuantity = finalData[currentMaterialNo].Split('#')[1];
+                                                lbMatCode.Text = loadMaterialCode;
+                                                lbCurrentStatus.Text = currentScan + "/" + loadMaterialQuantity;
+                                                data = loadMaterialCode + ";" + total + ";" + step + ";" + stepTotal + ";" + currentScan + "/" + loadMaterialQuantity;
+                                                SendLEDData(data);
+                                            }
                                         }
                                     }
+                                    else
+                                    {
+                                        //lbAlert.Text = "Mã nguyên liệu không trùng khớp!";
+                                    }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    //lbAlert.Text = "Mã nguyên liệu không trùng khớp!";
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.Append("QR code :" + _buffer.ToString() + "\r\n\r\n");
+                                    sb.Append("##: <Tên> # <Lot> # <Trọng lượng>\r\n");
+                                    sb.Append("Ví dụ: YZJ-HX-200#Test#20\r\n");
+                                    sb.Append(ex.Message);
+                                    CTMessageBox.Show(sb.ToString());
                                 }
                             }
                         }
