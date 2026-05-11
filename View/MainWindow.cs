@@ -134,6 +134,7 @@ namespace mixer_control_globalver
             if (dialogResult == DialogResult.Yes)
             {
                 PLCMethods.ResetPLCVariables();
+                SettingsManager.SaveSettings();
                 Environment.Exit(0);
             }
         }

@@ -7,11 +7,19 @@ using System.Threading.Tasks; // Task is still useful for general async operatio
 
 public static class SettingsManager
 {
+    private static string LogPath = @"C:\settings_log.txt";
     private static AppSettings _currentSettings = new AppSettings();
-    // Use a property to determine the path dynamically
-    private static string SettingsFilePath { get; } = GetSettingsFilePath();
+    private static string _settingsFilePath = null;
+    private static string SettingsFilePath
+    {
+        get
+        {
+            if (_settingsFilePath == null)
+                _settingsFilePath = GetSettingsFilePath();
+            return _settingsFilePath;
+        }
+    }
 
-    // A semaphore ensures only one thread performs an operation at a time.
     private static readonly SemaphoreSlim _settingsLock = new SemaphoreSlim(1, 1);
 
     private static readonly JsonSerializerOptions JsonOptions =
@@ -24,26 +32,62 @@ public static class SettingsManager
         }
     };
 
+    private static string BackupFilePath => SettingsFilePath + ".backup";
+
+    // Call this every time SaveSettings succeeds
+    private static void SaveBackup(string json)
+    {
+        try
+        {
+            File.WriteAllText(BackupFilePath, json);
+        }
+        catch { /* backup failure is non-critical */ }
+    }
+
+    private static bool TryLoadBackup()
+    {
+        try
+        {
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] Trying backup: {BackupFilePath}\n");
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] Backup exists: {File.Exists(BackupFilePath)}\n");
+
+            if (File.Exists(BackupFilePath))
+            {
+                var json = File.ReadAllText(BackupFilePath);
+                var settings = JsonSerializer.Deserialize<AppSettings>(json);
+                if (settings != null)
+                {
+                    _currentSettings = settings;
+                    File.WriteAllText(SettingsFilePath, json);
+                    File.AppendAllText(LogPath,
+                        $"[{DateTime.Now}] Backup restored successfully\n");
+                    return true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] BACKUP EXCEPTION: {ex.Message}\n");
+        }
+        return false;
+    }
+
+
 
     // Helper method to determine the persistent file path
     private static string GetSettingsFilePath()
     {
-        // Get the path to the user's local AppData folder (works on Windows, Linux, macOS)
-        string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        // Try saving next to the executable instead
+        string exeFolder = AppDomain.CurrentDomain.BaseDirectory;
+        string settingsFolder = Path.Combine(exeFolder, "Settings");
 
-        // Define a specific folder for your application to avoid conflicts
-        string companyName = "Tech-link Silicones"; // Change this
-        string appName = "Mixer Controller";       // Change this
-        string appSpecificFolder = Path.Combine(appDataFolder, companyName, appName);
+        if (!Directory.Exists(settingsFolder))
+            Directory.CreateDirectory(settingsFolder);
 
-        // Ensure the directory exists
-        if (!Directory.Exists(appSpecificFolder))
-        {
-            Directory.CreateDirectory(appSpecificFolder);
-        }
-
-        // Return the full path to the JSON settings file
-        return Path.Combine(appSpecificFolder, "user_settings.json");
+        return Path.Combine(settingsFolder, "user_settings.json");
     }
 
     /// <summary>
@@ -51,60 +95,100 @@ public static class SettingsManager
     /// </summary>
     public static void Initialize()
     {
-        // Acquire lock immediately as we are about to touch the file system and memory state
+        try
+        {
+            File.AppendAllText(LogPath,
+                $"\n[{DateTime.Now}] App started - PID: {System.Diagnostics.Process.GetCurrentProcess().Id}\n");
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] Looking for: {SettingsFilePath}\n");
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] File exists: {File.Exists(SettingsFilePath)}\n");
+        }
+        catch (Exception ex)
+        {
+            // Log to a FIXED path in case SettingsFilePath itself failed
+            File.AppendAllText(@"C:\settings_log.txt",
+                $"[{DateTime.Now}] INIT EXCEPTION: {ex.Message}\n");
+            File.AppendAllText(@"C:\settings_log.txt",
+                $"[{DateTime.Now}] Stack: {ex.StackTrace}\n");
+            return; // Don't proceed with broken state
+        }
+
         _settingsLock.Wait();
         try
         {
             if (File.Exists(SettingsFilePath))
             {
-                // --- File exists: Load existing settings ---
                 try
                 {
                     var json = File.ReadAllText(SettingsFilePath);
                     var settingsFromFile = JsonSerializer.Deserialize<AppSettings>(json);
                     _currentSettings = settingsFromFile ?? new AppSettings();
-                    Console.WriteLine("Settings loaded successfully.");
+
+                    // Log what was actually loaded
+                    File.AppendAllText(LogPath,
+                        $"[{DateTime.Now}] Loaded - Language:{_currentSettings.Language}" +
+                        $" PlcIp:{_currentSettings.PlcIp}\n");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error loading settings: {ex.Message}. Using default settings.");
-                    // Optionally delete the corrupt file here: File.Delete(SettingsFilePath);
+                    File.AppendAllText(LogPath,
+                        $"[{DateTime.Now}] LOAD EXCEPTION: {ex.Message}\n");
+
+                    // Try backup
+                    if (TryLoadBackup())
+                        File.AppendAllText(LogPath,
+                            $"[{DateTime.Now}] Backup loaded successfully\n");
+                    else
+                        File.AppendAllText(LogPath,
+                            $"[{DateTime.Now}] Backup also failed - using defaults!\n");
                 }
             }
             else
             {
-                // --- File does not exist: Create it with default settings ---
-                Console.WriteLine("Settings file not found. Creating default settings file.");
-                // We use the default values already present in _currentSettings 
-                // and save them to disk immediately.
-                var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
-                File.WriteAllText(SettingsFilePath, json);
+                File.AppendAllText(LogPath,
+                    $"[{DateTime.Now}] File not found - trying backup\n");
+
+                if (!TryLoadBackup())
+                {
+                    File.AppendAllText(LogPath,
+                        $"[{DateTime.Now}] No backup - creating defaults\n");
+                    var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
+                    File.WriteAllText(SettingsFilePath, json);
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] CRITICAL EXCEPTION: {ex.Message}\n");
         }
         finally
         {
             _settingsLock.Release();
         }
     }
-
     /// <summary>
     /// Saves the current in-memory settings snapshot to the JSON file (synchronous).
     /// </summary>
     // This method is now synchronous (returns void/Task, but internally sync I/O)
+    // Update SaveSettings to also save backup
     public static void SaveSettings()
     {
-        _settingsLock.Wait(); // Use synchronous wait for synchronous operation
+        _settingsLock.Wait();
         try
         {
-            // Serialize the *current* atomic snapshot of the settings object
             var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
-
-            // Synchronous write
             File.WriteAllText(SettingsFilePath, json);
+            SaveBackup(json);
+
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] Settings SAVED - PID: {System.Diagnostics.Process.GetCurrentProcess().Id}\n");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error saving settings: {ex.Message}");
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] SAVE ERROR: {ex.Message}\n");
         }
         finally
         {
@@ -139,6 +223,14 @@ public static class SettingsManager
         try
         {
             updateAction(_currentSettings);
+            var json = JsonSerializer.Serialize(_currentSettings, JsonOptions);
+            File.WriteAllText(SettingsFilePath, json);
+            SaveBackup(json); 
+        }
+        catch (Exception ex)  
+        {
+            File.AppendAllText(LogPath,
+                $"[{DateTime.Now}] UPDATE SAVE ERROR: {ex.Message}\n");
         }
         finally
         {

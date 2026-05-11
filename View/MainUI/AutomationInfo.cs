@@ -1614,7 +1614,9 @@ namespace mixer_control_globalver.View.MainUI
 
                                                         Thread.Sleep(200);
                                                         buffer = new byte[256];
-                                                        bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                                        bytesRead = serialPort1.Read(buffer, 0, buffer.Length); 
+                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc kiểm tra xem đã truyền khối lượng chưa (90 1 5 96 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)}");
+
 
                                                         if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
                                                         {
@@ -1624,7 +1626,7 @@ namespace mixer_control_globalver.View.MainUI
                                                             buffer = new byte[256];
                                                             Thread.Sleep(200);
                                                             bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
-                                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Status receive", buffer.ToString());
+                                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc trạng thái máy cấp dầu để mở cấp dầu (90 1 3 0 94 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)} - {string.Join(" ", buffer)}");
 
                                                             if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
                                                             {
@@ -1718,10 +1720,16 @@ namespace mixer_control_globalver.View.MainUI
                                         // isOilFeeding == true: poll pump status until it stops (pump done)
                                         try
                                         {
+                                            if(!serialPort1.IsOpen)
+                                            {
+                                                LoadConnection2SerialPort(1);
+                                            }
+
                                             byte[] cmd = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
                                             serialPort1.Write(cmd, 0, cmd.Length);
                                             buffer = new byte[256];
                                             bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc trạng thái máy cấp dầu để bắt đầu (90 1 3 0 94 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)} - {string.Join(" ", buffer)}");
 
                                             // Pump stopped signal
                                             if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
@@ -1901,6 +1909,19 @@ namespace mixer_control_globalver.View.MainUI
                                         catch (Exception ex)
                                         {
                                             SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport 2 read data timeout", ex.Message);
+                                        }
+                                    }
+                                }else if (isCompletePrimaryOilSupply && isFirstStart)
+                                {
+                                    if (!SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply))
+                                    {
+                                        CheckStart();
+                                    }
+                                    else
+                                    {
+                                        if (isCompleteSecondaryOilSupply)
+                                        {
+                                            CheckStart();
                                         }
                                     }
                                 }
