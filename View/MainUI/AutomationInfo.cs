@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using Color = System.Drawing.Color;
 
 namespace mixer_control_globalver.View.MainUI
@@ -38,6 +39,8 @@ namespace mixer_control_globalver.View.MainUI
 
         private int bytesRead;
         private byte[] buffer;
+
+        DeviceIPConnection device;
 
         CountDownTimer countDownTimer;
         bool isExitApplication = false;
@@ -154,7 +157,11 @@ namespace mixer_control_globalver.View.MainUI
         {
             if (SettingsManager.GetSetting(s => s.OilSupplyEnabled))
             {
-                LoadConnection2SerialPort(1);
+                if(!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                {
+                    LoadConnection2SerialPort(1);
+                    
+                }
                 if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
                     LoadConnection2SerialPort(3);
                 if (SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply))
@@ -203,7 +210,6 @@ namespace mixer_control_globalver.View.MainUI
                     mixerReport.ExportExcelMixerReport(TemporaryVariables.tempReportPath, TemporaryVariables.materialDT);
                     //Generate new Excel file with material sheet & proccess sheet
                     SettingsManager.UpdateSettings(s => s.EndReportEnabled = false);
-                    SettingsManager.SaveSettings();
                 }
             }
             lbFormulaName.Text = TemporaryVariables.tempFileName;
@@ -1594,147 +1600,205 @@ namespace mixer_control_globalver.View.MainUI
                                 {
                                     if (!isOilFeeding)
                                     {
-                                        if (serialPort1.IsOpen)
+                                        if (!isSendOilMass)
                                         {
-                                            if (!isSendOilMass)
+                                            try
                                             {
-                                                try
+                                                if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
                                                 {
-                                                    if (countTimeOutOil <= SettingsManager.GetSetting(s => s.OilSupplyAttempts))
+                                                    if (!serialPort1.IsOpen)
                                                     {
-                                                        countTimeOutOil++;
-                                                        announce = SettingsManager.GetSetting(s => s.Language) == 0 ? "Đang truyền khối lượng dầu. Lần thử " + countTimeOutOil + " ..." :
-                                                                   SettingsManager.GetSetting(s => s.Language) == 1 ? "传输油量. 尝试次数 " + countTimeOutOil + " ..." : "Sending oil mass. Attempt " + countTimeOutOil + " ...";
-                                                        lbAnnounce.Text = announce;
+                                                        LoadConnection2SerialPort(1);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (device == null)
+                                                    {
+                                                        device = new DeviceIPConnection(SettingsManager.GetSetting(s => s.OilPumpIp), SettingsManager.GetSetting(s => s.OilPumpPort));
+                                                        device.Connect();
+                                                    }
+                                                }
+                                                if (countTimeOutOil <= SettingsManager.GetSetting(s => s.OilSupplyAttempts))
+                                                {
+                                                    countTimeOutOil++;
+                                                    announce = SettingsManager.GetSetting(s => s.Language) == 0 ? "Đang truyền khối lượng dầu. Lần thử " + countTimeOutOil + " ..." :
+                                                               SettingsManager.GetSetting(s => s.Language) == 1 ? "传输油量. 尝试次数 " + countTimeOutOil + " ..." : "Sending oil mass. Attempt " + countTimeOutOil + " ...";
+                                                    lbAnnounce.Text = announce;
 
-                                                        if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
-                                                            SubMethods.FuelSetting(serialPort1, oilMass + SettingsManager.GetSetting(s => s.VolumnCompensation));
-                                                        else
-                                                            SubMethods.FuelSetting(serialPort1, oilMass);
+                                                    if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                                                        SubMethods.FuelSetting(serialPort1, device, oilMass + SettingsManager.GetSetting(s => s.VolumnCompensation));
+                                                    else
+                                                        SubMethods.FuelSetting(serialPort1, device, oilMass);
+                                                    Thread.Sleep(200);
+                                                    buffer = new byte[256];
 
+                                                    if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                        bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                                    else
+                                                        bytesRead = device.Read(buffer, 0, buffer.Length);
+
+                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc kiểm tra xem đã truyền khối lượng chưa (90 1 5 96 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)}");
+
+
+                                                    if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
+                                                    {
                                                         Thread.Sleep(200);
-                                                        buffer = new byte[256];
-                                                        bytesRead = serialPort1.Read(buffer, 0, buffer.Length); 
-                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc kiểm tra xem đã truyền khối lượng chưa (90 1 5 96 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)}");
+                                                        byte[] command = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
 
-
-                                                        if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 5 && buffer[3] == 96 && buffer[4] == 165)
-                                                        {
-                                                            Thread.Sleep(200);
-                                                            byte[] command = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
+                                                        if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
                                                             serialPort1.Write(command, 0, command.Length);
-                                                            buffer = new byte[256];
-                                                            Thread.Sleep(200);
-                                                            bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
-                                                            SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc trạng thái máy cấp dầu để mở cấp dầu (90 1 3 0 94 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)} - {string.Join(" ", buffer)}");
+                                                        else
+                                                            device.Write(command, 0, command.Length);
 
-                                                            if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
+                                                        buffer = new byte[256];
+                                                        Thread.Sleep(200);
+
+                                                        if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                            bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                                        else
+                                                            bytesRead = device.Read(buffer, 0, buffer.Length);
+
+                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc trạng thái máy cấp dầu để mở cấp dầu (90 1 3 0 94 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)} - {string.Join(" ", buffer)}");
+
+                                                        if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
+                                                        {
+                                                            if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
                                                             {
-                                                                if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
+                                                                double reading = ReadFlowMeter();
+                                                                if (reading >= 0)
                                                                 {
-                                                                    double reading = ReadFlowMeter();
-                                                                    if (reading >= 0)
-                                                                    {
-                                                                        initFlowMeterReading = reading;
-                                                                        SystemLog.Output(SystemLog.MSG_TYPE.Nor, "FlowMeter init read", "Init: " + initFlowMeterReading);
-                                                                        SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
-                                                                    }
+                                                                    initFlowMeterReading = reading;
+                                                                    SystemLog.Output(SystemLog.MSG_TYPE.Nor, "FlowMeter init read", "Init: " + initFlowMeterReading);
+                                                                    byte[] startOil = new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 };
+                                                                    if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                                        SubMethods.SendCommand(serialPort1, startOil);
                                                                     else
-                                                                    {
-                                                                        SystemLog.Output(SystemLog.MSG_TYPE.Err, "FlowMeter init read failed", "Could not read flow meter at pump start");
-                                                                    }
+                                                                        device.Write(startOil, 0, startOil.Length);
                                                                 }
                                                                 else
                                                                 {
-                                                                    Thread.Sleep(200);
-                                                                    SubMethods.SendCommand(serialPort1, new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 });
+                                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "FlowMeter init read failed", "Could not read flow meter at pump start");
                                                                 }
                                                             }
-                                                            else if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 1 && buffer[4] == 95 && buffer[5] == 165)
+                                                            else
                                                             {
-                                                                isSendOilMass = true;
+                                                                Thread.Sleep(200);
+                                                                byte[] startOil = new byte[] { 0x5A, 0x01, 0x01, 0x5C, 0xA5 };
+                                                                if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                                    SubMethods.SendCommand(serialPort1, startOil);
+                                                                else
+                                                                    device.Write(startOil, 0, startOil.Length);
                                                             }
                                                         }
-                                                    }
-                                                    else
-                                                    {
-                                                        throw new Exception("Oil pump did not respond after " + SettingsManager.GetSetting(s => s.OilSupplyAttempts) + " attempts.");
+                                                        else if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 1 && buffer[4] == 95 && buffer[5] == 165)
+                                                        {
+                                                            isSendOilMass = true;
+                                                        }
                                                     }
                                                 }
-                                                catch (Exception ex)
+                                                else
                                                 {
-                                                    isSendOilMass = false;
-                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Cannot connect to oil pump", ex.Message);
-                                                    // Timeout - stop and show error
-                                                    if (tmrCallBgWorker != null)
-                                                    {
-                                                        tmrCallBgWorker.Stop();
-                                                        tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
-                                                        bgWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
-                                                        bgWorker.ProgressChanged -= BW_ProgressChanged;
-                                                        bgWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
-                                                    }
-                                                    message = SettingsManager.GetSetting(s => s.Language) == 0 ? "Không thể kết nối máy cấp dầu: " + ex.Message :
-                                                              SettingsManager.GetSetting(s => s.Language) == 1 ? "无法连接加油机: " + ex.Message : "Cannot connect to oil pump: " + ex.Message;
-                                                    caption = SettingsManager.GetSetting(s => s.Language) == 0 ? "Lỗi" :
-                                                              SettingsManager.GetSetting(s => s.Language) == 1 ? "错误" : "Error";
-                                                    CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                                    Program.main.openScaleTab();
+                                                    throw new Exception("Oil pump did not respond after " + SettingsManager.GetSetting(s => s.OilSupplyAttempts) + " attempts.");
                                                 }
                                             }
-                                            else
+                                            catch (Exception ex)
                                             {
-                                                // isSendOilMass == true: pump has started, now waiting for it to finish
-                                                announce = SettingsManager.GetSetting(s => s.Language) == 0 ? "Đang cấp dầu..." :
-                                                           SettingsManager.GetSetting(s => s.Language) == 1 ? "开始注油..." : "Start oil feeding ...";
-                                                lbAnnounce.Text = announce;
-                                                isOilFeeding = true;
-                                                
-                                                try
+                                                isSendOilMass = false;
+                                                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Cannot connect to oil pump", ex.Message);
+                                                // Timeout - stop and show error
+                                                if (tmrCallBgWorker != null)
                                                 {
-                                                    if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
-                                                    {
-                                                        XLWorkbook workbook = new XLWorkbook(TemporaryVariables.tempReportPath);
-                                                        var reportSheet = workbook.Worksheet(1);
-                                                        int row = 8 + processNumber;
-                                                        DateTime timeOilStart = DateTime.UtcNow;
-                                                        reportSheet.Range("P" + row).Value = timeOilStart;
-                                                        reportSheet.Range("Q" + row).Value = timeOilStart;
-                                                        workbook.Save();
-                                                    }
+                                                    tmrCallBgWorker.Stop();
+                                                    tmrCallBgWorker.Tick -= new EventHandler(timer_nextRun_Tick);
+                                                    bgWorker.DoWork -= new DoWorkEventHandler(BW_DoWork);
+                                                    bgWorker.ProgressChanged -= BW_ProgressChanged;
+                                                    bgWorker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(BW_RunWorkerCompleted);
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                    isOilFeeding = false;
-                                                    SystemLog.Output(SystemLog.MSG_TYPE.Err, "Save oil start report fail", ex.Message);
-                                                }
+                                                message = SettingsManager.GetSetting(s => s.Language) == 0 ? "Không thể kết nối máy cấp dầu: " + ex.Message :
+                                                          SettingsManager.GetSetting(s => s.Language) == 1 ? "无法连接加油机: " + ex.Message : "Cannot connect to oil pump: " + ex.Message;
+                                                caption = SettingsManager.GetSetting(s => s.Language) == 0 ? "Lỗi" :
+                                                          SettingsManager.GetSetting(s => s.Language) == 1 ? "错误" : "Error";
+                                                CTMessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                Program.main.openScaleTab();
                                             }
                                         }
                                         else
                                         {
-                                            LoadConnection2SerialPort(1);
+                                            // isSendOilMass == true: pump has started, now waiting for it to finish
+                                            announce = SettingsManager.GetSetting(s => s.Language) == 0 ? "Đang cấp dầu..." :
+                                                       SettingsManager.GetSetting(s => s.Language) == 1 ? "开始注油..." : "Start oil feeding ...";
+                                            lbAnnounce.Text = announce;
+                                            isOilFeeding = true;
+
+                                            try
+                                            {
+                                                if (SettingsManager.GetSetting(s => s.SaveReportEnabled))
+                                                {
+                                                    XLWorkbook workbook = new XLWorkbook(TemporaryVariables.tempReportPath);
+                                                    var reportSheet = workbook.Worksheet(1);
+                                                    int row = 8 + processNumber;
+                                                    DateTime timeOilStart = DateTime.UtcNow;
+                                                    reportSheet.Range("P" + row).Value = timeOilStart;
+                                                    reportSheet.Range("Q" + row).Value = timeOilStart;
+                                                    workbook.Save();
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                isOilFeeding = false;
+                                                SystemLog.Output(SystemLog.MSG_TYPE.Err, "Save oil start report fail", ex.Message);
+                                            }
                                         }
+
                                     }
                                     else
                                     {
                                         // isOilFeeding == true: poll pump status until it stops (pump done)
                                         try
                                         {
-                                            if(!serialPort1.IsOpen)
+                                            if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
                                             {
-                                                LoadConnection2SerialPort(1);
+                                                if (!serialPort1.IsOpen)
+                                                {
+                                                    LoadConnection2SerialPort(1);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (device == null)
+                                                {
+                                                    device = new DeviceIPConnection(SettingsManager.GetSetting(s => s.OilPumpIp), SettingsManager.GetSetting(s => s.OilPumpPort));
+                                                    device.MaxRetries = 3;
+                                                    device.RetryDelayMs = 200;
+                                                    device.ReadTimeoutMs = 3000;
+                                                    device.Connect();
+                                                }
                                             }
 
                                             byte[] cmd = new byte[] { 0x5A, 0x01, 0x03, 0x5E, 0xA5 };
-                                            serialPort1.Write(cmd, 0, cmd.Length);
+
+                                            if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                serialPort1.Write(cmd, 0, cmd.Length);
+                                            else
+                                                device.Write(cmd, 0, cmd.Length);
+
                                             buffer = new byte[256];
-                                            bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+
+                                            if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                bytesRead = serialPort1.Read(buffer, 0, buffer.Length);
+                                            else
+                                                bytesRead = device.Read(buffer, 0, buffer.Length);
+
                                             SystemLog.Output(SystemLog.MSG_TYPE.Err, "Đọc trạng thái máy cấp dầu để bắt đầu (90 1 3 0 94 165):", $"[{buffer.Length} bytes] {BitConverter.ToString(buffer)} - {string.Join(" ", buffer)}");
 
                                             // Pump stopped signal
                                             if (buffer[0] == 90 && buffer[1] == 1 && buffer[2] == 3 && buffer[3] == 0 && buffer[4] == 94 && buffer[5] == 165)
                                             {
-                                                CloseSerialPort(serialPort1);
+                                                if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+                                                    CloseSerialPort(serialPort1);
+                                                else
+                                                    device.Dispose();
 
                                                 if (SettingsManager.GetSetting(s => s.FlowMeterEnabled))
                                                 {
@@ -1749,7 +1813,7 @@ namespace mixer_control_globalver.View.MainUI
                                                         sb.AppendLine("Oil supply completed. \r\n");
                                                         sb.AppendLine("Actual: " + Math.Round(actualOilVolume, 3) + " L -- Setting: " + Math.Round(oilMass, 3) + " L");
 
-                                                        if(SubMethods.CheckDoubleIsInRange(actualOilVolume - oilMass, SettingsManager.GetSetting(s => s.VolumnCompareValue)))
+                                                        if (SubMethods.CheckDoubleIsInRange(actualOilVolume - oilMass, SettingsManager.GetSetting(s => s.VolumnCompareValue)))
                                                         {
                                                             sb.AppendLine("Oil volume is within the acceptable range.");
                                                         }
@@ -1822,7 +1886,7 @@ namespace mixer_control_globalver.View.MainUI
                                                                    SettingsManager.GetSetting(s => s.Language) == 1 ? "传输油量2..." : "Sending oil mass 2 ...";
                                                         lbAnnounce.Text = announce;
 
-                                                        SubMethods.FuelSetting(serialPort2, oilMass2);
+                                                        SubMethods.FuelSetting(serialPort2, null, oilMass2);
 
                                                         Thread.Sleep(200);
                                                         buffer = new byte[256];
@@ -1911,7 +1975,8 @@ namespace mixer_control_globalver.View.MainUI
                                             SystemLog.Output(SystemLog.MSG_TYPE.Err, "Serialport 2 read data timeout", ex.Message);
                                         }
                                     }
-                                }else if (isCompletePrimaryOilSupply && isFirstStart)
+                                }
+                                else if (isCompletePrimaryOilSupply && isFirstStart)
                                 {
                                     if (!SettingsManager.GetSetting(s => s.EnableSecondaryOilSupply))
                                     {

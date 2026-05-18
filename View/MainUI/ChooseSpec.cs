@@ -10,6 +10,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
 using System.Threading;
@@ -78,6 +79,15 @@ namespace mixer_control_globalver.View.MainUI
         #endregion
         private void ChooseSpec_Load(object sender, EventArgs e)
         {
+            if (!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+            {
+                btnTestOilFeed.Visible = true;
+            }
+            else
+            {
+                btnTestOilFeed.Visible = false;
+            }
+
             lb1.Text = GlobalStrings.Label_SelectedFormula;
             lb1.Font = new System.Drawing.Font(GlobalStrings.Text_Font, lb1.Font.Size, lb1.Font.Style);
             lb2.Text = GlobalStrings.Label_FormulaDirectorySetup;
@@ -125,7 +135,6 @@ namespace mixer_control_globalver.View.MainUI
                 if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
                     SettingsManager.UpdateSettings(s => s.FormulaDirectory = dialog.FileName);
-                    SettingsManager.SaveSettings();
                 }
                 LoadItemFilePath(SettingsManager.GetSetting(s => s.FormulaDirectory));
             }

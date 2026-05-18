@@ -60,7 +60,11 @@
             this.label27 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageLogic = new System.Windows.Forms.TabPage();
+            this.txbVolumnCompareValue = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.txbVolumnCompensation = new System.Windows.Forms.TextBox();
             this.switchEnableSecondaryOilSup = new XanderUI.XUISwitch();
+            this.label32 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.btnTransferUserSettings = new XanderUI.XUIButton();
             this.switchPowderBagCheck = new XanderUI.XUISwitch();
@@ -96,6 +100,8 @@
             this.tabPageBasicSetting = new System.Windows.Forms.TabPage();
             this.tabPageSubSetting = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.txbOilSupplyAttempts = new System.Windows.Forms.TextBox();
             this.btnTestFRConnect = new XanderUI.XUIButton();
             this.btnTestPort2 = new XanderUI.XUIButton();
             this.label34 = new System.Windows.Forms.Label();
@@ -126,12 +132,12 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort2 = new System.IO.Ports.SerialPort(this.components);
             this.serialPort3 = new System.IO.Ports.SerialPort(this.components);
-            this.txbOilSupplyAttempts = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label32 = new System.Windows.Forms.Label();
-            this.txbVolumnCompensation = new System.Windows.Forms.TextBox();
-            this.label33 = new System.Windows.Forms.Label();
-            this.txbVolumnCompareValue = new System.Windows.Forms.TextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.txbOilPumpIP = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.txbOilPumpPort = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.switchOilPumpIpConnectorEnabled = new XanderUI.XUISwitch();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxCompanyLogo)).BeginInit();
             this.panel1.SuspendLayout();
@@ -205,7 +211,7 @@
             this.switchTest.Name = "switchTest";
             this.switchTest.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchTest.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
-            this.switchTest.Size = new System.Drawing.Size(65, 30);
+            this.switchTest.Size = new System.Drawing.Size(60, 30);
             this.switchTest.SwitchState = XanderUI.XUISwitch.State.On;
             this.switchTest.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
             this.switchTest.TabIndex = 25;
@@ -402,6 +408,12 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.groupBox1.Controls.Add(this.switchOilPumpIpConnectorEnabled);
+            this.groupBox1.Controls.Add(this.txbOilPumpPort);
+            this.groupBox1.Controls.Add(this.label37);
+            this.groupBox1.Controls.Add(this.label38);
+            this.groupBox1.Controls.Add(this.txbOilPumpIP);
+            this.groupBox1.Controls.Add(this.label35);
             this.groupBox1.Controls.Add(this.switchTestOilMultiple);
             this.groupBox1.Controls.Add(this.label27);
             this.groupBox1.Controls.Add(this.tabControl1);
@@ -495,6 +507,29 @@
             this.tabPageLogic.TabIndex = 0;
             this.tabPageLogic.Text = "Main logic triggers";
             // 
+            // txbVolumnCompareValue
+            // 
+            this.txbVolumnCompareValue.Location = new System.Drawing.Point(262, 227);
+            this.txbVolumnCompareValue.Name = "txbVolumnCompareValue";
+            this.txbVolumnCompareValue.Size = new System.Drawing.Size(79, 23);
+            this.txbVolumnCompareValue.TabIndex = 38;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(7, 230);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(247, 16);
+            this.label33.TabIndex = 37;
+            this.label33.Text = "Khoảng sai lệch cho phép của LLK";
+            // 
+            // txbVolumnCompensation
+            // 
+            this.txbVolumnCompensation.Location = new System.Drawing.Point(262, 183);
+            this.txbVolumnCompensation.Name = "txbVolumnCompensation";
+            this.txbVolumnCompensation.Size = new System.Drawing.Size(79, 23);
+            this.txbVolumnCompensation.TabIndex = 29;
+            // 
             // switchEnableSecondaryOilSup
             // 
             this.switchEnableSecondaryOilSup.BackColor = System.Drawing.Color.Transparent;
@@ -509,6 +544,15 @@
             this.switchEnableSecondaryOilSup.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
             this.switchEnableSecondaryOilSup.TabIndex = 36;
             this.switchEnableSecondaryOilSup.Text = "xuiSwitch1";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(7, 183);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(249, 32);
+            this.label32.TabIndex = 28;
+            this.label32.Text = "Bù khối lượng dầu (L)\r\n(Hoạt động cùng với lưu lượng kế)";
             // 
             // label29
             // 
@@ -714,9 +758,9 @@
             this.tabPageOilSupply.Controls.Add(this.switchOilMode);
             this.tabPageOilSupply.Controls.Add(this.switchAlertPowder);
             this.tabPageOilSupply.Controls.Add(this.label14);
-            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 25);
+            this.tabPageOilSupply.Location = new System.Drawing.Point(4, 22);
             this.tabPageOilSupply.Name = "tabPageOilSupply";
-            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 500);
+            this.tabPageOilSupply.Size = new System.Drawing.Size(521, 503);
             this.tabPageOilSupply.TabIndex = 2;
             this.tabPageOilSupply.Text = "Oil logic triggers";
             // 
@@ -777,10 +821,10 @@
             this.tabPageSub.Controls.Add(this.switchSkipPassword);
             this.tabPageSub.Controls.Add(this.label16);
             this.tabPageSub.Controls.Add(this.label15);
-            this.tabPageSub.Location = new System.Drawing.Point(4, 25);
+            this.tabPageSub.Location = new System.Drawing.Point(4, 22);
             this.tabPageSub.Name = "tabPageSub";
             this.tabPageSub.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSub.Size = new System.Drawing.Size(521, 500);
+            this.tabPageSub.Size = new System.Drawing.Size(521, 503);
             this.tabPageSub.TabIndex = 1;
             this.tabPageSub.Text = "Sub triggers";
             // 
@@ -860,7 +904,7 @@
             this.switchShowHiddenInfo.Name = "switchShowHiddenInfo";
             this.switchShowHiddenInfo.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
             this.switchShowHiddenInfo.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
-            this.switchShowHiddenInfo.Size = new System.Drawing.Size(67, 30);
+            this.switchShowHiddenInfo.Size = new System.Drawing.Size(60, 30);
             this.switchShowHiddenInfo.SwitchState = XanderUI.XUISwitch.State.On;
             this.switchShowHiddenInfo.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
             this.switchShowHiddenInfo.TabIndex = 25;
@@ -979,10 +1023,27 @@
             this.groupBox5.Controls.Add(this.label17);
             this.groupBox5.Location = new System.Drawing.Point(8, 150);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(591, 394);
+            this.groupBox5.Size = new System.Drawing.Size(591, 391);
             this.groupBox5.TabIndex = 25;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Gasoline pump setting (Do NOT change)";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label31.Location = new System.Drawing.Point(14, 319);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(178, 16);
+            this.label31.TabIndex = 44;
+            this.label31.Text = "Số lần thử tín hiệu cấp dầu";
+            // 
+            // txbOilSupplyAttempts
+            // 
+            this.txbOilSupplyAttempts.Location = new System.Drawing.Point(198, 316);
+            this.txbOilSupplyAttempts.Name = "txbOilSupplyAttempts";
+            this.txbOilSupplyAttempts.Size = new System.Drawing.Size(79, 23);
+            this.txbOilSupplyAttempts.TabIndex = 43;
             // 
             // btnTestFRConnect
             // 
@@ -1330,54 +1391,63 @@
             this.label23.TabIndex = 19;
             this.label23.Text = "IP:";
             // 
-            // txbOilSupplyAttempts
+            // label35
             // 
-            this.txbOilSupplyAttempts.Location = new System.Drawing.Point(198, 316);
-            this.txbOilSupplyAttempts.Name = "txbOilSupplyAttempts";
-            this.txbOilSupplyAttempts.Size = new System.Drawing.Size(79, 23);
-            this.txbOilSupplyAttempts.TabIndex = 43;
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label35.Location = new System.Drawing.Point(8, 288);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(104, 16);
+            this.label35.TabIndex = 28;
+            this.label35.Text = "IP máy cấp dầu";
             // 
-            // label31
+            // txbOilPumpIP
             // 
-            this.label31.AutoSize = true;
-            this.label31.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.Location = new System.Drawing.Point(14, 319);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(178, 16);
-            this.label31.TabIndex = 44;
-            this.label31.Text = "Số lần thử tín hiệu cấp dầu";
+            this.txbOilPumpIP.Location = new System.Drawing.Point(122, 285);
+            this.txbOilPumpIP.Name = "txbOilPumpIP";
+            this.txbOilPumpIP.Size = new System.Drawing.Size(265, 23);
+            this.txbOilPumpIP.TabIndex = 29;
             // 
-            // label32
+            // label37
             // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(7, 183);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(249, 32);
-            this.label32.TabIndex = 28;
-            this.label32.Text = "Bù khối lượng dầu (L)\r\n(Hoạt động cùng với lưu lượng kế)";
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(8, 323);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(92, 16);
+            this.label37.TabIndex = 30;
+            this.label37.Text = "Oil pump port";
             // 
-            // txbVolumnCompensation
+            // txbOilPumpPort
             // 
-            this.txbVolumnCompensation.Location = new System.Drawing.Point(262, 183);
-            this.txbVolumnCompensation.Name = "txbVolumnCompensation";
-            this.txbVolumnCompensation.Size = new System.Drawing.Size(79, 23);
-            this.txbVolumnCompensation.TabIndex = 29;
+            this.txbOilPumpPort.Location = new System.Drawing.Point(122, 320);
+            this.txbOilPumpPort.Name = "txbOilPumpPort";
+            this.txbOilPumpPort.Size = new System.Drawing.Size(79, 23);
+            this.txbOilPumpPort.TabIndex = 31;
             // 
-            // label33
+            // label38
             // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(7, 230);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(247, 16);
-            this.label33.TabIndex = 37;
-            this.label33.Text = "Khoảng sai lệch cho phép của LLK";
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(8, 248);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(111, 16);
+            this.label38.TabIndex = 32;
+            this.label38.Text = "Cấp dầu qua IP";
             // 
-            // txbVolumnCompareValue
+            // switchOilPumpIpConnectorEnabled
             // 
-            this.txbVolumnCompareValue.Location = new System.Drawing.Point(262, 227);
-            this.txbVolumnCompareValue.Name = "txbVolumnCompareValue";
-            this.txbVolumnCompareValue.Size = new System.Drawing.Size(79, 23);
-            this.txbVolumnCompareValue.TabIndex = 38;
+            this.switchOilPumpIpConnectorEnabled.BackColor = System.Drawing.Color.Transparent;
+            this.switchOilPumpIpConnectorEnabled.HandleOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(71)))), ((int)(((byte)(89)))));
+            this.switchOilPumpIpConnectorEnabled.HandleOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(1)))), ((int)(((byte)(180)))), ((int)(((byte)(120)))));
+            this.switchOilPumpIpConnectorEnabled.Location = new System.Drawing.Point(125, 244);
+            this.switchOilPumpIpConnectorEnabled.Name = "switchOilPumpIpConnectorEnabled";
+            this.switchOilPumpIpConnectorEnabled.OffColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(129)))), ((int)(((byte)(136)))));
+            this.switchOilPumpIpConnectorEnabled.OnColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(217)))), ((int)(((byte)(174)))));
+            this.switchOilPumpIpConnectorEnabled.Size = new System.Drawing.Size(60, 30);
+            this.switchOilPumpIpConnectorEnabled.SwitchState = XanderUI.XUISwitch.State.On;
+            this.switchOilPumpIpConnectorEnabled.SwitchStyle = XanderUI.XUISwitch.Style.iOS;
+            this.switchOilPumpIpConnectorEnabled.TabIndex = 33;
+            this.switchOilPumpIpConnectorEnabled.Text = "xuiSwitch1";
             // 
             // MainSetting
             // 
@@ -1526,5 +1596,11 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.TextBox txbVolumnCompareValue;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox txbOilPumpIP;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.TextBox txbOilPumpPort;
+        private System.Windows.Forms.Label label37;
+        private XanderUI.XUISwitch switchOilPumpIpConnectorEnabled;
+        private System.Windows.Forms.Label label38;
     }
 }

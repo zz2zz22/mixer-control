@@ -66,7 +66,7 @@ class SubMethods
         return Math.Abs(a - b) < epsilon;
     }
 
-    public static void FuelSetting(SerialPort serialPort, double numberReal)
+    public static void FuelSetting(SerialPort serialPort, DeviceIPConnection device, double numberReal)
     {
         double actualNumber = Math.Round(numberReal, 2) * 100;
         int number = Convert.ToInt32(actualNumber); // Số nguyên muốn chuyển đổi
@@ -107,8 +107,10 @@ class SubMethods
 
         // Chuyển lại List<byte> thành mảng byte
         byteArray = byteList.ToArray();
-
-        SendCommand(serialPort, byteArray); // Cài đặt lượng xăng định mức
+        if(!SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled))
+            SendCommand(serialPort, byteArray); // Cài đặt lượng xăng định mức
+        else
+            device.Write(byteArray, 0, byteArray.Length);
         string hexString2 = "";
 
         foreach (byte b in byteArray)
@@ -231,11 +233,15 @@ class SubMethods
 
     public static void SetLanguage(string cultureCode)
     {
-        if(!String.IsNullOrEmpty(cultureCode))
+        if (!String.IsNullOrEmpty(cultureCode))
         {
             CultureInfo newCulture = new CultureInfo(cultureCode);
+
+            // ✅ UI culture = controls display language (labels, strings)
             Thread.CurrentThread.CurrentUICulture = newCulture;
-            Thread.CurrentThread.CurrentCulture = newCulture;
+
+            // ✅ Number formatting stays ALWAYS invariant (dot as decimal)
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
         }
         else
         {

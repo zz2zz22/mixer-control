@@ -109,7 +109,7 @@ namespace mixer_control_globalver.View.SideUI
                         Thread.Sleep(200);
 
                         lbStatus.Text = "Transfer oil mass to pump machine...";
-                        SubMethods.FuelSetting(serialPort1, testMass);
+                        SubMethods.FuelSetting(serialPort1, null, testMass);
 
                         Thread.Sleep(200);
                         do
@@ -180,6 +180,7 @@ namespace mixer_control_globalver.View.SideUI
             label1.Text = message;
             try
             {
+                
                 if (!String.IsNullOrEmpty(SettingsManager.GetSetting(s => s.OilSupplyComPort)))
                 {
                     serialPort1.PortName = SettingsManager.GetSetting(s => s.OilSupplyComPort);
@@ -294,7 +295,6 @@ namespace mixer_control_globalver.View.SideUI
                     s.OIlTested = true;
                     s.OIlTestedTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                 });
-                SettingsManager.SaveSettings();
                 //Thread.Sleep(500);
                 //do
                 //{

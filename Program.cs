@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -8,12 +9,13 @@ namespace mixer_control_globalver
     {
         public static MainWindow main;
         static Mutex mutex = new Mutex(false, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F}");
-        /// <summary>
-                                                                                                /// The main entry point for the application.
-                                                                                                /// </summary>
+        // ✅ Force invariant culture for all number parsing app-wide
         [STAThread]
         static void Main()
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
             // ✅ Check mutex FIRST before anything else
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {

@@ -239,7 +239,6 @@ namespace mixer_control_globalver
                     SettingsManager.UpdateSettings(s => s.OIlTested = false);
                     statusCheckBackgroundWorker.ReportProgress(0);
                 }
-                SettingsManager.SaveSettings();
             }
             catch (Exception ex)
             {
@@ -420,7 +419,6 @@ namespace mixer_control_globalver
             if (SettingsManager.GetSetting(s => s.Language) != cbxLanguageChoose.SelectedIndex)
             {
                 SettingsManager.UpdateSettings(s => s.Language = cbxLanguageChoose.SelectedIndex);
-                SettingsManager.SaveSettings();
                 DialogResult dialogResult = CTMessageBox.Show(GlobalStrings.Message_LanguageChange, GlobalStrings.MessageBoxTitle_Warning, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.OK)
                 {

@@ -69,6 +69,9 @@ namespace mixer_control_globalver.View.SideUI
             cbComPort.Items.AddRange(ports);
             cbComPort.Text = SettingsManager.GetSetting(s => s.OilSupplyComPort);
 
+            txbOilPumpIP.Text = SettingsManager.GetSetting(s => s.OilPumpIp);
+            txbOilPumpPort.Text = SettingsManager.GetSetting(s => s.OilPumpPort.ToString());
+
             cbPump2ComPort.Items.AddRange(ports);
             cbPump2ComPort.Text = SettingsManager.GetSetting(s => s.SecondaryOilSupplyComPort);
 
@@ -161,6 +164,10 @@ namespace mixer_control_globalver.View.SideUI
                 XanderUI.XUISwitch.State.On :
                 XanderUI.XUISwitch.State.Off;
 
+            switchOilPumpIpConnectorEnabled.SwitchState = SettingsManager.GetSetting(s => s.OilPumpNewIpConnectorEnabled) ?
+                XanderUI.XUISwitch.State.On :
+                XanderUI.XUISwitch.State.Off;
+
             LoadNotSettingValue();
         }
         private void MainSetting_Load(object sender, EventArgs e)
@@ -213,9 +220,12 @@ namespace mixer_control_globalver.View.SideUI
                 s.VolumnCompareValue = double.Parse(txbVolumnCompareValue.Text.Trim(), CultureInfo.InvariantCulture);
 
                 s.ExactMatchEnabled = switchEnableExactMatch.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+                s.OilPumpNewIpConnectorEnabled = switchOilPumpIpConnectorEnabled.SwitchState == XanderUI.XUISwitch.State.On ? true : false;
+
+                s.OilPumpIp = txbOilPumpIP.Text.Trim();
+                s.OilPumpPort = int.Parse(txbOilPumpPort.Text.Trim(), CultureInfo.InvariantCulture);
             });
            
-            SettingsManager.SaveSettings();
             TemporaryVariables.InitSettingDT();
         }
 
@@ -365,7 +375,6 @@ namespace mixer_control_globalver.View.SideUI
             {
                 SettingsManager.UpdateSettings(s => s.ReportDirectory = dialog.FileName);
             }
-            SettingsManager.SaveSettings();
         }
 
         private void btnTestConnect_Click(object sender, EventArgs e)

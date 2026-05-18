@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -74,5 +75,10 @@ namespace mixer_control_globalver.Model
 
         //Exact match settings
         public bool ExactMatchEnabled { get; set; } = false; //Is exact match enabled
+
+        //OIl pump new IP connector
+        public bool OilPumpNewIpConnectorEnabled { get; set; } = false; //Is new IP connector for oil pump enabled
+        public string OilPumpIp { get; set; } //IP address for oil pump connection
+        public int OilPumpPort { get; set; } //Port for oil pump connection
     }
 }

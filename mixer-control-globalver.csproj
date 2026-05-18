@@ -394,6 +394,7 @@
     <Compile Include="Controller\Device\BXLLApi.cs" />
     <Compile Include="Controller\Device\BXLLApi_x64.cs" />
     <Compile Include="Controller\Device\BXLLApi_x86.cs" />
+    <Compile Include="Controller\Device\DeviceIPConnection.cs" />
     <Compile Include="Controller\Device\FinalProductLabel.cs" />
     <Compile Include="Controller\Device\PrintingLabel.cs" />
     <Compile Include="Controller\Device\QRGenerate.cs" />
